@@ -47,7 +47,7 @@ class MineController: BaseController {
     }()
     
     /// 观影记录模型 并排序
-    private var videoRecordModels: Array<VideoDataModel> = [] {
+    private var videoRecordModels: Array<ReadShadowVideoModel> = [] {
         didSet {
             DispatchQueue.main.async {
                 self.mineView.tableView.reloadData()
@@ -67,8 +67,8 @@ class MineController: BaseController {
     var videoRecordTableViewModels: Array<RecordTableViewModel> {
         return videoRecordModels.map { (model) -> RecordTableViewModel in
             let recordTableViewModel = RecordTableViewModel()
-            recordTableViewModel.imageUrlString = model.vodPic ?? ""
-            recordTableViewModel.titleName = model.vodName ?? ""
+            recordTableViewModel.imageUrlString = model.pic ?? ""
+            recordTableViewModel.titleName = model.name ?? ""
             return recordTableViewModel
         }
     }
@@ -127,12 +127,12 @@ class MineController: BaseController {
     
     /// 获取视频浏览记录
     /// - Returns: 视频浏览记录模型数组
-    private func getVideoRecordModels() -> Array<VideoDataModel> {
+    private func getVideoRecordModels() -> Array<ReadShadowVideoModel> {
         do {
-            var models: Array<VideoDataModel> = []
+            var models: Array<ReadShadowVideoModel> = []
             let files = try FileManager().contentsOfDirectory(atPath: videoBrowsingRecordFolderPath).filter{ $0.pathExtension == "plist" }
             for file in files {
-                let model = CZObjectStore.standard.cz_unarchiver(filePath: "\(videoBrowsingRecordFolderPath)/\(file)") as? VideoDataModel
+                let model = CZObjectStore.standard.cz_unarchiver(filePath: "\(videoBrowsingRecordFolderPath)/\(file)") as? ReadShadowVideoModel
                 models.append(model!)
             }
             return models.sorted { (modelOne, modelTwo) -> Bool in

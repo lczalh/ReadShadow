@@ -17,10 +17,10 @@ class VideoListController: BaseController {
     var currentPage: Int = 1
     
     /// 列表数据
-    var models: Array<VideoDataModel> = []
+    var models: Array<ReadShadowVideoModel> = []
     
     /// 轮播图数据
-    var shufflingFigureModels: Array<VideoDataModel> = []
+    var shufflingFigureModels: Array<ReadShadowVideoModel> = []
     
     /// 影源模型
     var readShadowVideoResourceModel: ReadShadowVideoResourceModel?
@@ -74,12 +74,28 @@ class VideoListController: BaseController {
             switch result {
                 case .success(let model):
                     if let videoModels = model.data, videoModels.count > 0 {
-                        var videos: [VideoDataModel] = []
+                        var videos: [ReadShadowVideoModel] = []
                         for videoModel in videoModels {
                             guard filterVideoCategorys.filter({ videoModel.listName == $0 }).first == nil else {
                                 continue
                             }
-                            videos.append(videoModel)
+                            let readShadowVideoModel = ReadShadowVideoModel()
+                            readShadowVideoModel.name = videoModel.vodName
+                            readShadowVideoModel.actor = videoModel.vodActor
+                            readShadowVideoModel.area = videoModel.vodArea
+                            readShadowVideoModel.year = videoModel.vodYear
+                            readShadowVideoModel.introduction = videoModel.vodContent
+                            readShadowVideoModel.director = videoModel.vodDirector
+                            readShadowVideoModel.url = videoModel.vodUrl
+                            // 解析所有剧集名称和地址
+                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
+                            readShadowVideoModel.seriesNames = m.0
+                            readShadowVideoModel.seriesUrls = m.1
+                            readShadowVideoModel.language = videoModel.vodLanguage
+                            readShadowVideoModel.type = videoModel.vodType
+                            readShadowVideoModel.category = videoModel.listName
+                            readShadowVideoModel.pic = videoModel.vodPic
+                            videos.append(readShadowVideoModel)
                         }
                         // 过滤空数组
                         guard videos.count > 0 else {
@@ -132,6 +148,7 @@ class VideoListController: BaseController {
         models.count == 0 ? showEmptyView(withText: text, detailText: nil, buttonTitle: "重新加载", buttonAction: #selector(self.getVideoData)) : hideEmptyView()
     }
 
+
 }
 
 
@@ -144,12 +161,12 @@ extension VideoListController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VideoListCollectionViewCell.identifier, for: indexPath) as! VideoListCollectionViewCell
         let model = models[indexPath.row]
         cell.videoImageView.kf.indicatorType = .activity
-        cell.videoImageView.kf.setImage(with: URL(string: model.vodPic), placeholder: UIImage(named: "Icon_Placeholder"))
-        cell.titleLabel.text = model.vodName
-        if model.vodContinu == nil || model.vodContinu?.isEmpty == true {
-            cell.continuLabel.text = model.vodYear
+        cell.videoImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
+        cell.titleLabel.text = model.name
+        if model.continu == nil || model.continu?.isEmpty == true {
+            cell.continuLabel.text = model.year
         } else {
-            cell.continuLabel.text = model.vodContinu
+            cell.continuLabel.text = model.continu
         }
         return cell
     }
@@ -193,10 +210,10 @@ extension VideoListController: FSPagerViewDataSource{
         let cell = pagerView.dequeueReusableCell(withReuseIdentifier: "FSPagerViewCell", at: index)
         let model = shufflingFigureModels[index]
         cell.imageView?.kf.indicatorType = .activity
-        cell.imageView?.kf.setImage(with: URL(string: model.vodPic), placeholder: UIImage(named: "Icon_Placeholder"))
+        cell.imageView?.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
         cell.imageView?.contentMode = .scaleAspectFill
         cell.imageView?.clipsToBounds = true
-        cell.textLabel?.text = model.vodName
+        cell.textLabel?.text = model.name
         return cell
     }
 }

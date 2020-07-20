@@ -18,12 +18,12 @@ class BrowsingHistoryController: BaseController {
     }()
     
     /// 观影记录模型 并排序
-    private var videoRecordModels: Array<VideoDataModel> {
+    private var videoRecordModels: Array<ReadShadowVideoModel> {
         do {
-            var models: Array<VideoDataModel> = []
+            var models: Array<ReadShadowVideoModel> = []
             let files = try FileManager().contentsOfDirectory(atPath: videoBrowsingRecordFolderPath).filter{ $0.pathExtension == "plist" }
             for file in files {
-                let model = CZObjectStore.standard.cz_unarchiver(filePath: "\(videoBrowsingRecordFolderPath)/\(file)") as? VideoDataModel
+                let model = CZObjectStore.standard.cz_unarchiver(filePath: "\(videoBrowsingRecordFolderPath)/\(file)") as? ReadShadowVideoModel
                 models.append(model!)
             }
             return models.sorted { (modelOne, modelTwo) -> Bool in
@@ -99,8 +99,8 @@ extension BrowsingHistoryController: UITableViewDataSource, UITableViewDelegate 
         let cell = tableView.dequeueReusableCell(withIdentifier: BrowsingHistoryTableViewCell.identifier, for: indexPath) as! BrowsingHistoryTableViewCell
         if type == "0" {
             let videoRecordModel = videoRecordModels[indexPath.row]
-            cell.leftImageView.kf.setImage(with: URL(string: videoRecordModel.vodPic), placeholder: UIImage(named: "Icon_Placeholder"))
-            cell.nameLabel.text = videoRecordModel.vodName
+            cell.leftImageView.kf.setImage(with: URL(string: videoRecordModel.pic), placeholder: UIImage(named: "Icon_Placeholder"))
+            cell.nameLabel.text = videoRecordModel.name
             cell.detailsLabel.text = "播放至：第\((videoRecordModel.currentPlayIndex ?? 0) + 1)集"
         } else {
             let bookReadRecordModel = bookReadRecordModels[indexPath.row]

@@ -20,13 +20,13 @@ class VideoIntroductionController: BaseController {
     }()
     
     /// 本页数据模型
-    var model: VideoDataModel! {
+    var model: ReadShadowVideoModel! {
         didSet {
-            videoIntroductionView.videoNameLabel.text = model.vodName
-            videoIntroductionView.videoInfoLabel.text = "\(model.vodLanguage ?? "未知")·\(model.vodYear ?? "未知")·\(model.vodArea ?? "未知")·\(model.listName ?? (model.vodType ?? "未知"))"
-            videoIntroductionView.directorLabel.text = "导演：\(model.vodDirector ?? "未知")"
-            videoIntroductionView.actorLabel.text = "主演：\(model.vodActor ?? "未知")"
-            videoIntroductionView.introductionLabel.text = model.vodContent ?? "未知"
+            videoIntroductionView.videoNameLabel.text = model.name
+            videoIntroductionView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))"
+            videoIntroductionView.directorLabel.text = "导演：\(model.director ?? "未知")"
+            videoIntroductionView.actorLabel.text = "主演：\(model.actor ?? "未知")"
+            videoIntroductionView.introductionLabel.text = model.introduction ?? "未知"
         }
     }
     

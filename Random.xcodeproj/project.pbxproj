@@ -126,6 +126,8 @@
 		FCA4EBAB24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBAA24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift */; };
 		FCA4EBB024C5889500D29579 /* VideoIntroductionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBAF24C5889500D29579 /* VideoIntroductionController.swift */; };
 		FCA4EBB224C588AE00D29579 /* VideoIntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBB124C588AE00D29579 /* VideoIntroductionView.swift */; };
+		FCA4EBB424C5A92A00D29579 /* ReadShadowVideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */; };
+		FCA4EBB724C5AFB400D29579 /* VideoParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBB624C5AFB400D29579 /* VideoParsing.swift */; };
 		FCB496BE246E4EEC00AECA78 /* CZRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB496BD246E4EEC00AECA78 /* CZRegex.swift */; };
 		FCB57FF4237E9F2500A46CD7 /* VideoDownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB57FF3237E9F2500A46CD7 /* VideoDownloadView.swift */; };
 		FCB5E56323911C1B0025E191 /* CZNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E56223911C1B0025E191 /* CZNetwork.swift */; };
@@ -387,6 +389,8 @@
 		FCA4EBAA24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEpisodeCollectionViewCell.swift; sourceTree = "<group>"; };
 		FCA4EBAF24C5889500D29579 /* VideoIntroductionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIntroductionController.swift; sourceTree = "<group>"; };
 		FCA4EBB124C588AE00D29579 /* VideoIntroductionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIntroductionView.swift; sourceTree = "<group>"; };
+		FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoModel.swift; sourceTree = "<group>"; };
+		FCA4EBB624C5AFB400D29579 /* VideoParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoParsing.swift; sourceTree = "<group>"; };
 		FCB496BD246E4EEC00AECA78 /* CZRegex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZRegex.swift; sourceTree = "<group>"; };
 		FCB57FF3237E9F2500A46CD7 /* VideoDownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloadView.swift; sourceTree = "<group>"; };
 		FCB5E56223911C1B0025E191 /* CZNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZNetwork.swift; sourceTree = "<group>"; };
@@ -649,6 +653,7 @@
 		D06E732523350DBA00886FDB /* Utility(工具) */ = {
 			isa = PBXGroup;
 			children = (
+				FCA4EBB524C5AF9800D29579 /* VideoParsing(视频解析) */,
 				FCCFC857248E298400BC4DD3 /* BookReadParsing(阅读解析) */,
 				FCC875BA23A0E85500ECA178 /* CZKit */,
 				FC838828239DE37400DC2D6E /* Progress */,
@@ -1019,6 +1024,7 @@
 				FC452FDB2374FEA900CCADD8 /* VideoPageModel.swift */,
 				FC452FDD2374FEF500CCADD8 /* VideoDataModel.swift */,
 				FC452FDF2374FF2000CCADD8 /* VideoListModel.swift */,
+				FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1453,6 +1459,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		FCA4EBB524C5AF9800D29579 /* VideoParsing(视频解析) */ = {
+			isa = PBXGroup;
+			children = (
+				FCA4EBB624C5AFB400D29579 /* VideoParsing.swift */,
+			);
+			path = "VideoParsing(视频解析)";
+			sourceTree = "<group>";
+		};
 		FCB8B4E3249355D40043EFF7 /* AddBookSource(添加书源) */ = {
 			isa = PBXGroup;
 			children = (
@@ -1803,8 +1817,8 @@
 				D06E72EF23350D2D00886FDB /* Frameworks */,
 				D06E72F023350D2D00886FDB /* Resources */,
 				FCFA8885240E644800FFBEC0 /* Embed App Extensions */,
-				FE7BA9D3E7CA327B271F221F /* [CP] Embed Pods Frameworks */,
-				46FC347CF460752D6897319A /* [CP] Copy Pods Resources */,
+				B44679B59C6A5736185C9ECF /* [CP] Embed Pods Frameworks */,
+				F8842958BE190A9EA7E8FBCA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1956,21 +1970,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		46FC347CF460752D6897319A /* [CP] Copy Pods Resources */ = {
+		B44679B59C6A5736185C9ECF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B76F0387E78BCFF790E9E53C /* [CP] Check Pods Manifest.lock */ = {
@@ -1995,21 +2009,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FE7BA9D3E7CA327B271F221F /* [CP] Embed Pods Frameworks */ = {
+		F8842958BE190A9EA7E8FBCA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2091,6 +2105,7 @@
 				FCC8762023A0E85600ECA178 /* UINavigationItem+CZKit.swift in Sources */,
 				FCC875F223A0E85600ECA178 /* CZLabel.swift in Sources */,
 				FCA1D46224B6EAA200E0AE8E /* BookReadSearchView.swift in Sources */,
+				FCA4EBB724C5AFB400D29579 /* VideoParsing.swift in Sources */,
 				FC3DDB4D2358696500052AA1 /* BaseTableController.swift in Sources */,
 				FCDF994524BEDB920038970B /* SearchDownloadableVideoCollectionHeaderView.swift in Sources */,
 				FCA1D46824B6F0BF00E0AE8E /* TelevisionSearchController.swift in Sources */,
@@ -2098,6 +2113,7 @@
 				FCFF173A24B5C6B2006A88E2 /* ReadShadowBasicConfigModel.swift in Sources */,
 				FCC875F823A0E85600ECA178 /* CZButtonExtension.swift in Sources */,
 				FCF4723723827FD9001A8F6F /* AppDelegate+JPush.swift in Sources */,
+				FCA4EBB424C5A92A00D29579 /* ReadShadowVideoModel.swift in Sources */,
 				FC1826F12484DF8C00A7E740 /* MineView.swift in Sources */,
 				FCC8762123A0E85600ECA178 /* CZDateSheetController.swift in Sources */,
 				FC859B6F249760D400ECABFC /* VideoResourceTableViewCell.swift in Sources */,
@@ -2407,7 +2423,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 13F1DB863A73DD826534AFC8 /* Pods-Random.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;
@@ -2441,7 +2457,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C328BC7E3088989D7DCF8EB5 /* Pods-Random.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CLANG_ENABLE_MODULES = YES;

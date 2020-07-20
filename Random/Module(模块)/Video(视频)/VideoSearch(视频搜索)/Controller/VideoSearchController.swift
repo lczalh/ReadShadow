@@ -10,28 +10,6 @@ import UIKit
 
 class VideoSearchController: BaseController {
     
-//    /// 过滤的分类
-//    private lazy var filterCategorys: Array<String> = {
-//        return [
-//                "高跟赤足",
-//                "街拍",
-//                "写真",
-//                "伦理",
-//                "福利",
-//                "视频秀",
-//                "情色",
-//                "美女",
-//                "00",
-//                "短视频",
-//                "连续剧",
-//                "电影",
-//                "倫理",
-//                "解说",
-//                "海外剧",
-//                "动漫"
-//        ]
-//    }()
-    
     /// 所有影源模型
     var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> {
         do {
@@ -47,7 +25,7 @@ class VideoSearchController: BaseController {
         }
     }
     
-    var videoModels: Array<Array<VideoDataModel>> = []
+    var videoModels: Array<Array<ReadShadowVideoModel>> = []
     
     /// 搜索内容
     var searchName: String?
@@ -119,12 +97,28 @@ class VideoSearchController: BaseController {
                         switch result {
                             case .success(let model):
                                 if let videoModels = model.data, videoModels.count > 0 {
-                                    var videos: [VideoDataModel] = []
+                                    var videos: [ReadShadowVideoModel] = []
                                     for videoModel in videoModels {
                                         guard filterVideoCategorys.filter({ videoModel.listName == $0 }).first == nil else {
                                             continue
                                         }
-                                        videos.append(videoModel)
+                                        let readShadowVideoModel = ReadShadowVideoModel()
+                                        readShadowVideoModel.name = videoModel.vodName
+                                        readShadowVideoModel.actor = videoModel.vodActor
+                                        readShadowVideoModel.area = videoModel.vodArea
+                                        readShadowVideoModel.year = videoModel.vodYear
+                                        readShadowVideoModel.introduction = videoModel.vodContent
+                                        readShadowVideoModel.director = videoModel.vodDirector
+                                        readShadowVideoModel.url = videoModel.vodUrl
+                                        // 解析所有剧集名称和地址
+                                        let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
+                                        readShadowVideoModel.seriesNames = m.0
+                                        readShadowVideoModel.seriesUrls = m.1
+                                        readShadowVideoModel.language = videoModel.vodLanguage
+                                        readShadowVideoModel.type = videoModel.vodType
+                                        readShadowVideoModel.category = videoModel.listName
+                                        readShadowVideoModel.pic = videoModel.vodPic
+                                        videos.append(readShadowVideoModel)
                                     }
                                     // 过滤空数组
                                     guard videos.count > 0 else {
@@ -163,8 +157,8 @@ extension VideoSearchController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = videoModels[indexPath.section][indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: VideoSearchTableViewCell.identifier) as! VideoSearchTableViewCell
-        cell.videoNameLabel.text = model.vodName
-        cell.rightLabel.text = model.vodContinu
+        cell.videoNameLabel.text = model.name
+        cell.rightLabel.text = model.continu
         return cell
     }
     

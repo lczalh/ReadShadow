@@ -27,28 +27,6 @@ class VideoHomeController: BaseController {
     /// 分类id
     var ids: Array<Int> = []
     
-//    /// 过滤的分类
-//    private lazy var filterCategorys: Array<String> = {
-//        return [
-//            "高跟赤足",
-//            "街拍",
-//            "写真",
-//            "伦理",
-//            "福利",
-//            "视频秀",
-//            "情色",
-//            "美女",
-//            "00",
-//            "短视频",
-//            "连续剧",
-//            "电影",
-//            "倫理",
-//            "解说",
-//            "海外剧",
-//            "动漫"
-//        ]
-//    }()
-    
     /// 所有影源模型
     var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> {
         do {

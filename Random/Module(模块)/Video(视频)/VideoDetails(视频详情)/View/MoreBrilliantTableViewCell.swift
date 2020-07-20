@@ -24,7 +24,7 @@ class MoreBrilliantTableViewCell: BaseTableViewCell {
     }
     
     /// 所有视频模型数据
-    var models: Array<VideoDataModel> = [] {
+    var models: Array<ReadShadowVideoModel> = [] {
         didSet {
             // 计算行
             let line = CGFloat(models.count).truncatingRemainder(dividingBy: 3.0) == 0 ? CGFloat(models.count / 3) : CGFloat((models.count + 1) / 3)
@@ -112,12 +112,12 @@ extension MoreBrilliantTableViewCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VideoListCollectionViewCell.identifier, for: indexPath) as! VideoListCollectionViewCell
         let model = models[indexPath.row]
         cell.videoImageView.kf.indicatorType = .activity
-        cell.videoImageView.kf.setImage(with: URL(string: model.vodPic), placeholder: UIImage(named: "Icon_Placeholder"))
-        cell.titleLabel.text = model.vodName
-        if model.vodContinu == nil || model.vodContinu?.isEmpty == true {
-            cell.continuLabel.text = model.vodYear
+        cell.videoImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
+        cell.titleLabel.text = model.name
+        if model.continu == nil || model.continu?.isEmpty == true {
+            cell.continuLabel.text = model.year
         } else {
-            cell.continuLabel.text = model.vodContinu
+            cell.continuLabel.text = model.continu
         }
         return cell
     }

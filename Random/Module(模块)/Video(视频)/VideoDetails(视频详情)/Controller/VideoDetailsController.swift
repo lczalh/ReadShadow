@@ -21,13 +21,13 @@ class VideoDetailsController: BaseController {
     }()
     
     /// 本页数据模型
-    var model: VideoDataModel!
+    var model: ReadShadowVideoModel!
     
-    /// 剧集
-    var titles: Array<String> = []
-    
-    /// 播放地址
-    var urls: Array<String> = []
+//    /// 剧集
+//    var titles: Array<String> = []
+//
+//    /// 播放地址
+//    var urls: Array<String> = []
     
 //    /// 分组标题
 //    var sectionTitles: Array<String> = []
@@ -57,7 +57,7 @@ class VideoDetailsController: BaseController {
     private var randomNumber = 0
     
     /// 更多精彩模型数据
-    private var moreWonderfulModels: Array<VideoDataModel> = []
+    private var moreWonderfulModels: Array<ReadShadowVideoModel> = []
     
     var statusBarHidden: Bool = false {
         didSet {
@@ -109,7 +109,7 @@ class VideoDetailsController: BaseController {
                 // 记录当前播放时间 和 浏览时间
                 self?.model.currentPlayTime = value!
                 self?.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
-                _ = CZObjectStore.standard.cz_archiver(object: self!.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self?.model.vodName ?? "").plist")
+                _ = CZObjectStore.standard.cz_archiver(object: self!.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self?.model.name ?? "").plist")
         })
         
         // 分享
@@ -122,7 +122,7 @@ class VideoDetailsController: BaseController {
         videoDetailsView.downloadButton.rx.tap.subscribe(onNext: {[weak self] () in
             DispatchQueue.main.async {
                 let searchDownloadableVideoController = SearchDownloadableVideoController()
-                searchDownloadableVideoController.vodName = self?.model.vodName ?? ""
+                searchDownloadableVideoController.vodName = self?.model.name ?? ""
                 searchDownloadableVideoController.hidesBottomBarWhenPushed = true
                 self?.navigationController?.pushViewController(searchDownloadableVideoController, animated: true)
             }
@@ -162,21 +162,34 @@ class VideoDetailsController: BaseController {
             switch result {
                 case .success(let model):
                     if let videoModels = model.data, videoModels.count > 0 {
-                        var videos: [VideoDataModel] = []
+                        var videos: [ReadShadowVideoModel] = []
                         for videoModel in videoModels {
                             guard filterVideoCategorys.filter({ videoModel.listName == $0 }).first == nil else {
                                 continue
                             }
-                            videos.append(videoModel)
+                            let readShadowVideoModel = ReadShadowVideoModel()
+                            readShadowVideoModel.name = videoModel.vodName
+                            readShadowVideoModel.actor = videoModel.vodActor
+                            readShadowVideoModel.area = videoModel.vodArea
+                            readShadowVideoModel.year = videoModel.vodYear
+                            readShadowVideoModel.introduction = videoModel.vodContent
+                            readShadowVideoModel.director = videoModel.vodDirector
+                            readShadowVideoModel.url = videoModel.vodUrl
+                            // 解析所有剧集名称和地址
+                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
+                            readShadowVideoModel.seriesNames = m.0
+                            readShadowVideoModel.seriesUrls = m.1
+                            readShadowVideoModel.language = videoModel.vodLanguage
+                            readShadowVideoModel.type = videoModel.vodType
+                            readShadowVideoModel.category = videoModel.listName
+                            readShadowVideoModel.pic = videoModel.vodPic
+                            videos.append(readShadowVideoModel)
                         }
                         // 过滤空数组
                         guard videos.count > 0 else {
                             return
                         }
                         self?.moreWonderfulModels = videos
-//                        if self?.sectionTitles.count != 3 {
-//                            self?.sectionTitles.append("更多精彩")
-//                        }
                         DispatchQueue.main.async {
                             self?.videoDetailsView.tableView.reloadData()
                         }
@@ -214,43 +227,43 @@ class VideoDetailsController: BaseController {
     
     /// 数据处理
     func dataTreating() {
-        guard self.model.vodUrl?.count ?? 0 > 0 else { return }
-        var titleAndUrlAry: Array<String> = []
-        if model.vodUrl?.contains("$$$") == true {
-            titleAndUrlAry = model.vodUrl?.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first?.components(separatedBy: "\r\n") ?? []
-        } else {
-            titleAndUrlAry = model.vodUrl?.components(separatedBy: "\r\n").filter{ $0.contains("m3u8") } ?? []
-        }
-        for titleAndUrlString in titleAndUrlAry {
-            let titleAndUrl = titleAndUrlString.components(separatedBy: "$")
-            guard titleAndUrl.count == 2 else {
-                CZHUD.showError("播放地址解析失败")
-                return
-            }
-            self.titles.append(titleAndUrl.first!)
-            self.urls.append(titleAndUrl.last!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-        }
+//        guard self.model.vodUrl?.count ?? 0 > 0 else { return }
+//        var titleAndUrlAry: Array<String> = []
+//        if model.vodUrl?.contains("$$$") == true {
+//            titleAndUrlAry = model.vodUrl?.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first?.components(separatedBy: "\r\n") ?? []
+//        } else {
+//            titleAndUrlAry = model.vodUrl?.components(separatedBy: "\r\n").filter{ $0.contains("m3u8") } ?? []
+//        }
+//        for titleAndUrlString in titleAndUrlAry {
+//            let titleAndUrl = titleAndUrlString.components(separatedBy: "$")
+//            guard titleAndUrl.count == 2 else {
+//                CZHUD.showError("播放地址解析失败")
+//                return
+//            }
+//            self.titles.append(titleAndUrl.first!)
+//            self.urls.append(titleAndUrl.last!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+//        }
         // 设置封面
         videoDetailsView.playerImageView.kf.indicatorType = .activity
-        videoDetailsView.playerImageView.kf.setImage(with: URL(string: model.vodPic), placeholder: UIImage(named: "Icon_Placeholder"))
+        videoDetailsView.playerImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
         videoDetailsView.superPlayerView.coverImageView.kf.indicatorType = .activity
-        videoDetailsView.superPlayerView.coverImageView.kf.setImage(with: URL(string: model.vodPic), placeholder: UIImage(named: "Icon_Placeholder"))
-        cz_print("视频地址：\(urls[model.currentPlayIndex ?? 0])")
+        videoDetailsView.superPlayerView.coverImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
+        cz_print("视频地址：\(model.seriesUrls?[model.currentPlayIndex ?? 0] ?? "")")
         if isAdvertisingPrivilege == true {
-            if urls.count > 1 {
-                videoDetailsView.superPlayerView.controlView.title = "\(model.vodName ?? "")\(titles[model.currentPlayIndex ?? 0])"
+            if model.seriesUrls?.count ?? 0 > 1 {
+                videoDetailsView.superPlayerView.controlView.title = "\(model.name ?? "")\(model.seriesNames?[model.currentPlayIndex ?? 0] ?? "")"
             } else {
-                videoDetailsView.superPlayerView.controlView.title = model.vodName
+                videoDetailsView.superPlayerView.controlView.title = model.name
             }
-            superPlayerModel.videoURL = urls[model.currentPlayIndex ?? 0]
+            superPlayerModel.videoURL = model.seriesUrls?[model.currentPlayIndex ?? 0]
             videoDetailsView.superPlayerView.play(with: superPlayerModel)
             // 刷新剧集
             videoDetailsView.tableView.reloadData()
         }
         // 设置视频名称
-        videoDetailsView.videoNameLabel.text = model.vodName
-        videoDetailsView.videoInfoLabel.text = "\(model.vodLanguage ?? "未知")·\(model.vodYear ?? "未知")·\(model.vodArea ?? "未知")·\(model.listName ?? (model.vodType ?? "未知"))"
-        videoDetailsView.playerSourceLabel.text = "播放源：\(model.vodPlay ?? "")"
+        videoDetailsView.videoNameLabel.text = model.name
+        videoDetailsView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))"
+        videoDetailsView.playerSourceLabel.text = "播放源：\(model.playerSource ?? "")"
     }
     
     // 状态栏是否隐藏
@@ -275,16 +288,16 @@ extension VideoDetailsController: UITableViewDataSource, UITableViewDelegate  {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: VideoEpisodeTableViewCell.identifier, for: indexPath) as! VideoEpisodeTableViewCell
-            cell.episodeTitles = titles
+            cell.episodeTitles = model.seriesNames ?? []
             cell.selectorIndex = model.currentPlayIndex ?? 0
             cell.didSelectItemBlock = {[weak self] index in
                 self?.model.currentPlayIndex = index
-                if self?.urls.count ?? 0 > 1 {
-                    self?.videoDetailsView.superPlayerView.controlView.title = "\(self?.model.vodName ?? "")\(self?.titles[index] ?? "")"
+                if self?.model.seriesUrls?.count ?? 0 > 1 {
+                    self?.videoDetailsView.superPlayerView.controlView.title = "\(self?.model.name ?? "")\(self?.model.seriesNames?[index] ?? "")"
                 } else {
-                    self?.videoDetailsView.superPlayerView.controlView.title = self?.model.vodName
+                    self?.videoDetailsView.superPlayerView.controlView.title = self?.model.name
                 }
-                self?.superPlayerModel.videoURL = self?.urls[index]
+                self?.superPlayerModel.videoURL = self?.model.seriesUrls?[index]
                 self?.videoDetailsView.superPlayerView.play(with: self?.superPlayerModel)
                 DispatchQueue.main.async { tableView.reloadRows(at: [IndexPath(item: 0, section: 0)], with: .none) }
             }
@@ -316,10 +329,10 @@ extension VideoDetailsController: SuperPlayerDelegate {
     
     /// 播放结束通知
     func superPlayerDidEnd(_ player: SuperPlayerView!) {
-        guard model.currentPlayIndex != urls.count - 1 else { return }
+        guard model.currentPlayIndex != (model.seriesUrls?.count ?? 0) - 1 else { return }
         model.currentPlayIndex! += 1
-        videoDetailsView.superPlayerView.controlView.title = "\(model.vodName ?? "")\(titles[model.currentPlayIndex!])"
-        superPlayerModel.videoURL = urls[model.currentPlayIndex!]
+        videoDetailsView.superPlayerView.controlView.title = "\(model.name ?? "")\(model.seriesNames?[model.currentPlayIndex!] ?? "")"
+        superPlayerModel.videoURL = model.seriesUrls?[model.currentPlayIndex!]
         videoDetailsView.superPlayerView.play(with: superPlayerModel)
         // 刷新剧集
         videoDetailsView.tableView.reloadData()
@@ -361,12 +374,12 @@ extension VideoDetailsController: GADInterstitialDelegate {
     /// 告诉委托该间隙已被动画移出屏幕。
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         DispatchQueue.main.async {
-            if self.urls.count > 1 {
-                self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.vodName ?? "")\(self.titles[self.model.currentPlayIndex ?? 0])"
+            if self.model.seriesUrls?.count ?? 0 > 1 {
+                self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.name ?? "")\(self.model.seriesNames?[self.model.currentPlayIndex ?? 0] ?? "")"
             } else {
-                self.videoDetailsView.superPlayerView.controlView.title = self.model.vodName
+                self.videoDetailsView.superPlayerView.controlView.title = self.model.name
             }
-            self.superPlayerModel.videoURL = self.urls[self.model.currentPlayIndex ?? 0]
+            self.superPlayerModel.videoURL = self.model.seriesUrls?[self.model.currentPlayIndex ?? 0]
             self.videoDetailsView.superPlayerView.play(with: self.superPlayerModel)
             // 刷新剧集
             self.videoDetailsView.tableView.reloadData()
