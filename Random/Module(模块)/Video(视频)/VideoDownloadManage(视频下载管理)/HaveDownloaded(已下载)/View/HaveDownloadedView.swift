@@ -1,0 +1,35 @@
+//
+//  HaveDownloadedView.swift
+//  Random
+//
+//  Created by yu mingming on 2019/12/10.
+//  Copyright © 2019 刘超正. All rights reserved.
+//
+
+import UIKit
+
+class HaveDownloadedView: BaseView {
+
+    var tableView: UITableView!
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        tableView = UITableView(frame: .zero, style: .plain)
+            .cz
+            .addSuperView(self)
+            .makeConstraints({ (make) in
+                make.edges.equalToSuperview()
+            })
+            .rowHeight(CZCommon.cz_dynamicFitHeight(50))
+            .register(HaveDownloadedTableViewCell.self, forCellReuseIdentifier: HaveDownloadedTableViewCell.identifier)
+            .backgroundColor(cz_backgroundColor)
+            .separatorStyle(.none)
+            .build
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+}
