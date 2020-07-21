@@ -18,6 +18,9 @@ class ReadShadowVideoResourceModel : NSObject, NSCoding, Mappable{
     var name : String?
     /// 路径
     var path : String?
+    
+    /// 资源类型 0: 切片资源    1.直链资源
+    var type: String?
 
 
     class func newInstance(map: Map) -> Mappable?{
@@ -32,7 +35,7 @@ class ReadShadowVideoResourceModel : NSObject, NSCoding, Mappable{
         downloadPath <- map["downloadPath"]
         name <- map["name"]
         path <- map["path"]
-        
+        type <- map["type"]
     }
 
     /**
@@ -45,7 +48,7 @@ class ReadShadowVideoResourceModel : NSObject, NSCoding, Mappable{
          downloadPath = aDecoder.decodeObject(forKey: "downloadPath") as? String
          name = aDecoder.decodeObject(forKey: "name") as? String
          path = aDecoder.decodeObject(forKey: "path") as? String
-
+         type = aDecoder.decodeObject(forKey: "type") as? String
     }
 
     /**
@@ -66,7 +69,9 @@ class ReadShadowVideoResourceModel : NSObject, NSCoding, Mappable{
         if path != nil{
             aCoder.encode(path, forKey: "path")
         }
-
+        if type != nil{
+            aCoder.encode(type, forKey: "type")
+        }
     }
 
 }

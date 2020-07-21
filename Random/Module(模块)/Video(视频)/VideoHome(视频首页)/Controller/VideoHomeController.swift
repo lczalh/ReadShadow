@@ -102,9 +102,9 @@ class VideoHomeController: BaseController {
                         self?.ids.removeAll()
                         for list in videoModels {
                             // 数据过滤
-                            guard filterVideoCategorys.filter({ list.listName == $0 }).first == nil else { continue }
-                            self?.titles.append(list.listName!)
-                            self?.ids.append(list.listId!)
+                            guard let listName = list.categoryName, filterVideoCategorys.filter({ listName == $0 }).first == nil else { continue }
+                            self?.titles.append(listName)
+                            self?.ids.append(list.categoryId!)
                         }
                         self?.titles.reverse()
                         self?.ids.reverse()

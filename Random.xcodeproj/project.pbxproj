@@ -34,6 +34,9 @@
 		FC0A020A24A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0A020924A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift */; };
 		FC100E50237566F1004ADEB3 /* VideoDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC100E4F237566F1004ADEB3 /* VideoDetailsController.swift */; };
 		FC100E5223756701004ADEB3 /* VideoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC100E5123756701004ADEB3 /* VideoDetailsView.swift */; };
+		FC17D9ED24C6C1260079F524 /* AppleCmsDetailsRootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */; };
+		FC17D9EF24C6C1560079F524 /* AppleCmsDetailsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */; };
+		FC17D9F124C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */; };
 		FC1826EF2484DEE800A7E740 /* MineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1826EE2484DEE800A7E740 /* MineController.swift */; };
 		FC1826F12484DF8C00A7E740 /* MineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1826F02484DF8C00A7E740 /* MineView.swift */; };
 		FC1826F52484F5E800A7E740 /* PrivacyPolicy.txt in Resources */ = {isa = PBXBuildFile; fileRef = FC1826F42484F5E800A7E740 /* PrivacyPolicy.txt */; };
@@ -295,6 +298,9 @@
 		FC0A020924A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftTitleRightLabelTableViewCell.swift; sourceTree = "<group>"; };
 		FC100E4F237566F1004ADEB3 /* VideoDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailsController.swift; sourceTree = "<group>"; };
 		FC100E5123756701004ADEB3 /* VideoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailsView.swift; sourceTree = "<group>"; };
+		FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCmsDetailsRootModel.swift; sourceTree = "<group>"; };
+		FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCmsDetailsListModel.swift; sourceTree = "<group>"; };
+		FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoCategoryModel.swift; sourceTree = "<group>"; };
 		FC1826EE2484DEE800A7E740 /* MineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineController.swift; sourceTree = "<group>"; };
 		FC1826F02484DF8C00A7E740 /* MineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineView.swift; sourceTree = "<group>"; };
 		FC1826F42484F5E800A7E740 /* PrivacyPolicy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrivacyPolicy.txt; sourceTree = "<group>"; };
@@ -1025,6 +1031,9 @@
 				FC452FDD2374FEF500CCADD8 /* VideoDataModel.swift */,
 				FC452FDF2374FF2000CCADD8 /* VideoListModel.swift */,
 				FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */,
+				FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */,
+				FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */,
+				FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2066,10 +2075,12 @@
 				FCDF994124BED3560038970B /* SearchDownloadableVideoView.swift in Sources */,
 				FC8180C9249078B400140B5E /* BookReadNewestTableViewCell.swift in Sources */,
 				FCF21C3424A2F100003BFD3D /* VideoSourceManageController.swift in Sources */,
+				FC17D9EF24C6C1560079F524 /* AppleCmsDetailsListModel.swift in Sources */,
 				FC2B54EE2379496E00637B56 /* OutlineTableViewCell.swift in Sources */,
 				FCB57FF4237E9F2500A46CD7 /* VideoDownloadView.swift in Sources */,
 				FCC875FE23A0E85600ECA178 /* CZViewExtension.swift in Sources */,
 				FC9E71C4249873F80090EE76 /* CZReadStyleCollectionCell.swift in Sources */,
+				FC17D9ED24C6C1260079F524 /* AppleCmsDetailsRootModel.swift in Sources */,
 				FC69493A2490B07600F9708A /* BookReadDirectoryView.swift in Sources */,
 				FCA4EBA924C579F200D29579 /* VideoEpisodeTableViewCell.swift in Sources */,
 				FCA4EBA724C54B9400D29579 /* StraightChainVideoAnalysisModel.swift in Sources */,
@@ -2128,6 +2139,7 @@
 				FCFF173424B5A98F006A88E2 /* ReadShadowRootModel.swift in Sources */,
 				FC8180CB24909CAB00140B5E /* BookReadChapterModel.swift in Sources */,
 				FCC8761F23A0E85600ECA178 /* UICollectionViewFlowLayout+CZKit.swift in Sources */,
+				FC17D9F124C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift in Sources */,
 				FCC8762323A0E85600ECA178 /* ChainKit+SnapKit.swift in Sources */,
 				FC716CE0236A83B200692833 /* UIDevice+VKKeychainIDFV.m in Sources */,
 				FC452FD72374FBAB00CCADD8 /* VideoDataApi.swift in Sources */,

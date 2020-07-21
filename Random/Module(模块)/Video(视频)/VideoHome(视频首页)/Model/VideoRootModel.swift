@@ -11,7 +11,7 @@ import Foundation
 class VideoRootModel : NSObject, NSCoding, Mappable{
 
     var data : [VideoDataModel]?
-    var list : [VideoListModel]?
+    var list : [ReadShadowVideoCategoryModel]?
     var page : VideoPageModel?
     var status : Int?
 
@@ -38,7 +38,7 @@ class VideoRootModel : NSObject, NSCoding, Mappable{
     @objc required init(coder aDecoder: NSCoder)
     {
          data = aDecoder.decodeObject(forKey: "data") as? [VideoDataModel]
-         list = aDecoder.decodeObject(forKey: "list") as? [VideoListModel]
+         list = aDecoder.decodeObject(forKey: "list") as? [ReadShadowVideoCategoryModel]
          page = aDecoder.decodeObject(forKey: "page") as? VideoPageModel
          status = aDecoder.decodeObject(forKey: "status") as? Int
 

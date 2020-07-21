@@ -174,6 +174,7 @@ class MainTabBarController: BaseTabBarController {
         coolCloud.baseUrl = "http://caiji.kuyun98.com"
         coolCloud.path = "/inc/s_feifeikkm3u8"
         coolCloud.downloadPath = "/inc/feifei3down"
+        coolCloud.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: coolCloud, filePath: videoResourceFolderPath + "/" + (coolCloud.name ?? "") + ".plist")
         
         let ok = ReadShadowVideoResourceModel()
@@ -181,6 +182,7 @@ class MainTabBarController: BaseTabBarController {
         ok.baseUrl = "https://cj.okzy.tv"
         ok.path = "/inc/feifei3ckm3u8s"
         ok.downloadPath = "/inc/feifei3down"
+        ok.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: ok, filePath: videoResourceFolderPath + "/" + (ok.name ?? "") + ".plist")
         
         let max = ReadShadowVideoResourceModel()
@@ -188,31 +190,43 @@ class MainTabBarController: BaseTabBarController {
         max.baseUrl = "http://www.zdziyuan.com"
         max.path = "/inc/s_feifei3zuidam3u8"
         max.downloadPath = "/inc/feifeidown"
+        max.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: max, filePath: videoResourceFolderPath + "/" + (max.name ?? "") + ".plist")
         
         let newest = ReadShadowVideoResourceModel()
         newest.name = "最新"
         newest.baseUrl = "http://api.zuixinapi.com"
         newest.path = "/inc/feifei3"
+        newest.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: newest, filePath: videoResourceFolderPath + "/" + (newest.name ?? "") + ".plist")
         
         let permanentCloud = ReadShadowVideoResourceModel()
         permanentCloud.name = "永久云"
         permanentCloud.baseUrl = "http://cj.yongjiuzyw.com"
         permanentCloud.path = "/inc/s_feifei3"
+        permanentCloud.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: permanentCloud, filePath: videoResourceFolderPath + "/" + (permanentCloud.name ?? "") + ".plist")
         
         let twistCloud = ReadShadowVideoResourceModel()
         twistCloud.name = "麻花云"
         twistCloud.baseUrl = "https://www.mhapi123.com"
         twistCloud.path = "/inc/feifei3"
+        twistCloud.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: twistCloud, filePath: videoResourceFolderPath + "/" + (twistCloud.name ?? "") + ".plist")
         
         let speedOn = ReadShadowVideoResourceModel()
         speedOn.name = "速播"
         speedOn.baseUrl = "https://www.subo988.com"
         speedOn.path = "/inc/feifei3.4"
+        speedOn.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: speedOn, filePath: videoResourceFolderPath + "/" + (speedOn.name ?? "") + ".plist")
+        
+        let mushroomCloud = ReadShadowVideoResourceModel()
+        mushroomCloud.name = "蘑菇云"
+        mushroomCloud.baseUrl = "http://zy.mgys8.com"
+        mushroomCloud.path = "/api.php/provide/vod"
+        mushroomCloud.type = "1"
+        let _ = CZObjectStore.standard.cz_archiver(object: mushroomCloud, filePath: videoResourceFolderPath + "/" + (mushroomCloud.name ?? "") + ".plist")
     }
     
     /// 设置控制器

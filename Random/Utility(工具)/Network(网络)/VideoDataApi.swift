@@ -33,6 +33,9 @@ public enum VideoDataApi {
     
     // MARK: - 直链视频解析
     case straightChainVideoAnalysis(baseUrl: String, path: String, url: String)
+    
+    // MARK: - ac=list/detail ids=数据ID，多个ID逗号分割。 t=类别ID pg=页码 wd=搜索关键字 h=几小时内的数据
+    case getAppleCmsVideoListData(baseUrl: String, path: String, ac: String, ids: Int?, t: Int?, pg: Int?, wd: String?, h: Int?)
 }
 
 //设置请求配置
@@ -47,6 +50,8 @@ extension VideoDataApi : TargetType {
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         case .straightChainVideoAnalysis(let baseUrl, _, _):
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
+        case .getAppleCmsVideoListData(let baseUrl, _, _, _, _, _, _, _):
+            return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         }
     }
     
@@ -59,6 +64,8 @@ extension VideoDataApi : TargetType {
         case .getVideoDownData(_, let downloadPath, _, _, _):
             return downloadPath
         case .straightChainVideoAnalysis(_, let path, _):
+            return path
+        case .getAppleCmsVideoListData(_, let path, _, _, _, _, _, _):
             return path
         }
         
@@ -91,6 +98,14 @@ extension VideoDataApi : TargetType {
             break
         case .straightChainVideoAnalysis(_, _, let url):
             parameterDict["url"] = url
+            break
+        case .getAppleCmsVideoListData(_, _, let ac, let ids, let t, let pg, let wd, let h):
+            parameterDict["ac"] = ac
+            parameterDict["ids"] = ids
+            parameterDict["t"] = t
+            parameterDict["pg"] = pg
+            parameterDict["wd"] = wd
+            parameterDict["h"] = h
             break
         }
         return  .requestParameters(parameters: parameterDict, encoding: URLEncoding.default)

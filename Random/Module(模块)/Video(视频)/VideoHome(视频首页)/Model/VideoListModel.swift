@@ -25,8 +25,11 @@ class VideoListModel : NSObject, NSCoding, Mappable{
 
     func mapping(map: Map)
     {
+       // listId <- map["type_id"]
         listId <- map["list_id"]
+
         listName <- map["list_name"]
+      //  listName <- map["type_name"]
         
     }
 

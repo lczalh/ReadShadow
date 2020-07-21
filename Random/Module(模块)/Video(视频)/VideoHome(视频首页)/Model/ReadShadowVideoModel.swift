@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReadShadowVideoModel: NSObject, NSCoding {
+class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     
     func encode(with coder: NSCoder) {
         coder.encode(browseTime, forKey: "browseTime")
@@ -107,5 +107,25 @@ class ReadShadowVideoModel: NSObject, NSCoding {
     /// 播放源
     var playerSource: String?
     
-    override init() { }
+    func mapping(map: Map)
+    {
+        name <- map["vod_name"]
+        actor <- map["vod_actor"]
+        area <- map["vod_area"]
+        introduction <- map["vod_content"]
+        director <- map["vod_director"]
+        language <- map["vod_language"]
+        pic <- map["vod_pic"]
+        type <- map["vod_class"]
+        url <- map["vod_play_url"]
+        year <- map["vod_year"]
+        category <- map["type_name"]
+        continu <- map["vod_remarks"]
+    }
+    
+    class func newInstance(map: Map) -> Mappable?{
+        return ReadShadowVideoModel()
+    }
+    required init?(map: Map){}
+    override init(){}
 }
