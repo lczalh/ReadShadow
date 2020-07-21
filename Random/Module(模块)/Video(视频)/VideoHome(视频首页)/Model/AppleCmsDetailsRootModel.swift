@@ -17,6 +17,7 @@ class AppleCmsDetailsRootModel : NSObject, NSCoding, Mappable{
     var page : Int?
     var pagecount : Int?
     var total : Int?
+//    var category
 
 
     class func newInstance(map: Map) -> Mappable?{

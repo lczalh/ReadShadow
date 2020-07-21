@@ -93,34 +93,40 @@ class VideoHomeController: BaseController {
     @objc func getVideoData() {
         showEmptyViewWithLoading()
         let readShadowVideoResourceModel = readShadowVideoResourceModels[randomNumber]
-        CZNetwork.cz_request(target: VideoDataApi.getVideoData(baseUrl: (readShadowVideoResourceModel.baseUrl)!, path: (readShadowVideoResourceModel.path)!, wd: nil, p: nil, cid: "1"),
-                             model: ReadShadowVideoRootModel.self) {[weak self] (result) in
-            switch result {
-                case .success(let model):
-                    if let videoModels = model.list, videoModels.count > 0 {
-                        self?.titles.removeAll()
-                        self?.ids.removeAll()
-                        for list in videoModels {
-                            // 数据过滤
-                            guard let listName = list.categoryName, filterVideoCategorys.filter({ listName == $0 }).first == nil else { continue }
-                            self?.titles.append(listName)
-                            self?.ids.append(list.categoryId!)
+        
+        if readShadowVideoResourceModel.type == "0" {
+            CZNetwork.cz_request(target: VideoDataApi.getVideoData(baseUrl: (readShadowVideoResourceModel.baseUrl)!, path: (readShadowVideoResourceModel.path)!, wd: nil, p: nil, cid: "1"),
+                                 model: ReadShadowVideoRootModel.self) {[weak self] (result) in
+                switch result {
+                    case .success(let model):
+                        if let videoModels = model.list, videoModels.count > 0 {
+                            self?.titles.removeAll()
+                            self?.ids.removeAll()
+                            for list in videoModels {
+                                // 数据过滤
+                                guard let listName = list.categoryName, filterVideoCategorys.filter({ listName == $0 }).first == nil else { continue }
+                                self?.titles.append(listName)
+                                self?.ids.append(list.categoryId!)
+                            }
+                            self?.titles.reverse()
+                            self?.ids.reverse()
+                            DispatchQueue.main.async {
+                                self?.videoHomeView.segmentedDataSource.titles = self!.titles
+                                self?.videoHomeView.segmentedView.defaultSelectedIndex = 0
+                                self?.videoHomeView.segmentedView.reloadData()
+                            }
                         }
-                        self?.titles.reverse()
-                        self?.ids.reverse()
-                        DispatchQueue.main.async {
-                            self?.videoHomeView.segmentedDataSource.titles = self!.titles
-                            self?.videoHomeView.segmentedView.defaultSelectedIndex = 0
-                            self?.videoHomeView.segmentedView.reloadData()
-                        }
-                    }
-                    self?.showOrHideEmptyView(text: "暂无数据")
-                    break
-                case .failure(let error):
-                    self?.showOrHideEmptyView(text: error.localizedDescription)
-                    break
+                        self?.showOrHideEmptyView(text: "暂无数据")
+                        break
+                    case .failure(let error):
+                        self?.showOrHideEmptyView(text: error.localizedDescription)
+                        break
+                }
             }
+        } else {
+//            CZNetwork.cz_request(target: VideoDataApi.getAppleCmsVideoListData(baseUrl: readShadowVideoResourceModel.baseUrl!, path: readShadowVideoResourceModel.path!, ac: "list", ids: nil, t: nil, pg: nil, wd: nil, h: nil), model: <#T##BaseMappable.Protocol#>, completion: <#T##(Result<BaseMappable, CZError>) -> Void#>)
         }
+        
     }
     
     // MARK: - 显示或隐藏空视图
