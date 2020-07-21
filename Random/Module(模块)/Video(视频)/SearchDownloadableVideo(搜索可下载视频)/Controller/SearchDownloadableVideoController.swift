@@ -77,8 +77,8 @@ class SearchDownloadableVideoController: BaseController {
                         var videoTitles: Array<String> = []
                         var videoUrls: Array<URL> = []
                         if downModel.data!.count > 0, let video = downModel.data?.first { // 下载地址解析
-                            if video.vodUrl?.count ?? 0 > 0 {
-                                let videos = video.vodUrl?.components(separatedBy: CharacterSet(charactersIn: "\r\n"))
+                            if video.url?.count ?? 0 > 0 {
+                                let videos = video.url?.components(separatedBy: CharacterSet(charactersIn: "\r\n"))
                                 let titleAndUrls = videos?.filter{ $0.count > 0 }
                                 for titleAndUrl in titleAndUrls ?? [] {
                                     let titleAndUrlAry = titleAndUrl.components(separatedBy: CharacterSet(charactersIn: "$"))

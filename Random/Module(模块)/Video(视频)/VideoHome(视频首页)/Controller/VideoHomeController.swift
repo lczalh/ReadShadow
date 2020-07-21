@@ -94,7 +94,7 @@ class VideoHomeController: BaseController {
         showEmptyViewWithLoading()
         let readShadowVideoResourceModel = readShadowVideoResourceModels[randomNumber]
         CZNetwork.cz_request(target: VideoDataApi.getVideoData(baseUrl: (readShadowVideoResourceModel.baseUrl)!, path: (readShadowVideoResourceModel.path)!, wd: nil, p: nil, cid: "1"),
-                             model: VideoRootModel.self) {[weak self] (result) in
+                             model: ReadShadowVideoRootModel.self) {[weak self] (result) in
             switch result {
                 case .success(let model):
                     if let videoModels = model.list, videoModels.count > 0 {

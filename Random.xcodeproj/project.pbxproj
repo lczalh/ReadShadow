@@ -37,6 +37,7 @@
 		FC17D9ED24C6C1260079F524 /* AppleCmsDetailsRootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */; };
 		FC17D9EF24C6C1560079F524 /* AppleCmsDetailsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */; };
 		FC17D9F124C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */; };
+		FC17D9F324C6E2C50079F524 /* ReadShadowVideoRootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9F224C6E2C50079F524 /* ReadShadowVideoRootModel.swift */; };
 		FC1826EF2484DEE800A7E740 /* MineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1826EE2484DEE800A7E740 /* MineController.swift */; };
 		FC1826F12484DF8C00A7E740 /* MineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1826F02484DF8C00A7E740 /* MineView.swift */; };
 		FC1826F52484F5E800A7E740 /* PrivacyPolicy.txt in Resources */ = {isa = PBXBuildFile; fileRef = FC1826F42484F5E800A7E740 /* PrivacyPolicy.txt */; };
@@ -301,6 +302,7 @@
 		FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCmsDetailsRootModel.swift; sourceTree = "<group>"; };
 		FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCmsDetailsListModel.swift; sourceTree = "<group>"; };
 		FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoCategoryModel.swift; sourceTree = "<group>"; };
+		FC17D9F224C6E2C50079F524 /* ReadShadowVideoRootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoRootModel.swift; sourceTree = "<group>"; };
 		FC1826EE2484DEE800A7E740 /* MineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineController.swift; sourceTree = "<group>"; };
 		FC1826F02484DF8C00A7E740 /* MineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineView.swift; sourceTree = "<group>"; };
 		FC1826F42484F5E800A7E740 /* PrivacyPolicy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrivacyPolicy.txt; sourceTree = "<group>"; };
@@ -1034,6 +1036,7 @@
 				FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */,
 				FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */,
 				FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */,
+				FC17D9F224C6E2C50079F524 /* ReadShadowVideoRootModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2118,6 +2121,7 @@
 				FCA1D46224B6EAA200E0AE8E /* BookReadSearchView.swift in Sources */,
 				FCA4EBB724C5AFB400D29579 /* VideoParsing.swift in Sources */,
 				FC3DDB4D2358696500052AA1 /* BaseTableController.swift in Sources */,
+				FC17D9F324C6E2C50079F524 /* ReadShadowVideoRootModel.swift in Sources */,
 				FCDF994524BEDB920038970B /* SearchDownloadableVideoCollectionHeaderView.swift in Sources */,
 				FCA1D46824B6F0BF00E0AE8E /* TelevisionSearchController.swift in Sources */,
 				D027EBBD2352E8310063616F /* ShufflingFigureView.swift in Sources */,

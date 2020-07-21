@@ -2,13 +2,13 @@
 //  File.swift
 //  Random
 //
-//  Created by yu mingming on 2019/11/8.
-//  Copyright © 2019 刘超正. All rights reserved.
+//  Created by yu mingming on 2020/7/21.
+//  Copyright © 2020 刘超正. All rights reserved.
 //
 
 import Foundation
 
-class VideoRootModel : NSObject, NSCoding, Mappable{
+class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
 
     var data : [ReadShadowVideoModel]?
     var list : [ReadShadowVideoCategoryModel]?
@@ -17,7 +17,7 @@ class VideoRootModel : NSObject, NSCoding, Mappable{
 
 
     class func newInstance(map: Map) -> Mappable?{
-        return VideoRootModel()
+        return ReadShadowVideoRootModel()
     }
     required init?(map: Map){}
     private override init(){}

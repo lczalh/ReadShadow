@@ -100,28 +100,28 @@ class VideoSearchController: BaseController {
                                     if let videoModels = model.data, videoModels.count > 0 {
                                         var videos: [ReadShadowVideoModel] = []
                                         for videoModel in videoModels {
-                                            guard filterVideoCategorys.filter({ videoModel.listName == $0 }).first == nil else {
+                                            guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else {
                                                 continue
                                             }
-                                            let readShadowVideoModel = ReadShadowVideoModel()
-                                            readShadowVideoModel.name = videoModel.vodName
-                                            readShadowVideoModel.actor = videoModel.vodActor
-                                            readShadowVideoModel.area = videoModel.vodArea
-                                            readShadowVideoModel.year = videoModel.vodYear
-                                            readShadowVideoModel.introduction = videoModel.vodContent
-                                            readShadowVideoModel.director = videoModel.vodDirector
-                                            readShadowVideoModel.url = videoModel.vodUrl
-                                            // 解析所有剧集名称和地址
-                                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
-                                            readShadowVideoModel.seriesNames = m.0
-                                            readShadowVideoModel.seriesUrls = m.1
-                                            readShadowVideoModel.language = videoModel.vodLanguage
-                                            readShadowVideoModel.type = videoModel.vodType
-                                            readShadowVideoModel.category = videoModel.listName
-                                            readShadowVideoModel.pic = videoModel.vodPic
-                                            readShadowVideoModel.playerSource = videoModel.vodPlay
-                                            readShadowVideoModel.continu = videoModel.vodContinu
-                                            videos.append(readShadowVideoModel)
+//                                            let readShadowVideoModel = ReadShadowVideoModel()
+//                                            readShadowVideoModel.name = videoModel.vodName
+//                                            readShadowVideoModel.actor = videoModel.vodActor
+//                                            readShadowVideoModel.area = videoModel.vodArea
+//                                            readShadowVideoModel.year = videoModel.vodYear
+//                                            readShadowVideoModel.introduction = videoModel.vodContent
+//                                            readShadowVideoModel.director = videoModel.vodDirector
+//                                            readShadowVideoModel.url = videoModel.vodUrl
+//                                            // 解析所有剧集名称和地址
+//                                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
+//                                            readShadowVideoModel.seriesNames = m.0
+//                                            readShadowVideoModel.seriesUrls = m.1
+//                                            readShadowVideoModel.language = videoModel.vodLanguage
+//                                            readShadowVideoModel.type = videoModel.vodType
+//                                            readShadowVideoModel.category = videoModel.listName
+//                                            readShadowVideoModel.pic = videoModel.vodPic
+//                                            readShadowVideoModel.playerSource = videoModel.vodPlay
+//                                            readShadowVideoModel.continu = videoModel.vodContinu
+                                            videos.append(videoModel)
                                         }
                                         // 过滤空数组
                                         guard videos.count > 0 else {
@@ -154,27 +154,6 @@ class VideoSearchController: BaseController {
                                         guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else {
                                             continue
                                         }
-//                                        let readShadowVideoModel = ReadShadowVideoModel()
-//                                        readShadowVideoModel.name = videoModel.vodName
-//                                        readShadowVideoModel.actor = videoModel.vodActor
-//                                        readShadowVideoModel.area = videoModel.vodArea
-//                                        readShadowVideoModel.year = videoModel.vodYear
-//                                        readShadowVideoModel.introduction = videoModel.vodContent
-//                                        readShadowVideoModel.director = videoModel.vodDirector
-//                                        readShadowVideoModel.url = videoModel.vodPlayUrl
-//                                        // 解析所有剧集名称和地址
-//                                        let m = VideoParsing.parsingResourceSitelLnearChainDddress(playerSource: videoModel.vodPlayFrom ?? "", url: videoModel.vodPlayUrl ?? "")
-//                                        let seriesNames = m.0.first?.value.map{ $0.first?.key ?? "" } ?? []
-//                                        let seriesUrls = m.0.first?.value.map{ $0.first?.value ?? "" } ?? []
-//                                        readShadowVideoModel.seriesNames = seriesNames
-//                                        readShadowVideoModel.seriesUrls = seriesUrls
-//                                        readShadowVideoModel.playerSource = m.1.first
-//                                       // readShadowVideoModel.language = videoModel.vodla
-//                                        readShadowVideoModel.continu = videoModel.vodRemarks
-//                                        readShadowVideoModel.playerSource = videoModel.vodPlayFrom
-//                                        readShadowVideoModel.type = videoModel.vodClass
-//                                        readShadowVideoModel.category = videoModel.typeName
-//                                        readShadowVideoModel.pic = videoModel.vodPic
                                         videos.append(videoModel)
                                     }
                                     // 过滤空数组

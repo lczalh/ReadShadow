@@ -76,32 +76,33 @@ class VideoListController: BaseController {
                     if let videoModels = model.data, videoModels.count > 0 {
                         var videos: [ReadShadowVideoModel] = []
                         for videoModel in videoModels {
-                            guard filterVideoCategorys.filter({ videoModel.listName == $0 }).first == nil else {
+                            guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else {
                                 continue
                             }
-                            let readShadowVideoModel = ReadShadowVideoModel()
-                            readShadowVideoModel.name = videoModel.vodName
-                            readShadowVideoModel.actor = videoModel.vodActor
-                            readShadowVideoModel.area = videoModel.vodArea
-                            readShadowVideoModel.year = videoModel.vodYear
-                            readShadowVideoModel.introduction = videoModel.vodContent
-                            readShadowVideoModel.director = videoModel.vodDirector
-                            readShadowVideoModel.url = videoModel.vodUrl
-                            // 解析所有剧集名称和地址
-                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
-                            readShadowVideoModel.seriesNames = m.0
-                            readShadowVideoModel.seriesUrls = m.1
-                            readShadowVideoModel.language = videoModel.vodLanguage
-                            readShadowVideoModel.type = videoModel.vodType
-                            readShadowVideoModel.category = videoModel.listName
-                            readShadowVideoModel.pic = videoModel.vodPic
-                            videos.append(readShadowVideoModel)
+//                            let readShadowVideoModel = ReadShadowVideoModel()
+//                            readShadowVideoModel.name = videoModel.vodName
+//                            readShadowVideoModel.actor = videoModel.vodActor
+//                            readShadowVideoModel.area = videoModel.vodArea
+//                            readShadowVideoModel.year = videoModel.vodYear
+//                            readShadowVideoModel.introduction = videoModel.vodContent
+//                            readShadowVideoModel.director = videoModel.vodDirector
+//                            readShadowVideoModel.url = videoModel.vodUrl
+//                            // 解析所有剧集名称和地址
+//                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
+//                            readShadowVideoModel.seriesNames = m.0
+//                            readShadowVideoModel.seriesUrls = m.1
+//                            readShadowVideoModel.language = videoModel.vodLanguage
+//                            readShadowVideoModel.type = videoModel.vodType
+//                            readShadowVideoModel.category = videoModel.listName
+//                            readShadowVideoModel.pic = videoModel.vodPic
+                            videos.append(videoModel)
                         }
                         // 过滤空数组
                         guard videos.count > 0 else {
                             return
                         }
                         for (index, data) in videos.enumerated() {
+                            data.readShadowVideoResourceModel = self?.readShadowVideoResourceModel
                             if index < 3 && self?.shufflingFigureModels.count != 3 { // 轮播图数据
                                 self?.shufflingFigureModels.append(data)
                             } else { // 列表数据
