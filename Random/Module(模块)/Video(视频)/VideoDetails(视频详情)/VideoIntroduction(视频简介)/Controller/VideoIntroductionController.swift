@@ -15,7 +15,7 @@ class VideoIntroductionController: BaseController {
     }()
     
     lazy var videoIntroductionView: VideoIntroductionView = {
-        let view = VideoIntroductionView(frame: CGRect(x: 0, y: videoIntroductionViewHeight, width: CZCommon.cz_screenWidth, height: CZCommon.cz_screenHeight - videoIntroductionViewHeight))
+        let view = VideoIntroductionView(frame: CGRect(x: 0, y: CZCommon.cz_screenHeight, width: CZCommon.cz_screenWidth, height: CZCommon.cz_screenHeight - videoIntroductionViewHeight))
         return view
     }()
     

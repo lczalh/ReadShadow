@@ -126,36 +126,76 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     
     func mapping(map: Map)
     {
-        name <- map["vod_name"]
+        if name == nil || name?.isEmpty == true {
+            name <- map["vod_name"]
+        }
         
-        actor <- map["vod_actor"]
+        if actor == nil || actor?.isEmpty == true {
+            actor <- map["vod_actor"]
+        }
         
-        area <- map["vod_area"]
+        if area == nil || actor?.isEmpty == true {
+            area <- map["vod_area"]
+        }
         
-        introduction <- map["vod_content"]
+        if introduction == nil || introduction?.isEmpty == true {
+            introduction <- map["vod_content"]
+        }
         
-        director <- map["vod_director"]
+        if director == nil || director?.isEmpty == true {
+            director <- map["vod_director"]
+        }
         
-        language <- map["vod_language"]
+        if language == nil || language?.isEmpty == true {
+            language <- map["vod_language"]
+        }
         
-        pic <- map["vod_pic"]
+        if language == nil || language?.isEmpty == true {
+            language <- map["vod_lang"]
+        }
         
-        type <- map["vod_class"]
-        type <- map["vod_type"]
+        if pic == nil || pic?.isEmpty == true {
+            pic <- map["vod_pic"]
+        }
         
-        url <- map["vod_play_url"]
-        url <- map["vod_url"]
+        if type == nil || type?.isEmpty == true {
+            type <- map["vod_class"]
+        }
+        if type == nil || type?.isEmpty == true {
+            type <- map["vod_type"]
+        }
         
-        year <- map["vod_year"]
+        if url == nil || url?.isEmpty == true {
+            url <- map["vod_play_url"]
+        }
+        if url == nil || url?.isEmpty == true {
+            url <- map["vod_url"]
+        }
         
-        category <- map["type_name"]
-        category <- map["list_name"]
+        if year == nil || year?.isEmpty == true {
+            year <- map["vod_year"]
+        }
         
-        continu <- map["vod_remarks"]
-        continu <- map["vod_continu"]
+        if category == nil || category?.isEmpty == true {
+            category <- map["type_name"]
+        }
+        if category == nil || category?.isEmpty == true {
+            category <- map["list_name"]
+        }
         
-        playerSource <- map["vod_play"]
-        playerSource <- map["vod_play_from"]
+        if continu == nil || continu?.isEmpty == true {
+            continu <- map["vod_remarks"]
+        }
+        if continu == nil || continu?.isEmpty == true {
+            continu <- map["vod_continu"]
+        }
+        
+        if playerSource == nil || playerSource?.isEmpty == true {
+            playerSource <- map["vod_play"]
+        }
+        if playerSource == nil || playerSource?.isEmpty == true {
+            playerSource <- map["vod_play_from"]
+        }
     }
     
     class func newInstance(map: Map) -> Mappable?{
@@ -169,15 +209,36 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     /// - Returns: (所有集数，所有集数播放地址)
     private func parsingResourceSiteM3U8Dddress(url: String) -> (Array<String>, Array<String>) {
         guard url.count > 0 else { return ([], []) }
-        var titleAndUrlAry: Array<String> = []
+//        var titleAndUrlAry: Array<String> = []
+        var m3u8VideoString: String = ""
         if url.contains("$$$") == true { // 存在多个播放器 只去m3u8格式的视频
-            titleAndUrlAry = url.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first?.components(separatedBy: "\r\n") ?? []
+//            titleAndUrlAry = url.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first?.components(separatedBy: "\r\n") ?? []
+            // 获取m3u8格式的所有视频
+            m3u8VideoString = url.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first!
+            
         } else {
-            titleAndUrlAry = url.components(separatedBy: "\r\n").filter{ $0.contains("m3u8") }
+//            titleAndUrlAry = url.components(separatedBy: "\r\n").filter{ $0.contains(".m3u8") }
+            m3u8VideoString = url.contains(".m3u8") == true ? url : ""
         }
+        // 存在m3u8的视频才继续往下处理
+        guard m3u8VideoString.count > 0 else { return ([], []) }
+        // 存储所有剧集字符串的数组
+        var allSeriesStringAry: Array<String> = []
+        // 判断是否存在多集
+        if m3u8VideoString.contains("\r\n") == true { // 存在多集
+            allSeriesStringAry = m3u8VideoString.components(separatedBy: "\r\n").filter{ $0.count > 0 }
+        } else if m3u8VideoString.contains("#") == true { // 存在多集
+            allSeriesStringAry = m3u8VideoString.components(separatedBy: "#").filter{ $0.count > 0 }
+        } else { //单集
+            allSeriesStringAry.append(m3u8VideoString)
+        }
+//        let aa = m3u8VideoString.components(separatedBy: "\r\n")
+//        cz_print(aa)
+//        cz_print(url)
+        cz_print(allSeriesStringAry)
         var titles: Array<String> = []
         var urls: Array<String> = []
-        for titleAndUrlString in titleAndUrlAry {
+        for titleAndUrlString in allSeriesStringAry {
             let titleAndUrl = titleAndUrlString.components(separatedBy: "$")
             guard titleAndUrl.count == 2 else { return ([], []) }
             titles.append(titleAndUrl.first!)
@@ -211,12 +272,12 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
                     for playSourceSeries in playSourceSeriesAry {
                         let titleAndUrlAry = playSourceSeries.components(separatedBy: "$")
                         titles.append(titleAndUrlAry.first!)
-                        urls.append(titleAndUrlAry.first!)
+                        urls.append(titleAndUrlAry.last!)
                     }
                 } else { // 单集
                     let titleAndUrlAry = playSourceData.components(separatedBy: "$")
                     titles.append(titleAndUrlAry.first!)
-                    urls.append(titleAndUrlAry.first!)
+                    urls.append(titleAndUrlAry.last!)
                 }
                 allPlayDataAry.append((titles, urls))
             }
@@ -234,12 +295,12 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
                 for playSourceSeries in playSourceSeriesAry {
                     let titleAndUrlAry = playSourceSeries.components(separatedBy: "$")
                     titles.append(titleAndUrlAry.first!)
-                    urls.append(titleAndUrlAry.first!)
+                    urls.append(titleAndUrlAry.last!)
                 }
             } else { // 单集
                 let titleAndUrlAry = url.components(separatedBy: "$")
                 titles.append(titleAndUrlAry.first!)
-                urls.append(titleAndUrlAry.first!)
+                urls.append(titleAndUrlAry.last!)
             }
             allPlayDataAry.append((titles, urls))
         }

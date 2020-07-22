@@ -42,9 +42,6 @@ class VideoHomeController: BaseController {
         }
     }
     
-    /// 随机数
-    private var randomNumber = 0
-    
     override func setupNavigationItems() {
         super.setupNavigationItems()
         DispatchQueue.main.async { self.navigationController?.setNavigationBarHidden(true, animated: false) }
@@ -64,9 +61,6 @@ class VideoHomeController: BaseController {
             make.top.equalToSuperview().offset(CZCommon.cz_navigationHeight * 2)
         }
         
-        // 获取随机数
-        randomNumber = Int(arc4random() % UInt32(readShadowVideoResourceModels.count - 1))
-        cz_print(randomNumber)
         // 搜索
         videoHomeView.videoSearchFeatureView.tapSearchLabelBlock = {[weak self] tap in
             DispatchQueue.main.async {
@@ -92,39 +86,39 @@ class VideoHomeController: BaseController {
     // MARK: - 获取视频分类
     @objc func getVideoData() {
         showEmptyViewWithLoading()
-        let readShadowVideoResourceModel = readShadowVideoResourceModels[randomNumber]
+        let readShadowVideoResourceModel = readShadowVideoResourceModels.first!
         
-        if readShadowVideoResourceModel.type == "0" {
-            CZNetwork.cz_request(target: VideoDataApi.getVideoData(baseUrl: (readShadowVideoResourceModel.baseUrl)!, path: (readShadowVideoResourceModel.path)!, wd: nil, p: nil, cid: "1"),
-                                 model: ReadShadowVideoRootModel.self) {[weak self] (result) in
-                switch result {
-                    case .success(let model):
-                        if let videoModels = model.list, videoModels.count > 0 {
-                            self?.titles.removeAll()
-                            self?.ids.removeAll()
-                            for list in videoModels {
-                                // 数据过滤
-                                guard let listName = list.categoryName, filterVideoCategorys.filter({ listName == $0 }).first == nil else { continue }
-                                self?.titles.append(listName)
-                                self?.ids.append(list.categoryId!)
+        CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: readShadowVideoResourceModel.baseUrl!, path: readShadowVideoResourceModel.path!, type: readShadowVideoResourceModel.type!, ac: "list", categoryId: 1, pg: nil, wd: nil), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
+            switch result {
+                case .success(let model):
+                    if let videoModels = model.category, videoModels.count > 0 {
+                        self?.titles.removeAll()
+                        self?.ids.removeAll()
+                        for list in videoModels {
+                            // 数据过滤
+                            guard let listName = list.categoryName, filterVideoCategorys.filter({ listName == $0 }).first == nil else { continue }
+                            self?.titles.append(listName)
+                            if let categoryId = list.categoryId as? Int {
+                                self?.ids.append(categoryId)
+                            } else if let categoryId = list.categoryId as? String {
+                                self?.ids.append(Int(categoryId)!)
                             }
-                            self?.titles.reverse()
-                            self?.ids.reverse()
-                            DispatchQueue.main.async {
-                                self?.videoHomeView.segmentedDataSource.titles = self!.titles
-                                self?.videoHomeView.segmentedView.defaultSelectedIndex = 0
-                                self?.videoHomeView.segmentedView.reloadData()
-                            }
+                            
                         }
-                        self?.showOrHideEmptyView(text: "暂无数据")
-                        break
-                    case .failure(let error):
-                        self?.showOrHideEmptyView(text: error.localizedDescription)
-                        break
-                }
+                        self?.titles.reverse()
+                        self?.ids.reverse()
+                        DispatchQueue.main.async {
+                            self?.videoHomeView.segmentedDataSource.titles = self!.titles
+                            self?.videoHomeView.segmentedView.defaultSelectedIndex = 0
+                            self?.videoHomeView.segmentedView.reloadData()
+                        }
+                    }
+                    self?.showOrHideEmptyView(text: "暂无数据")
+                    break
+                case .failure(let error):
+                    self?.showOrHideEmptyView(text: error.localizedDescription)
+                    break
             }
-        } else {
-//            CZNetwork.cz_request(target: VideoDataApi.getAppleCmsVideoListData(baseUrl: readShadowVideoResourceModel.baseUrl!, path: readShadowVideoResourceModel.path!, ac: "list", ids: nil, t: nil, pg: nil, wd: nil, h: nil), model: <#T##BaseMappable.Protocol#>, completion: <#T##(Result<BaseMappable, CZError>) -> Void#>)
         }
         
     }
@@ -143,7 +137,7 @@ extension VideoHomeController: JXSegmentedListContainerViewDataSource {
     func listContainerView(_ listContainerView: JXSegmentedListContainerView, initListAt index: Int) -> JXSegmentedListContainerViewListDelegate {
         let videoListController = VideoListController()
         videoListController.index = ids[index]
-        videoListController.readShadowVideoResourceModel = readShadowVideoResourceModels[randomNumber]
+        videoListController.readShadowVideoResourceModel = readShadowVideoResourceModels.first
         return videoListController
     }
     

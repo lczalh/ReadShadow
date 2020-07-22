@@ -11,9 +11,9 @@ import Foundation
 class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
 
     var data : [ReadShadowVideoModel]?
-    var list : [ReadShadowVideoCategoryModel]?
-    var page : VideoPageModel?
-    var status : Int?
+    var category : [ReadShadowVideoCategoryModel]?
+  //  var page : VideoPageModel?
+    var code : Int?
 
 
     class func newInstance(map: Map) -> Mappable?{
@@ -24,10 +24,26 @@ class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
 
     func mapping(map: Map)
     {
-        data <- map["data"]
-        list <- map["list"]
-        page <- map["page"]
-        status <- map["status"]
+        if data == nil || data?.isEmpty == true {
+            data <- map["data"]
+        }
+        if data == nil || data?.isEmpty == true {
+            data <- map["list"]
+        }
+        
+        if category == nil || category?.isEmpty == true {
+            category <- map["list"]
+        }
+        if category == nil || category?.isEmpty == true {
+            category <- map["class"]
+        }
+        
+        if code == nil {
+            code <- map["status"]
+        }
+        if code == nil {
+            code <- map["code"]
+        }
         
     }
 
@@ -38,9 +54,9 @@ class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
     @objc required init(coder aDecoder: NSCoder)
     {
          data = aDecoder.decodeObject(forKey: "data") as? [ReadShadowVideoModel]
-         list = aDecoder.decodeObject(forKey: "list") as? [ReadShadowVideoCategoryModel]
-         page = aDecoder.decodeObject(forKey: "page") as? VideoPageModel
-         status = aDecoder.decodeObject(forKey: "status") as? Int
+         category = aDecoder.decodeObject(forKey: "list") as? [ReadShadowVideoCategoryModel]
+//         page = aDecoder.decodeObject(forKey: "page") as? VideoPageModel
+         code = aDecoder.decodeObject(forKey: "status") as? Int
 
     }
 
@@ -53,14 +69,14 @@ class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
         if data != nil{
             aCoder.encode(data, forKey: "data")
         }
-        if list != nil{
-            aCoder.encode(list, forKey: "list")
+        if category != nil{
+            aCoder.encode(category, forKey: "list")
         }
-        if page != nil{
-            aCoder.encode(page, forKey: "page")
-        }
-        if status != nil{
-            aCoder.encode(status, forKey: "status")
+//        if page != nil{
+//            aCoder.encode(page, forKey: "page")
+//        }
+        if code != nil{
+            aCoder.encode(code, forKey: "status")
         }
 
     }

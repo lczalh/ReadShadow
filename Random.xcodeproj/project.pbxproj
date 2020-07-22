@@ -61,10 +61,6 @@
 		FC427BBB241237D300DEC398 /* TelevisionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC427BBA241237D300DEC398 /* TelevisionView.swift */; };
 		FC427BBD2412394100DEC398 /* TelevisionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC427BBC2412394100DEC398 /* TelevisionTableViewCell.swift */; };
 		FC452FD72374FBAB00CCADD8 /* VideoDataApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC452FD62374FBAB00CCADD8 /* VideoDataApi.swift */; };
-		FC452FDA2374FE3900CCADD8 /* VideoRootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC452FD92374FE3900CCADD8 /* VideoRootModel.swift */; };
-		FC452FDC2374FEA900CCADD8 /* VideoPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC452FDB2374FEA900CCADD8 /* VideoPageModel.swift */; };
-		FC452FDE2374FEF500CCADD8 /* VideoDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC452FDD2374FEF500CCADD8 /* VideoDataModel.swift */; };
-		FC452FE02374FF2000CCADD8 /* VideoListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC452FDF2374FF2000CCADD8 /* VideoListModel.swift */; };
 		FC452FE42375039100CCADD8 /* VideoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC452FE32375039100CCADD8 /* VideoListView.swift */; };
 		FC4E35072399F97C00CAA71A /* VideoDownloadManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E35062399F97C00CAA71A /* VideoDownloadManageView.swift */; };
 		FC4E35092399F9C700CAA71A /* VideoDownloadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E35082399F9C700CAA71A /* VideoDownloadController.swift */; };
@@ -327,10 +323,6 @@
 		FC427BBA241237D300DEC398 /* TelevisionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelevisionView.swift; sourceTree = "<group>"; };
 		FC427BBC2412394100DEC398 /* TelevisionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelevisionTableViewCell.swift; sourceTree = "<group>"; };
 		FC452FD62374FBAB00CCADD8 /* VideoDataApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDataApi.swift; sourceTree = "<group>"; };
-		FC452FD92374FE3900CCADD8 /* VideoRootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRootModel.swift; sourceTree = "<group>"; };
-		FC452FDB2374FEA900CCADD8 /* VideoPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPageModel.swift; sourceTree = "<group>"; };
-		FC452FDD2374FEF500CCADD8 /* VideoDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDataModel.swift; sourceTree = "<group>"; };
-		FC452FDF2374FF2000CCADD8 /* VideoListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListModel.swift; sourceTree = "<group>"; };
 		FC452FE32375039100CCADD8 /* VideoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListView.swift; sourceTree = "<group>"; };
 		FC4E35062399F97C00CAA71A /* VideoDownloadManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloadManageView.swift; sourceTree = "<group>"; };
 		FC4E35082399F9C700CAA71A /* VideoDownloadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloadController.swift; sourceTree = "<group>"; };
@@ -1028,10 +1020,6 @@
 		FC452FD82374FE2900CCADD8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				FC452FD92374FE3900CCADD8 /* VideoRootModel.swift */,
-				FC452FDB2374FEA900CCADD8 /* VideoPageModel.swift */,
-				FC452FDD2374FEF500CCADD8 /* VideoDataModel.swift */,
-				FC452FDF2374FF2000CCADD8 /* VideoListModel.swift */,
 				FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */,
 				FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */,
 				FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */,
@@ -2061,7 +2049,6 @@
 				FC615E512462A2970069CF24 /* CZReadContentHeaderView.swift in Sources */,
 				D06E73AF23354EB500886FDB /* VenderHeader.swift in Sources */,
 				FC799B4624ADC62500793FA9 /* BrowsingHistoryController.swift in Sources */,
-				FC452FE02374FF2000CCADD8 /* VideoListModel.swift in Sources */,
 				FCC8761623A0E85600ECA178 /* UserDefaults+CZKit.swift in Sources */,
 				FCBE6491248A245900B9A0D8 /* RecordTableViewCell.swift in Sources */,
 				FCC8761223A0E85600ECA178 /* UIProgressView+CZKit.swift in Sources */,
@@ -2110,7 +2097,6 @@
 				FCFF172824B568EB006A88E2 /* TelevisionListView.swift in Sources */,
 				FCC875F623A0E85600ECA178 /* CZKit.swift in Sources */,
 				FCA4EBAB24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift in Sources */,
-				FC452FDA2374FE3900CCADD8 /* VideoRootModel.swift in Sources */,
 				D05F5ABF2335FED400FC0B52 /* CZClearCache.swift in Sources */,
 				FC5768E724B2C5A60037CBE2 /* TelevisionModel.swift in Sources */,
 				FC998408248F913600ADE067 /* BookReadModel.swift in Sources */,
@@ -2200,9 +2186,7 @@
 				FC0A020A24A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift in Sources */,
 				FCC8761723A0E85600ECA178 /* UIBarButtonItem+CZKit.swift in Sources */,
 				FCC8762223A0E85600ECA178 /* CZDateSheetView.swift in Sources */,
-				FC452FDC2374FEA900CCADD8 /* VideoPageModel.swift in Sources */,
 				FC1A5BBB23A0960900F37CA1 /* FullscreenPlayController.swift in Sources */,
-				FC452FDE2374FEF500CCADD8 /* VideoDataModel.swift in Sources */,
 				FCC8760C23A0E85600ECA178 /* UIImageView+CZKit.swift in Sources */,
 				FCC875F523A0E85600ECA178 /* CZStringExtension.swift in Sources */,
 				FCC875FD23A0E85600ECA178 /* CZLabelExtension.swift in Sources */,

@@ -165,9 +165,7 @@ class MainTabBarController: BaseTabBarController {
         
         // 创建影源文件夹
         let state = CZObjectStore.standard.cz_createFolder(folderPath: videoResourceFolderPath)
-        guard state else {
-            return
-        }
+        guard state else { return }
         
         let coolCloud = ReadShadowVideoResourceModel()
         coolCloud.name = "酷云"
@@ -221,12 +219,27 @@ class MainTabBarController: BaseTabBarController {
         speedOn.type = "0"
         let _ = CZObjectStore.standard.cz_archiver(object: speedOn, filePath: videoResourceFolderPath + "/" + (speedOn.name ?? "") + ".plist")
         
-        let mushroomCloud = ReadShadowVideoResourceModel()
-        mushroomCloud.name = "蘑菇云"
-        mushroomCloud.baseUrl = "http://zy.mgys8.com"
-        mushroomCloud.path = "/api.php/provide/vod"
-        mushroomCloud.type = "1"
-        let _ = CZObjectStore.standard.cz_archiver(object: mushroomCloud, filePath: videoResourceFolderPath + "/" + (mushroomCloud.name ?? "") + ".plist")
+        let sky = ReadShadowVideoResourceModel()
+        sky.name = "天空"
+        sky.baseUrl = "https://api.tiankongapi.com"
+        sky.path = "/api.php/provide/vod"
+        sky.type = "1"
+        let _ = CZObjectStore.standard.cz_archiver(object: sky, filePath: videoResourceFolderPath + "/" + (sky.name ?? "") + ".plist")
+        
+        let veryFast = ReadShadowVideoResourceModel()
+        veryFast.name = "极快"
+        veryFast.baseUrl = "https://www.jikzy.com"
+        veryFast.path = "/inc/feifei3/"
+        veryFast.type = "0"
+        let _ = CZObjectStore.standard.cz_archiver(object: veryFast, filePath: videoResourceFolderPath + "/" + (veryFast.name ?? "") + ".plist")
+        
+        let polymerization = ReadShadowVideoResourceModel()
+        polymerization.name = "聚合"
+        polymerization.baseUrl = "http://cj.cbi88.com"
+        polymerization.path = "/inc/feifei3.4s/"
+        polymerization.type = "0"
+        let _ = CZObjectStore.standard.cz_archiver(object: polymerization, filePath: videoResourceFolderPath + "/" + (polymerization.name ?? "") + ".plist")
+        
     }
     
     /// 设置控制器

@@ -53,9 +53,6 @@ class VideoDetailsController: BaseController {
         }
     }
     
-    /// 随机数
-    private var randomNumber = 0
-    
     /// 更多精彩模型数据
     private var moreWonderfulModels: Array<ReadShadowVideoModel> = []
     
@@ -95,9 +92,6 @@ class VideoDetailsController: BaseController {
                 make.edges.equalToSuperview().inset(UIEdgeInsets(top: CZCommon.cz_navigationHeight + CZCommon.cz_statusBarHeight, left: 0, bottom: 0, right: 0))
             }
         }
-    
-        // 获取随机数
-        randomNumber = Int(arc4random() % UInt32(readShadowVideoResourceModels.count - 1))
         
         // 创建历史浏览记录文件夹
         _ = CZObjectStore.standard.cz_createFolder(folderPath: videoBrowsingRecordFolderPath)
@@ -141,6 +135,9 @@ class VideoDetailsController: BaseController {
         self.dataTreating()
         
         getMoreWonderfulModels()
+        
+//        let str = try! String(contentsOf: URL(string: "https://1717.ntryjd.net/jx/tyjx.php?url=http://v.qq.com/x/cover/mzc00200tf3z4z0/b00349fd6nd.html")!)
+//        cz_print(str)
     }
     
     /// 请求广告
@@ -152,54 +149,28 @@ class VideoDetailsController: BaseController {
     
     /// 获取更多精彩模型数组
     func getMoreWonderfulModels() {
-        let readShadowVideoResourceModel = readShadowVideoResourceModels[randomNumber]
-        CZNetwork.cz_request(target: VideoDataApi.getVideoData(baseUrl: (readShadowVideoResourceModel.baseUrl)!,
-                                                               path: (readShadowVideoResourceModel.path)!,
-                                                               wd: nil,
-                                                               p: 1,
-                                                               cid: nil),
-                             model: VideoRootModel.self) {[weak self] (result) in
+        let readShadowVideoResourceModel = readShadowVideoResourceModels.first!
+        CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: readShadowVideoResourceModel.baseUrl!, path: readShadowVideoResourceModel.path!, type: readShadowVideoResourceModel.type!, ac: "detail", categoryId: nil, pg: 1, wd: nil), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
             switch result {
-                case .success(let model):
-                    if let videoModels = model.data, videoModels.count > 0 {
-                        var videos: [ReadShadowVideoModel] = []
-                        for videoModel in videoModels {
-                            guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else {
-                                continue
-                            }
-//                            let readShadowVideoModel = ReadShadowVideoModel()
-//                            readShadowVideoModel.name = videoModel.vodName
-//                            readShadowVideoModel.actor = videoModel.vodActor
-//                            readShadowVideoModel.area = videoModel.vodArea
-//                            readShadowVideoModel.year = videoModel.vodYear
-//                            readShadowVideoModel.introduction = videoModel.vodContent
-//                            readShadowVideoModel.director = videoModel.vodDirector
-//                            readShadowVideoModel.url = videoModel.vodUrl
-//                            // 解析所有剧集名称和地址
-//                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
-//                            readShadowVideoModel.seriesNames = m.0
-//                            readShadowVideoModel.seriesUrls = m.1
-//                            readShadowVideoModel.language = videoModel.vodLanguage
-//                            readShadowVideoModel.type = videoModel.vodType
-//                            readShadowVideoModel.category = videoModel.listName
-//                            readShadowVideoModel.pic = videoModel.vodPic
-                            videos.append(videoModel)
-                        }
-                        // 过滤空数组
-                        guard videos.count > 0 else {
-                            return
-                        }
-                        self?.moreWonderfulModels = videos
-                        DispatchQueue.main.async {
-                            self?.videoDetailsView.tableView.reloadData()
-                        }
+            case .success(let model):
+                if let videoModels = model.data, videoModels.count > 0 {
+                    var videos: [ReadShadowVideoModel] = []
+                    for videoModel in videoModels {
+                        guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
+                        // 默认播放首集
+                        videoModel.currentPlayIndex = 0
+                        videos.append(videoModel)
                     }
-                    
-                    break
-                case .failure(let error):
-                    cz_print(error.localizedDescription)
-                    break
+                    // 过滤空数组
+                    guard videos.count > 0 else { return }
+                    self?.moreWonderfulModels = videos
+                    DispatchQueue.main.async { self?.videoDetailsView.tableView.reloadData() }
                 }
+                break
+            case .failure(let error):
+                cz_print(error.localizedDescription)
+                break
+            }
         }
     }
     
@@ -227,49 +198,60 @@ class VideoDetailsController: BaseController {
     
     /// 数据处理
     func dataTreating() {
-//        guard self.model.vodUrl?.count ?? 0 > 0 else { return }
-//        var titleAndUrlAry: Array<String> = []
-//        if model.vodUrl?.contains("$$$") == true {
-//            titleAndUrlAry = model.vodUrl?.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first?.components(separatedBy: "\r\n") ?? []
-//        } else {
-//            titleAndUrlAry = model.vodUrl?.components(separatedBy: "\r\n").filter{ $0.contains("m3u8") } ?? []
-//        }
-//        for titleAndUrlString in titleAndUrlAry {
-//            let titleAndUrl = titleAndUrlString.components(separatedBy: "$")
-//            guard titleAndUrl.count == 2 else {
-//                CZHUD.showError("播放地址解析失败")
-//                return
-//            }
-//            self.titles.append(titleAndUrl.first!)
-//            self.urls.append(titleAndUrl.last!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-//        }
         // 设置封面
         videoDetailsView.playerImageView.kf.indicatorType = .activity
         videoDetailsView.playerImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
         videoDetailsView.superPlayerView.coverImageView.kf.indicatorType = .activity
         videoDetailsView.superPlayerView.coverImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
         cz_print("视频地址：\(model.seriesUrls?[model.currentPlayIndex ?? 0] ?? "")")
-        if isAdvertisingPrivilege == true {
-            if model.seriesUrls?.count ?? 0 > 1 {
-                videoDetailsView.superPlayerView.controlView.title = "\(model.name ?? "")\(model.seriesNames?[model.currentPlayIndex ?? 0] ?? "")"
-            } else {
-                videoDetailsView.superPlayerView.controlView.title = model.name
-            }
-            superPlayerModel.videoURL = model.seriesUrls?[model.currentPlayIndex ?? 0]
-            videoDetailsView.superPlayerView.play(with: superPlayerModel)
-            // 刷新剧集
-            videoDetailsView.tableView.reloadData()
-        }
         // 设置视频名称
         videoDetailsView.videoNameLabel.text = model.name
         videoDetailsView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))"
         videoDetailsView.playerSourceLabel.text = "播放源：\(model.playerSource ?? "")"
+        playerVideo()
+    }
+    
+    /// 播放视频
+    func playerVideo() {
+        if model.seriesUrls?.count ?? 0 > 1 {
+            videoDetailsView.superPlayerView.controlView.title = "\(model.name ?? "")\(model.seriesNames?[model.currentPlayIndex ?? 0] ?? "")"
+        } else {
+            videoDetailsView.superPlayerView.controlView.title = model.name
+        }
+        // 获取当前的url
+        let url = model.seriesUrls?[model.currentPlayIndex ?? 0]
+        if url?.contains(".html") == true { // 需要解析
+            CZHUD.show("视频解析中")
+            CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://videocache-videodata.voooe.cn/", path: "冬瓜ship.php", url: url!), model: StraightChainVideoAnalysisModel.self) {[weak self] (result) in
+                switch result {
+                    case .success(let model):
+                        if model.url == nil || model.url?.isEmpty == true {
+                            DispatchQueue.main.async { CZHUD.showError("视频解析失败") }
+                        } else {
+                            DispatchQueue.main.async {
+                                CZHUD.dismiss()
+                                self?.superPlayerModel.videoURL = model.url
+                                self?.videoDetailsView.superPlayerView.play(with: self!.superPlayerModel)
+                                
+                            }
+                        }
+                        break
+                    case .failure(let error):
+                        DispatchQueue.main.async { CZHUD.showError("视频解析失败") }
+                        cz_print(error.localizedDescription)
+                        break
+                }
+            }
+        } else { // 直接可以播放
+            DispatchQueue.main.async {
+                self.superPlayerModel.videoURL = url
+                self.videoDetailsView.superPlayerView.play(with: self.superPlayerModel)
+            }
+        }
     }
     
     // 状态栏是否隐藏
-    override var prefersStatusBarHidden: Bool {
-        return statusBarHidden
-    }
+    override var prefersStatusBarHidden: Bool {  return statusBarHidden }
 
     deinit {
         /// 清理播放器内部状态，释放内存
@@ -288,19 +270,10 @@ extension VideoDetailsController: UITableViewDataSource, UITableViewDelegate  {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: VideoEpisodeTableViewCell.identifier, for: indexPath) as! VideoEpisodeTableViewCell
-            cell.episodeTitles = model.seriesNames ?? []
-            cell.selectorIndex = model.currentPlayIndex ?? 0
-            cell.didSelectItemBlock = {[weak self] index in
-                self?.model.currentPlayIndex = index
-                if self?.model.seriesUrls?.count ?? 0 > 1 {
-                    self?.videoDetailsView.superPlayerView.controlView.title = "\(self?.model.name ?? "")\(self?.model.seriesNames?[index] ?? "")"
-                } else {
-                    self?.videoDetailsView.superPlayerView.controlView.title = self?.model.name
-                }
-                self?.superPlayerModel.videoURL = self?.model.seriesUrls?[index]
-                self?.videoDetailsView.superPlayerView.play(with: self?.superPlayerModel)
-                DispatchQueue.main.async { tableView.reloadRows(at: [IndexPath(item: 0, section: 0)], with: .none) }
-            }
+            cell.segmentedDataSource.titles = model.seriesNames ?? []
+            cell.segmentedView.defaultSelectedIndex = model.currentPlayIndex ?? 0
+            cell.segmentedView.reloadDataWithoutListContainer()
+            cell.segmentedView.delegate = self
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: MoreBrilliantTableViewCell.identifier, for: indexPath) as! MoreBrilliantTableViewCell
@@ -312,12 +285,20 @@ extension VideoDetailsController: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
-            return CZCommon.cz_dynamicFitHeight(50)
+            return CZCommon.cz_dynamicFitHeight(40)
         } else {
             return UITableView.automaticDimension
         }
     }
     
+}
+
+extension VideoDetailsController: JXSegmentedViewDelegate {
+    
+    func segmentedView(_ segmentedView: JXSegmentedView, didClickSelectedItemAt index: Int) {
+        model.currentPlayIndex = index
+        self.playerVideo()
+    }
 }
 
 extension VideoDetailsController: SuperPlayerDelegate {
@@ -331,11 +312,8 @@ extension VideoDetailsController: SuperPlayerDelegate {
     func superPlayerDidEnd(_ player: SuperPlayerView!) {
         guard model.currentPlayIndex != (model.seriesUrls?.count ?? 0) - 1 else { return }
         model.currentPlayIndex! += 1
-        videoDetailsView.superPlayerView.controlView.title = "\(model.name ?? "")\(model.seriesNames?[model.currentPlayIndex!] ?? "")"
-        superPlayerModel.videoURL = model.seriesUrls?[model.currentPlayIndex!]
-        videoDetailsView.superPlayerView.play(with: superPlayerModel)
-        // 刷新剧集
-        videoDetailsView.tableView.reloadData()
+        playerVideo()
+        videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
     /// 全屏改变通知
@@ -373,17 +351,7 @@ extension VideoDetailsController: GADInterstitialDelegate {
 
     /// 告诉委托该间隙已被动画移出屏幕。
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
-        DispatchQueue.main.async {
-            if self.model.seriesUrls?.count ?? 0 > 1 {
-                self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.name ?? "")\(self.model.seriesNames?[self.model.currentPlayIndex ?? 0] ?? "")"
-            } else {
-                self.videoDetailsView.superPlayerView.controlView.title = self.model.name
-            }
-            self.superPlayerModel.videoURL = self.model.seriesUrls?[self.model.currentPlayIndex ?? 0]
-            self.videoDetailsView.superPlayerView.play(with: self.superPlayerModel)
-            // 刷新剧集
-            self.videoDetailsView.tableView.reloadData()
-        }
+        
     }
 
     ///告诉委托用户单击将打开另一个应用程序

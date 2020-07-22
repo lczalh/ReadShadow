@@ -23,7 +23,7 @@ class VideoListController: BaseController {
     var shufflingFigureModels: Array<ReadShadowVideoModel> = []
     
     /// 影源模型
-    var readShadowVideoResourceModel: ReadShadowVideoResourceModel?
+    var readShadowVideoResourceModel: ReadShadowVideoResourceModel!
     
     lazy var videoListView: VideoListView = {
         let view = VideoListView()
@@ -65,83 +65,107 @@ class VideoListController: BaseController {
     
     // MARK: - 获取视频数据
     @objc func getVideoData() {
-        CZNetwork.cz_request(target: VideoDataApi.getVideoData(baseUrl: (readShadowVideoResourceModel?.baseUrl)!,
-                                                               path: (readShadowVideoResourceModel?.path)!,
-                                                               wd: nil,
-                                                               p: self.currentPage,
-                                                               cid: "\(self.index ?? 0)"),
-                             model: VideoRootModel.self) {[weak self] (result) in
+        CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: readShadowVideoResourceModel.baseUrl!, path: readShadowVideoResourceModel.path!, type: readShadowVideoResourceModel.type!, ac: "detail", categoryId: index, pg: currentPage, wd: nil), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
             switch result {
-                case .success(let model):
-                    if let videoModels = model.data, videoModels.count > 0 {
-                        var videos: [ReadShadowVideoModel] = []
-                        for videoModel in videoModels {
-                            guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else {
-                                continue
-                            }
-//                            let readShadowVideoModel = ReadShadowVideoModel()
-//                            readShadowVideoModel.name = videoModel.vodName
-//                            readShadowVideoModel.actor = videoModel.vodActor
-//                            readShadowVideoModel.area = videoModel.vodArea
-//                            readShadowVideoModel.year = videoModel.vodYear
-//                            readShadowVideoModel.introduction = videoModel.vodContent
-//                            readShadowVideoModel.director = videoModel.vodDirector
-//                            readShadowVideoModel.url = videoModel.vodUrl
-//                            // 解析所有剧集名称和地址
-//                            let m = VideoParsing.parsingResourceSiteM3U8Dddress(url: videoModel.vodUrl ?? "")
-//                            readShadowVideoModel.seriesNames = m.0
-//                            readShadowVideoModel.seriesUrls = m.1
-//                            readShadowVideoModel.language = videoModel.vodLanguage
-//                            readShadowVideoModel.type = videoModel.vodType
-//                            readShadowVideoModel.category = videoModel.listName
-//                            readShadowVideoModel.pic = videoModel.vodPic
-                            videos.append(videoModel)
-                        }
-                        // 过滤空数组
-                        guard videos.count > 0 else {
-                            return
-                        }
-                        for (index, data) in videos.enumerated() {
-                            data.readShadowVideoResourceModel = self?.readShadowVideoResourceModel
-                            if index < 3 && self?.shufflingFigureModels.count != 3 { // 轮播图数据
-                                self?.shufflingFigureModels.append(data)
-                            } else { // 列表数据
-                                self?.models.append(data)
-                            }
+            case .success(let model):
+                if let videoModels = model.data, videoModels.count > 0 {
+                    var videos: [ReadShadowVideoModel] = []
+                    for videoModel in videoModels {
+                        guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
+                        // 默认播放首集
+                        videoModel.currentPlayIndex = 0
+                        videos.append(videoModel)
+                    }
+                    // 过滤空数组
+                    guard videos.count > 0 else { return }
+                    for (index, data) in videos.enumerated() {
+                        data.readShadowVideoResourceModel = self?.readShadowVideoResourceModel
+                        if index < 3 && self?.shufflingFigureModels.count != 3 { // 轮播图数据
+                            self?.shufflingFigureModels.append(data)
+                        } else { // 列表数据
+                            self?.models.append(data)
                         }
                     }
-                    DispatchQueue.main.async {
-                        self?.videoListView.collectionView.reloadData()
-                        if self?.videoListView.collectionView.mj_header?.isRefreshing == true {
-                            self?.videoListView.collectionView.mj_header?.endRefreshing()
-                        }
-                        if self?.videoListView.collectionView.mj_footer?.isRefreshing == true {
-                            if let pageCount = model.page?.pagecount {
-                                if Int(pageCount)! < self!.currentPage {
-                                    self?.videoListView.collectionView.mj_footer?.endRefreshingWithNoMoreData()
-                                } else {
-                                    self?.videoListView.collectionView.mj_footer?.endRefreshing()
-                                }
-                            } else {
-                                self?.videoListView.collectionView.mj_footer?.endRefreshing()
-                            }
-                        }
-                        self?.showOrHideEmptyView(text: "暂无数据")
-                    }
-                    break
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        if self?.videoListView.collectionView.mj_header?.isRefreshing == true {
-                            self?.videoListView.collectionView.mj_header?.endRefreshing()
-                        }
-                        if self?.videoListView.collectionView.mj_footer?.isRefreshing == true {
-                            self?.videoListView.collectionView.mj_footer?.endRefreshing()
-                        }
-                        self?.showOrHideEmptyView(text: error.localizedDescription)
-                    }
-                    break
                 }
+                DispatchQueue.main.async {
+                    self?.videoListView.collectionView.reloadData()
+                    if self?.videoListView.collectionView.mj_header?.isRefreshing == true {
+                        self?.videoListView.collectionView.mj_header?.endRefreshing()
+                    }
+                    if self?.videoListView.collectionView.mj_footer?.isRefreshing == true {
+                        self?.videoListView.collectionView.mj_footer?.endRefreshing()
+                    }
+                    self?.showOrHideEmptyView(text: "暂无数据")
+                }
+                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    if self?.videoListView.collectionView.mj_header?.isRefreshing == true {
+                        self?.videoListView.collectionView.mj_header?.endRefreshing()
+                    }
+                    if self?.videoListView.collectionView.mj_footer?.isRefreshing == true {
+                        self?.videoListView.collectionView.mj_footer?.endRefreshing()
+                    }
+                    self?.showOrHideEmptyView(text: error.localizedDescription)
+                }
+                break
+            }
         }
+
+        
+//        CZNetwork.cz_request(target: VideoDataApi.getVideoData(baseUrl: (readShadowVideoResourceModel?.baseUrl)!,
+//                                                               path: (readShadowVideoResourceModel?.path)!,
+//                                                               wd: nil,
+//                                                               p: self.currentPage,
+//                                                               cid: "\(self.index ?? 0)"),
+//                             model: ReadShadowVideoRootModel.self) {[weak self] (result) in
+//            switch result {
+//                case .success(let model):
+//                    if let videoModels = model.data, videoModels.count > 0 {
+//                        var videos: [ReadShadowVideoModel] = []
+//                        for videoModel in videoModels {
+//                            guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else {
+//                                continue
+//                            }
+//                            videos.append(videoModel)
+//                        }
+//                        // 过滤空数组
+//                        guard videos.count > 0 else {
+//                            return
+//                        }
+//                        for (index, data) in videos.enumerated() {
+//                            data.readShadowVideoResourceModel = self?.readShadowVideoResourceModel
+//                            if index < 3 && self?.shufflingFigureModels.count != 3 { // 轮播图数据
+//                                self?.shufflingFigureModels.append(data)
+//                            } else { // 列表数据
+//                                self?.models.append(data)
+//                            }
+//                        }
+//                    }
+//                    DispatchQueue.main.async {
+//                        self?.videoListView.collectionView.reloadData()
+//                        if self?.videoListView.collectionView.mj_header?.isRefreshing == true {
+//                            self?.videoListView.collectionView.mj_header?.endRefreshing()
+//                        }
+//                        if self?.videoListView.collectionView.mj_footer?.isRefreshing == true {
+//                            self?.videoListView.collectionView.mj_footer?.endRefreshing()
+//                        }
+//                        self?.showOrHideEmptyView(text: "暂无数据")
+//                    }
+//                    break
+//                case .failure(let error):
+//                    DispatchQueue.main.async {
+//                        if self?.videoListView.collectionView.mj_header?.isRefreshing == true {
+//                            self?.videoListView.collectionView.mj_header?.endRefreshing()
+//                        }
+//                        if self?.videoListView.collectionView.mj_footer?.isRefreshing == true {
+//                            self?.videoListView.collectionView.mj_footer?.endRefreshing()
+//                        }
+//                        self?.showOrHideEmptyView(text: error.localizedDescription)
+//                    }
+//                    break
+//                }
+//        }
     }
     
     // MARK: - 显示或隐藏空视图

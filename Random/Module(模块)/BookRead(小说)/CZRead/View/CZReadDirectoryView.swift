@@ -88,7 +88,7 @@ extension CZReadDirectoryView: UITableViewDataSource, UITableViewDelegate {
         if tapChapterBlock != nil {
             let cell = tableView.cellForRow(at: indexPath)
             // 修正偏移位置
-            var offsetPoint = tableView.contentOffset;
+            var offsetPoint = tableView.contentOffset
             offsetPoint.y = (cell?.center.y)! - tableView.frame.height / 2
             //顶边超出处理
             if (offsetPoint.y < 0) {

@@ -69,11 +69,11 @@ class SearchDownloadableVideoController: BaseController {
         }
         for downloadReadShadowVideoResourceModel in downloadReadShadowVideoResourceModels{
             CZNetwork.cz_request(target: VideoDataApi.getVideoDownData(baseUrl: downloadReadShadowVideoResourceModel.baseUrl ?? "", downloadPath: downloadReadShadowVideoResourceModel.downloadPath ?? "", wd: vodName, p: nil, cid: nil),
-                                 model: VideoRootModel.self) {[weak self] (result) in
+                                 model: ReadShadowVideoRootModel.self) {[weak self] (result) in
                 switch result {
 
                 case .success(let downModel):
-                    if downModel.status == 200 {
+                    if let videoModels = downModel.data, videoModels.count > 0 {
                         var videoTitles: Array<String> = []
                         var videoUrls: Array<URL> = []
                         if downModel.data!.count > 0, let video = downModel.data?.first { // 下载地址解析

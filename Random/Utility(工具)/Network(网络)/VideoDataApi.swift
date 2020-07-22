@@ -36,6 +36,22 @@ public enum VideoDataApi {
     
     // MARK: - ac=list/detail ids=数据ID，多个ID逗号分割。 t=类别ID pg=页码 wd=搜索关键字 h=几小时内的数据
     case getAppleCmsVideoListData(baseUrl: String, path: String, ac: String, ids: Int?, t: Int?, pg: Int?, wd: String?, h: Int?)
+    
+    
+    
+    /*
+     获取视频数据
+     baseUrl: 基础地址
+     path: 路径
+     downloadPath: 下载路径
+     type: 资源类型 0: 飞飞3.4    1.苹果CMS
+     ac: 直链资源必填 ac=list(获取分类) / detail
+     categoryId： 分类id
+     pg: 页码
+     wd：搜索
+     */
+    case getReadShadowVideoData(baseUrl: String, path: String, type: String, ac: String?, categoryId: Any?, pg: Int?, wd: String?)
+
 }
 
 //设置请求配置
@@ -52,6 +68,8 @@ extension VideoDataApi : TargetType {
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         case .getAppleCmsVideoListData(let baseUrl, _, _, _, _, _, _, _):
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
+        case .getReadShadowVideoData(let baseUrl, _, _, _, _, _, _):
+            return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         }
     }
     
@@ -66,6 +84,8 @@ extension VideoDataApi : TargetType {
         case .straightChainVideoAnalysis(_, let path, _):
             return path
         case .getAppleCmsVideoListData(_, let path, _, _, _, _, _, _):
+            return path
+        case .getReadShadowVideoData(_, let path, _, _, _, _, _):
             return path
         }
         
@@ -106,6 +126,20 @@ extension VideoDataApi : TargetType {
             parameterDict["pg"] = pg
             parameterDict["wd"] = wd
             parameterDict["h"] = h
+            break
+        case .getReadShadowVideoData(_, _, let type, let ac, let categoryId, let pg, let wd):
+            if type == "0" {
+                parameterDict["wd"] = wd
+                parameterDict["p"] = pg
+                if categoryId != nil {
+                    parameterDict["cid"] = "\(categoryId ?? 0)"
+                }
+            } else {
+                parameterDict["ac"] = ac
+                parameterDict["pg"] = pg
+                parameterDict["wd"] = wd
+                parameterDict["t"] = categoryId as? Int
+            }
             break
         }
         return  .requestParameters(parameters: parameterDict, encoding: URLEncoding.default)

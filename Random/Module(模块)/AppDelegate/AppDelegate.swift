@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableView.appearance().estimatedRowHeight = 0
         UITableView.appearance().estimatedSectionFooterHeight = 0
         UITableView.appearance().estimatedSectionHeaderHeight = 0
+//        UICollectionViewFlowLayout.appearance()
         
         // 允许获取电量信息
         UIDevice.current.isBatteryMonitoringEnabled = true
@@ -116,18 +117,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://videocache-videodata.voooe.cn/", path: "冬瓜ship.php", url: url), model: StraightChainVideoAnalysisModel.self) { (result) in
             switch result {
                 case .success(let model):
-                    DispatchQueue.main.async {
-                        CZHUD.dismiss()
-                        let fullscreenPlayController = FullscreenPlayController()
-                        fullscreenPlayController.videoURL = model.url ?? ""
-                        fullscreenPlayController.hidesBottomBarWhenPushed = true
-                        CZCommon.cz_topmostController().navigationController?.pushViewController(fullscreenPlayController, animated: true)
+                    if let url = model.url, url.isEmpty == false {
+                        DispatchQueue.main.async {
+                            CZHUD.dismiss()
+                            let fullscreenPlayController = FullscreenPlayController()
+                            fullscreenPlayController.videoURL = model.url ?? ""
+                            fullscreenPlayController.hidesBottomBarWhenPushed = true
+                            CZCommon.cz_topmostController().navigationController?.pushViewController(fullscreenPlayController, animated: true)
+                        }
+                    } else {
+                        DispatchQueue.main.async { CZHUD.showError("视频解析失败") }
                     }
                     break
                 case .failure(let error):
-                    DispatchQueue.main.async {
-                        CZHUD.showError("解析失败")
-                    }
+                    DispatchQueue.main.async { CZHUD.showError("视频解析失败") }
                     cz_print(error.localizedDescription)
                     break
             }

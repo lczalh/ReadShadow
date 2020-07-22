@@ -19,7 +19,7 @@ class ReadShadowVideoResourceModel : NSObject, NSCoding, Mappable{
     /// 路径
     var path : String?
     
-    /// 资源类型 0: 切片资源    1.直链资源
+    /// 资源类型 0: 飞飞3.4    1.苹果CMS
     var type: String?
 
 

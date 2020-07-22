@@ -11,7 +11,7 @@ import Foundation
 class ReadShadowVideoCategoryModel : NSObject, NSCoding, Mappable{
     
     /// 分类id
-    var categoryId : Int?
+    var categoryId : AnyObject?
     
     /// 分类名
     var categoryName : String?
@@ -25,11 +25,20 @@ class ReadShadowVideoCategoryModel : NSObject, NSCoding, Mappable{
 
     func mapping(map: Map)
     {
-        categoryId <- map["type_id"]
-        categoryId <- map["list_id"]
+        if categoryId == nil  {
+            categoryId <- map["type_id"]
+        }
+        if categoryId == nil {
+            categoryId <- map["list_id"]
+        }
 
-        categoryName <- map["list_name"]
-        categoryName <- map["type_name"]
+        if categoryName == nil || categoryName?.isEmpty == true {
+            categoryName <- map["list_name"]
+        }
+        if categoryName == nil || categoryName?.isEmpty == true {
+            categoryName <- map["type_name"]
+        }
+        
         
     }
 
@@ -39,7 +48,7 @@ class ReadShadowVideoCategoryModel : NSObject, NSCoding, Mappable{
     */
     @objc required init(coder aDecoder: NSCoder)
     {
-         categoryId = aDecoder.decodeObject(forKey: "categoryId") as? Int
+        categoryId = aDecoder.decodeObject(forKey: "categoryId") as AnyObject? 
          categoryName = aDecoder.decodeObject(forKey: "categoryName") as? String
 
     }
