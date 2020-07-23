@@ -32,16 +32,15 @@ class VideoIntroductionController: BaseController {
     
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        videoIntroductionView.frame.origin = CGPoint(x: 0, y: CZCommon.cz_screenHeight)
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
-            self.view.backgroundColor = UIColor.cz_rgbColor(0, 0, 0, 0.5)
+            self.view.backgroundColor = UIColor.cz_rgbColor(0, 0, 0, 0.3)
             self.videoIntroductionView.frame.origin = CGPoint(x: 0, y: self.videoIntroductionViewHeight)
         }, completion: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .cz_rgbColor(0, 0, 0, 0.3)
+        view.backgroundColor = .cz_rgbColor(0, 0, 0, 0)
         videoIntroductionView.cz.addSuperView(view)
         
         videoIntroductionView.closeButton.rx.tap.subscribe(onNext: {[weak self] () in

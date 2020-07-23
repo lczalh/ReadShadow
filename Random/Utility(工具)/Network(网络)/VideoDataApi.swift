@@ -44,13 +44,12 @@ public enum VideoDataApi {
      baseUrl: 基础地址
      path: 路径
      downloadPath: 下载路径
-     type: 资源类型 0: 飞飞3.4    1.苹果CMS
      ac: 直链资源必填 ac=list(获取分类) / detail
      categoryId： 分类id
      pg: 页码
      wd：搜索
      */
-    case getReadShadowVideoData(baseUrl: String, path: String, type: String, ac: String?, categoryId: Any?, pg: Int?, wd: String?)
+    case getReadShadowVideoData(baseUrl: String, path: String, ac: String?, categoryId: Any?, pg: Int?, wd: String?)
 
 }
 
@@ -68,7 +67,7 @@ extension VideoDataApi : TargetType {
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         case .getAppleCmsVideoListData(let baseUrl, _, _, _, _, _, _, _):
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
-        case .getReadShadowVideoData(let baseUrl, _, _, _, _, _, _):
+        case .getReadShadowVideoData(let baseUrl, _, _, _, _, _):
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         }
     }
@@ -85,7 +84,7 @@ extension VideoDataApi : TargetType {
             return path
         case .getAppleCmsVideoListData(_, let path, _, _, _, _, _, _):
             return path
-        case .getReadShadowVideoData(_, let path, _, _, _, _, _):
+        case .getReadShadowVideoData(_, let path, _, _, _, _):
             return path
         }
         
@@ -127,18 +126,16 @@ extension VideoDataApi : TargetType {
             parameterDict["wd"] = wd
             parameterDict["h"] = h
             break
-        case .getReadShadowVideoData(_, _, let type, let ac, let categoryId, let pg, let wd):
-            if type == "0" {
-                parameterDict["wd"] = wd
-                parameterDict["p"] = pg
-                if categoryId != nil {
-                    parameterDict["cid"] = "\(categoryId ?? 0)"
-                }
-            } else {
+        case .getReadShadowVideoData(_, let path, let ac, let categoryId, let pg, let wd):
+            if path == "/api.php/provide/vod" {
                 parameterDict["ac"] = ac
                 parameterDict["pg"] = pg
                 parameterDict["wd"] = wd
                 parameterDict["t"] = categoryId as? Int
+            } else {
+                parameterDict["wd"] = wd
+                parameterDict["p"] = pg
+                parameterDict["cid"] = "\(categoryId ?? 0)"
             }
             break
         }

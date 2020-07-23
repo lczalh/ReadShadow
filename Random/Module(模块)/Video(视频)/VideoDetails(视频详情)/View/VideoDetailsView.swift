@@ -25,17 +25,17 @@ class VideoDetailsView: BaseView {
         return view
     }()
     
-    lazy var superPlayerView: SuperPlayerView = {
-        let view = SuperPlayerView(frame: playerImageView.bounds)
-        //view.autoPlay = false
-        view.coverImageView.contentMode = .scaleAspectFill
-        view.fatherView = playerImageView
-        let superPlayerViewConfig = SuperPlayerViewConfig()
-        superPlayerViewConfig.maxCacheItem = 100
-        superPlayerViewConfig.renderMode = 0
-        view.playerConfig = superPlayerViewConfig
-        return view
-    }()
+//    lazy var superPlayerView: SuperPlayerView = {
+//        let view = SuperPlayerView(frame: playerImageView.bounds)
+//        //view.autoPlay = false
+//        view.coverImageView.contentMode = .scaleAspectFill
+//      //  view.fatherView = playerImageView
+//        let superPlayerViewConfig = SuperPlayerViewConfig()
+//        superPlayerViewConfig.maxCacheItem = 100
+//        superPlayerViewConfig.renderMode = 0
+//        view.playerConfig = superPlayerViewConfig
+//        return view
+//    }()
     
     /// 流动提示
     lazy var marqueeLabel: QMUIMarqueeLabel = {
@@ -51,7 +51,6 @@ class VideoDetailsView: BaseView {
             .cz
             .rowHeight(UITableView.automaticDimension)
             .estimatedRowHeight(50)
-            .register(OutlineTableViewCell.self, forCellReuseIdentifier: OutlineTableViewCell.identifier)
             .register(MoreBrilliantTableViewCell.self, forCellReuseIdentifier: MoreBrilliantTableViewCell.identifier)
             .register(VideoEpisodeTableViewCell.self, forCellReuseIdentifier: VideoEpisodeTableViewCell.identifier)
             .backgroundColor(cz_backgroundColor)
@@ -73,11 +72,14 @@ class VideoDetailsView: BaseView {
     /// 视频信息 评分、年、地区、类别
     var videoInfoLabel: UILabel!
     
-    /// 播放源
-    var playerSourceLabel: UILabel!
+//    /// 播放源
+//    var playerSourceLabel: UILabel!
     
     /// 简介按钮
     var introductionButton: UIButton!
+    
+    /// 切换源按钮
+    var switchSourceButton: UIButton!
     
     // MARK: - 初始化
     override init(frame: CGRect) {
@@ -97,6 +99,21 @@ class VideoDetailsView: BaseView {
     private func createTableHeaderView() -> UIView {
         let tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_dynamicFitHeight(80)))
         
+        // 简介
+        introductionButton = UIButton()
+            .cz
+            .addSuperView(tableHeaderView)
+            .makeConstraints({ (make) in
+                make.right.equalToSuperview().offset(-10)
+                make.top.equalToSuperview()
+            })
+            .font(.cz_systemFont(12))
+            .titleColor(cz_unStandardTextColor, for: .normal)
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
+            .build
+        introductionButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_Video_Introduction_RightArrow"), title: "简介", titlePosition: .left, additionalSpacing: 0, state: .normal)
+        
         // 视频名称
         videoNameLabel = UILabel()
              .cz
@@ -104,9 +121,11 @@ class VideoDetailsView: BaseView {
              .makeConstraints({ (make) in
                 make.left.equalToSuperview().offset(10)
                 make.top.equalToSuperview().offset(0)
+                make.right.equalTo(introductionButton.snp.left).offset(-10)
              })
             .font(.cz_boldSystemFont(14))
             .textColor(cz_standardTextColor)
+            .numberOfLines(2)
             .build
         
         // 视频信息
@@ -122,7 +141,7 @@ class VideoDetailsView: BaseView {
             .build
         
         /// 播放源
-        playerSourceLabel = UILabel()
+        let playerSourceLabel = UILabel()
             .cz
             .addSuperView(tableHeaderView)
             .makeConstraints({ (make) in
@@ -131,6 +150,18 @@ class VideoDetailsView: BaseView {
             })
             .font(.cz_systemFont(10))
             .textColor(cz_unStandardTextColor)
+            .text("切换播放源:")
+            .build
+        
+        switchSourceButton = UIButton()
+            .cz
+            .addSuperView(tableHeaderView)
+            .makeConstraints({ (make) in
+                make.left.equalTo(playerSourceLabel.snp.right).offset(5)
+                make.centerY.equalTo(playerSourceLabel)
+            })
+            .titleColor(cz_standardTextColor, for: .normal)
+            .font(.cz_boldSystemFont(10))
             .build
         
         // 下载
@@ -166,19 +197,6 @@ class VideoDetailsView: BaseView {
             .tintColor(.black)
             .build
         avRoutePickerView.activeTintColor = .black
-        
-        // 简介
-        introductionButton = UIButton()
-            .cz
-            .addSuperView(tableHeaderView)
-            .makeConstraints({ (make) in
-                make.right.equalToSuperview().offset(-10)
-                make.top.equalToSuperview()
-            })
-            .font(.cz_systemFont(12))
-            .titleColor(cz_unStandardTextColor, for: .normal)
-            .build
-        introductionButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_Video_Introduction_RightArrow"), title: "简介", titlePosition: .left, additionalSpacing: 0, state: .normal)
         
         let _ = UIView()
             .cz

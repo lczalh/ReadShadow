@@ -39,7 +39,7 @@ class SearchDownloadableVideoController: BaseController {
     private var downloadableVideoTitles: Array<Array<String>> = []
     
     /// 可下载视频URL数组
-    private var downloadableVideoUrls: Array<Array<URL>> = []
+    private var downloadableVideoUrls: Array<Array<String>> = []
     
     /// 可下载视频资源站名称数组
     private var downloadableVideoResourceNames: Array<String> = []
@@ -73,29 +73,10 @@ class SearchDownloadableVideoController: BaseController {
                 switch result {
 
                 case .success(let downModel):
+                    
                     if let videoModels = downModel.data, videoModels.count > 0 {
-                        var videoTitles: Array<String> = []
-                        var videoUrls: Array<URL> = []
-                        if downModel.data!.count > 0, let video = downModel.data?.first { // 下载地址解析
-                            if video.url?.count ?? 0 > 0 {
-                                let videos = video.url?.components(separatedBy: CharacterSet(charactersIn: "\r\n"))
-                                let titleAndUrls = videos?.filter{ $0.count > 0 }
-                                for titleAndUrl in titleAndUrls ?? [] {
-                                    let titleAndUrlAry = titleAndUrl.components(separatedBy: CharacterSet(charactersIn: "$"))
-                                    guard titleAndUrlAry.count == 2 else { break }
-                                    // 播放地址有效才添加
-                                    if let url = URL(string: titleAndUrlAry[1].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) {
-                                        videoTitles.append(titleAndUrlAry[0])
-                                        videoUrls.append(url)
-                                    }
-                                }
-                            }
-                        }
-                        guard videoTitles.count > 0, videoUrls.count > 0 else {
-                            return
-                        }
-                        self?.downloadableVideoTitles.append(videoTitles)
-                        self?.downloadableVideoUrls.append(videoUrls)
+                        self?.downloadableVideoTitles.append(videoModels.first?.allPlayerSourceSeriesNames?.first ?? [])
+                        self?.downloadableVideoUrls.append(videoModels.first?.allPlayerSourceSeriesUrls?.first ?? [])
                         self?.downloadableVideoResourceNames.append(downloadReadShadowVideoResourceModel.name ?? "")
                         DispatchQueue.main.async {
                             CZHUD.dismiss()

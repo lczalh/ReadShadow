@@ -26,8 +26,8 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
         coder.encode(year, forKey: "year")
         coder.encode(category, forKey: "category")
         coder.encode(continu, forKey: "continu")
-        coder.encode(seriesNames, forKey: "seriesNames")
-        coder.encode(seriesUrls, forKey: "seriesUrls")
+        coder.encode(allPlayerSourceSeriesNames, forKey: "allPlayerSourceSeriesNames")
+        coder.encode(allPlayerSourceSeriesUrls, forKey: "allPlayerSourceSeriesUrls")
         coder.encode(playerSource, forKey: "playerSource")
         coder.encode(readShadowVideoResourceModel, forKey: "readShadowVideoResourceModel")
     }
@@ -48,8 +48,8 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
         year = coder.decodeObject(forKey: "year") as? String
         category = coder.decodeObject(forKey: "category") as? String
         continu = coder.decodeObject(forKey: "continu") as? String
-        seriesNames = coder.decodeObject(forKey: "seriesNames") as? Array<String>
-        seriesUrls = coder.decodeObject(forKey: "seriesUrls") as? Array<String>
+        allPlayerSourceSeriesNames = coder.decodeObject(forKey: "allPlayerSourceSeriesNames") as? Array<Array<String>>
+        allPlayerSourceSeriesUrls = coder.decodeObject(forKey: "allPlayerSourceSeriesUrls") as? Array<Array<String>>
         playerSource = coder.decodeObject(forKey: "playerSource") as? String
         readShadowVideoResourceModel = coder.decodeObject(forKey: "readShadowVideoResourceModel") as? ReadShadowVideoResourceModel
     }
@@ -91,18 +91,12 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     var type : String?
     
     /// 播放地址
-    var url : String? {
+    private var url : String? {
         didSet {
             guard url != nil, url?.isEmpty == false else { return }
-            if url?.contains(".m3u8") == true {
-                let m = parsingResourceSiteM3U8Dddress(url: url!)
-                seriesNames = m.0
-                seriesUrls = m.1
-            } else {
-                let m = parsingResourceSitelLnearChainDddress(url: url!).first
-                seriesNames = m?.0 
-                seriesUrls = m?.1
-            }
+            let playerSourceAry = parsingResourceSiteM3U8Dddress(url: url!)
+            allPlayerSourceSeriesNames = playerSourceAry.0
+            allPlayerSourceSeriesUrls = playerSourceAry.1
         }
     }
     
@@ -115,14 +109,28 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     /// 连续中  例：更新至XX集
     var continu: String?
     
+    /// 播放源
+    private var playerSource: String? {
+        didSet {
+            guard playerSource?.count ?? 0 > 0 else { return }
+            var playerSourceNames: Array<String> = []
+            if playerSource?.contains("$$$") == true { // 多个播放器
+                playerSourceNames = playerSource?.components(separatedBy: "$$$").filter{ $0.count > 0 } ?? []
+            } else { // 单个
+                playerSourceNames.append(playerSource ?? "")
+            }
+            allPlayerSourceNames = playerSourceNames
+        }
+    }
+    
     /// 剧集名称
-    var seriesNames: Array<String>?
+    var allPlayerSourceSeriesNames: Array<Array<String>>?
     
     /// 剧集地址
-    var seriesUrls: Array<String>?
+    var allPlayerSourceSeriesUrls: Array<Array<String>>?
     
-    /// 播放源
-    var playerSource: String?
+    /// 所有播放源名称
+    var allPlayerSourceNames: Array<String>?
     
     func mapping(map: Map)
     {
@@ -207,103 +215,114 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     /// 解析资源站中的m3u8播放地址
     /// - Parameter url: 综合的播放地址字符串
     /// - Returns: (所有集数，所有集数播放地址)
-    private func parsingResourceSiteM3U8Dddress(url: String) -> (Array<String>, Array<String>) {
+    private func parsingResourceSiteM3U8Dddress(url: String) -> (Array<Array<String>>, Array<Array<String>>) {
         guard url.count > 0 else { return ([], []) }
-//        var titleAndUrlAry: Array<String> = []
-        var m3u8VideoString: String = ""
-        if url.contains("$$$") == true { // 存在多个播放器 只去m3u8格式的视频
-//            titleAndUrlAry = url.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first?.components(separatedBy: "\r\n") ?? []
-            // 获取m3u8格式的所有视频
-            m3u8VideoString = url.components(separatedBy: "$$$").filter{ $0.contains(".m3u8") }.first!
-            
+        /// 存储所有播放源剧集名称
+        var allPlayerSourceTitles: Array<Array<String>> = []
+        /// 存储所有播放源剧集地址
+        var allPlayerSourceUrls: Array<Array<String>> = []
+        
+        if url.contains("$$$") == true { // 存在多个播放器
+            // 获取多个播放源数据
+            let playerSourceAry = url.components(separatedBy: "$$$").filter{ $0.count > 0 }
+                //.filter{ $0.contains(".m3u8") || $0.contains(".mp4") || $0.contains(".html") }
+            // 遍历符合要求的数据
+            for playerSource in playerSourceAry {
+                let titleAndUrlAry = singlePlaybackSourceDataParsing(url: playerSource)
+                allPlayerSourceTitles.append(titleAndUrlAry.0)
+                allPlayerSourceUrls.append(titleAndUrlAry.1)
+            }
         } else {
-//            titleAndUrlAry = url.components(separatedBy: "\r\n").filter{ $0.contains(".m3u8") }
-            m3u8VideoString = url.contains(".m3u8") == true ? url : ""
+            let playerSource = url//.contains(".m3u8") || url.contains(".mp4") || url.contains(".html") ? url : ""
+            let titleAndUrlAry = singlePlaybackSourceDataParsing(url: playerSource)
+            allPlayerSourceTitles.append(titleAndUrlAry.0)
+            allPlayerSourceUrls.append(titleAndUrlAry.1)
         }
+        return (allPlayerSourceTitles, allPlayerSourceUrls)
+    }
+    
+    /// 单个播放源数据解析
+    private func singlePlaybackSourceDataParsing(url: String) -> (Array<String>, Array<String>) {
         // 存在m3u8的视频才继续往下处理
-        guard m3u8VideoString.count > 0 else { return ([], []) }
+        guard url.count > 0 else { return ([], []) }
         // 存储所有剧集字符串的数组
         var allSeriesStringAry: Array<String> = []
         // 判断是否存在多集
-        if m3u8VideoString.contains("\r\n") == true { // 存在多集
-            allSeriesStringAry = m3u8VideoString.components(separatedBy: "\r\n").filter{ $0.count > 0 }
-        } else if m3u8VideoString.contains("#") == true { // 存在多集
-            allSeriesStringAry = m3u8VideoString.components(separatedBy: "#").filter{ $0.count > 0 }
+        if url.contains("\r\n") == true { // 存在多集
+            allSeriesStringAry = url.components(separatedBy: "\r\n").filter{ $0.count > 0 }
+        } else if url.contains("#") == true { // 存在多集
+            allSeriesStringAry = url.components(separatedBy: "#").filter{ $0.count > 0 }
         } else { //单集
-            allSeriesStringAry.append(m3u8VideoString)
+            allSeriesStringAry.append(url)
         }
-//        let aa = m3u8VideoString.components(separatedBy: "\r\n")
-//        cz_print(aa)
-//        cz_print(url)
-        cz_print(allSeriesStringAry)
         var titles: Array<String> = []
         var urls: Array<String> = []
         for titleAndUrlString in allSeriesStringAry {
-            let titleAndUrl = titleAndUrlString.components(separatedBy: "$")
-            guard titleAndUrl.count == 2 else { return ([], []) }
+            let titleAndUrl = titleAndUrlString.components(separatedBy: "$").filter{ $0.count > 0 }
+            guard titleAndUrl.count == 2 else { continue }
             titles.append(titleAndUrl.first!)
             urls.append(titleAndUrl.last!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
         }
         return (titles, urls)
     }
     
-    /// 解析资源站中的直链播放地址
-    /// - Parameter url: 综合的播放地址字符串
-    /// - Returns: (所有播放源剧集字典, 所有播放源数组)
-    private func parsingResourceSitelLnearChainDddress(url: String) -> Array<(Array<String>, Array<String>)> {
-        guard url.count > 0 else { return [] }
-        /// 所有播放源数据
-        var allPlayDataAry: Array<(Array<String>, Array<String>)> = []
-
-        if url.contains("$$$") == true { // 存在多个播放源
-            let playSourceDataAry = url.components(separatedBy: "$$$").filter{ $0.count > 0 }
-            // 遍历所有播放源
-            for playSourceData in playSourceDataAry {
-                guard playSourceData.isEmpty == false else { continue }
-                // 标题数组
-                var titles: Array<String> = []
-                /// 地址数组
-                var urls: Array<String> = []
-                // 判断是否存在多集
-                if playSourceData.contains("#") == true { // 多集
-                    // 所有剧集数组
-                    let playSourceSeriesAry = playSourceData.components(separatedBy: "#")
-                    // 取出每一集标题和地址
-                    for playSourceSeries in playSourceSeriesAry {
-                        let titleAndUrlAry = playSourceSeries.components(separatedBy: "$")
-                        titles.append(titleAndUrlAry.first!)
-                        urls.append(titleAndUrlAry.last!)
-                    }
-                } else { // 单集
-                    let titleAndUrlAry = playSourceData.components(separatedBy: "$")
-                    titles.append(titleAndUrlAry.first!)
-                    urls.append(titleAndUrlAry.last!)
-                }
-                allPlayDataAry.append((titles, urls))
-            }
-        } else { // 只有单个播放源
-            // 标题数组
-            var titles: Array<String> = []
-            /// 地址数组
-            var urls: Array<String> = []
-            
-            // 判断是否存在多集
-            if url.contains("#") == true { // 多集
-                // 所有剧集数组
-                let playSourceSeriesAry = url.components(separatedBy: "#")
-                // 取出每一集标题和地址
-                for playSourceSeries in playSourceSeriesAry {
-                    let titleAndUrlAry = playSourceSeries.components(separatedBy: "$")
-                    titles.append(titleAndUrlAry.first!)
-                    urls.append(titleAndUrlAry.last!)
-                }
-            } else { // 单集
-                let titleAndUrlAry = url.components(separatedBy: "$")
-                titles.append(titleAndUrlAry.first!)
-                urls.append(titleAndUrlAry.last!)
-            }
-            allPlayDataAry.append((titles, urls))
-        }
-        return allPlayDataAry
-    }
+//    /// 解析资源站中的直链播放地址
+//    /// - Parameter url: 综合的播放地址字符串
+//    /// - Returns: (所有播放源剧集字典, 所有播放源数组)
+//    private func parsingResourceSitelLnearChainDddress(url: String) -> Array<(Array<String>, Array<String>)> {
+//        guard url.count > 0 else { return [] }
+//        /// 所有播放源数据
+//        var allPlayDataAry: Array<(Array<String>, Array<String>)> = []
+//
+//        if url.contains("$$$") == true { // 存在多个播放源
+//            let playSourceDataAry = url.components(separatedBy: "$$$").filter{ $0.count > 0 }
+//            // 遍历所有播放源
+//            for playSourceData in playSourceDataAry {
+//                guard playSourceData.isEmpty == false else { continue }
+//                // 标题数组
+//                var titles: Array<String> = []
+//                /// 地址数组
+//                var urls: Array<String> = []
+//                // 判断是否存在多集
+//                if playSourceData.contains("#") == true { // 多集
+//                    // 所有剧集数组
+//                    let playSourceSeriesAry = playSourceData.components(separatedBy: "#")
+//                    // 取出每一集标题和地址
+//                    for playSourceSeries in playSourceSeriesAry {
+//                        let titleAndUrlAry = playSourceSeries.components(separatedBy: "$")
+//                        titles.append(titleAndUrlAry.first!)
+//                        urls.append(titleAndUrlAry.last!)
+//                    }
+//                } else { // 单集
+//                    let titleAndUrlAry = playSourceData.components(separatedBy: "$")
+//                    titles.append(titleAndUrlAry.first!)
+//                    urls.append(titleAndUrlAry.last!)
+//                }
+//                allPlayDataAry.append((titles, urls))
+//            }
+//        } else { // 只有单个播放源
+//            // 标题数组
+//            var titles: Array<String> = []
+//            /// 地址数组
+//            var urls: Array<String> = []
+//
+//            // 判断是否存在多集
+//            if url.contains("#") == true { // 多集
+//                // 所有剧集数组
+//                let playSourceSeriesAry = url.components(separatedBy: "#")
+//                // 取出每一集标题和地址
+//                for playSourceSeries in playSourceSeriesAry {
+//                    let titleAndUrlAry = playSourceSeries.components(separatedBy: "$")
+//                    titles.append(titleAndUrlAry.first!)
+//                    urls.append(titleAndUrlAry.last!)
+//                }
+//            } else { // 单集
+//                let titleAndUrlAry = url.components(separatedBy: "$")
+//                titles.append(titleAndUrlAry.first!)
+//                urls.append(titleAndUrlAry.last!)
+//            }
+//            allPlayDataAry.append((titles, urls))
+//        }
+//        return allPlayDataAry
+//    }
 }

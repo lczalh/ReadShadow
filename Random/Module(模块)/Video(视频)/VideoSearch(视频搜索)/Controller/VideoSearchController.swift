@@ -91,7 +91,7 @@ class VideoSearchController: BaseController {
         CZHUD.show("视频搜索中")
         for videoSourceModel in readShadowVideoResourceModels {
             autoreleasepool{
-                CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: videoSourceModel.baseUrl!, path: videoSourceModel.path!, type: videoSourceModel.type!, ac: "detail", categoryId: nil, pg: nil, wd: searchName), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
+                CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: videoSourceModel.baseUrl!, path: videoSourceModel.path!, ac: "detail", categoryId: nil, pg: nil, wd: searchName), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
                     switch result {
                         case .success(let model):
                             if let videoModels = model.data, videoModels.count > 0 {

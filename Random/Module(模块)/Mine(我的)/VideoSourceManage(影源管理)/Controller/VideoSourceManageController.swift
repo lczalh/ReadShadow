@@ -40,64 +40,52 @@ class VideoSourceManageController: BaseController {
     
     override func setupNavigationItems() {
         titleView?.title = "我的影源"
-//        if videoSourceModels.count == 0 {
-//            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "添加", style: .done, target: nil, action: nil)
-//        }
-//        navigationItem.rightBarButtonItem?.rx.tap.subscribe(onNext: {[weak self] () in
-//            DispatchQueue.main.async {
-//                let dialogTextFieldViewController = QMUIDialogTextFieldViewController()
-//                dialogTextFieldViewController.titleView?.title = "添加影源"
-//                dialogTextFieldViewController.submitButton?.isEnabled = true
-//                dialogTextFieldViewController.addTextField(withTitle: "影源路径") { (label, textField, layer) in
-//
-//                }
-//                dialogTextFieldViewController.addCancelButton(withText: "取消") { _ in }
-//                dialogTextFieldViewController.addSubmitButton(withText: "添加") { (viewController) in
-//                    dialogTextFieldViewController.hideWith(animated: true) {[weak self] _ in
-//                        let value = dialogTextFieldViewController.textFields![0].text!
-//                        let md5Key = "824092805" + UIDevice.vkKeychainIDFV() + "824092805"
-////                        guard md5Key.md5() == value else {
-////                            CZHUD.showError("影源路径有误!")
-////                            return
-////                        }
-//                        // 添加视频资源
-//                        let videoResources = [
-//                            VideoSourceModel(name: "酷云资源", address: "http://caiji.kuyun98.com", allDataPath: "/inc/s_feifeikkm3u8", downloadDataPath: "/inc/feifei3down"),
-//                            VideoSourceModel(name: "OK资源", address: "https://cj.okzy.tv", allDataPath: "/inc/feifei3ckm3u8s", downloadDataPath: "/inc/feifei3down"),
-//                            VideoSourceModel(name: "最大资源", address: "http://www.zdziyuan.com", allDataPath: "/inc/s_feifei3zuidam3u8", downloadDataPath: "/inc/feifeidown"),
-//                            VideoSourceModel(name: "酷播资源", address: "http://api.kbzyapi.com", allDataPath: "/inc/s_feifei3.4", downloadDataPath: ""),
-//                            VideoSourceModel(name: "最新资源", address: "http://api.zuixinapi.com", allDataPath: "/inc/feifei3", downloadDataPath: ""),
-//                           // VideoSourceModel(name: "卧龙云资源", address: "https://cj.wlzy.tv", allDataPath: "/api/ffs/vod", downloadDataPath: ""),
-//                            VideoSourceModel(name: "135资源", address: "http://cj.zycjw1.com", allDataPath: "/inc/feifei3", downloadDataPath: ""),
-//                            VideoSourceModel(name: "永久云资源", address: "http://www.yongjiuzy1.com", allDataPath: "/inc/s_feifei3", downloadDataPath: ""),
-//                            VideoSourceModel(name: "麻花云资源", address: "https://www.mhapi123.com", allDataPath: "/inc/feifei3", downloadDataPath: ""),
-//                            VideoSourceModel(name: "速播资源", address: "https://www.subo988.com", allDataPath: "/inc/feifei3.4", downloadDataPath: "")
-//                        ]
-//                        // 创建影源文件夹
-//                        let _ = CZObjectStore.standard.cz_createFolder(folderPath: videoResourceFolderPath)
-//
-//                        // 存储所有视频资源
-//                        for videoResource in videoResources {
-//                            _ = CZObjectStore.standard.cz_archiver(object: videoResource, filePath: videoResourceFolderPath + "/" + (videoResource.name ?? "") + ".plist")
-//                        }
-//
-//                        DispatchQueue.main.async {
-//                            self?.videoSourceManageView.tableView.reloadData()
-//                            // 动态创建 视频控制器
-//                            let navigationController = BaseNavigationController(rootViewController: VideoHomeController())
-//                            let tabbarItem = UITabBarItem()
-//                            tabbarItem.title = "视频"
-//                            tabbarItem.image = UIImage(named: "Icon_Video")
-//                            tabbarItem.tag = 2
-//                            tabbarItem.selectedImage = UIImage(named: "Icon_Video")
-//                            navigationController.tabBarItem = tabbarItem
-//                            self?.tabBarController?.viewControllers?.insert(navigationController, at: 1)
-//                        }
-//                    }
-//                }
-//                dialogTextFieldViewController.show()
-//            }
-//        }).disposed(by: rx.disposeBag)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "添加", style: .done, target: nil, action: nil)
+        navigationItem.rightBarButtonItem?.rx.tap.subscribe(onNext: {[weak self] () in
+            DispatchQueue.main.async {
+                let dialogTextFieldViewController = QMUIDialogTextFieldViewController()
+                dialogTextFieldViewController.titleView?.title = "添加影源"
+                dialogTextFieldViewController.submitButton?.isEnabled = true
+                dialogTextFieldViewController.addTextField(withTitle: "影源名称") { (label, textField, layer) in
+
+                }
+                dialogTextFieldViewController.addTextField(withTitle: "影源地址") { (label, textField, layer) in
+
+                }
+                dialogTextFieldViewController.addCancelButton(withText: "取消") { _ in }
+                dialogTextFieldViewController.addSubmitButton(withText: "添加") { (viewController) in
+                    let videoSourceName = dialogTextFieldViewController.textFields?[0].text ?? ""
+                    let videoSourceAddress = dialogTextFieldViewController.textFields?[1].text ?? ""
+                    DispatchQueue.main.async { CZHUD.show("影源匹配中") }
+                    // 匹配路径
+                    let path = self?.videoSourcePathMatching(baseUrl: videoSourceAddress)
+                    guard path != nil else {
+                        DispatchQueue.main.async { CZHUD.show("影源匹配失败") }
+                        return
+                    }
+                    // 匹配下载地址
+                    let downloadPath = self?.videoSourceDownloadPathMatching(baseUrl: videoSourceAddress)
+                    let mushroomCloud = ReadShadowVideoResourceModel()
+                    mushroomCloud.name = videoSourceName
+                    mushroomCloud.baseUrl = videoSourceAddress
+                    mushroomCloud.path = path
+                    mushroomCloud.downloadPath = downloadPath
+                    let _ = CZObjectStore.standard.cz_archiver(object: mushroomCloud, filePath: videoResourceFolderPath + "/" + (mushroomCloud.name ?? "") + ".plist")
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                        CZHUD.dismiss()
+                        dialogTextFieldViewController.hideWith(animated: true) { _ in
+                            let tabBarController = MainTabBarController()
+                            let transtition = CATransition()
+                            transtition.duration = 0.5
+                            transtition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+                            UIApplication.shared.delegate?.window??.layer.add(transtition, forKey: "animation")
+                            UIApplication.shared.delegate?.window??.rootViewController = tabBarController
+                        }
+                    }
+                }
+                dialogTextFieldViewController.show()
+            }
+        }).disposed(by: rx.disposeBag)
     }
 
     override func viewDidLoad() {
@@ -111,7 +99,48 @@ class VideoSourceManageController: BaseController {
         }
         
     }
-
+    
+    
+    /// 影源路径匹配
+    /// - Parameter baseUrl: 影源地址
+    /// - Returns: 影源路径
+    func videoSourcePathMatching(baseUrl: String) -> String? {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/api.php/provide/vod")!) {
+            return "/api.php/provide/vod"
+        }
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifeikkm3u8")!) {
+            return "/inc/s_feifeikkm3u8"
+        }
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifei3zuidam3u8")!) {
+            return "/inc/s_feifei3zuidam3u8"
+        }
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifei3")!) {
+            return "/inc/s_feifei3"
+        }
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3ckm3u8s")!) {
+            return "/inc/feifei3ckm3u8s"
+        }
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3")!) {
+            return "/inc/feifei3"
+        }
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3.4s")!) {
+            return "/inc/feifei3.4s"
+        }
+        return nil
+    }
+    
+    /// 影源下载路径匹配
+    /// - Parameter baseUrl: 影源地址
+    /// - Returns: 影源下载路径
+    func videoSourceDownloadPathMatching(baseUrl: String) -> String? {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3down")!) {
+            return "/inc/feifei3down"
+        }
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifeidown")!) {
+            return "/inc/feifeidown"
+        }
+        return nil
+    }
 }
 
 extension VideoSourceManageController: UITableViewDataSource, UITableViewDelegate {

@@ -15,7 +15,7 @@ class FullscreenPlayView: BaseView {
         view.fatherView = self
         let superPlayerViewConfig = SuperPlayerViewConfig()
         superPlayerViewConfig.maxCacheItem = 100
-        superPlayerViewConfig.renderMode = 0
+       // superPlayerViewConfig.renderMode = 0
         view.playerConfig = superPlayerViewConfig
         return view
     }()

@@ -113,27 +113,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         // 视频解析
         let url = url.absoluteString.components(separatedBy: "ReadShadow://").last ?? ""
-        CZHUD.show("视频解析中")
-        CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://videocache-videodata.voooe.cn/", path: "冬瓜ship.php", url: url), model: StraightChainVideoAnalysisModel.self) { (result) in
-            switch result {
-                case .success(let model):
-                    if let url = model.url, url.isEmpty == false {
-                        DispatchQueue.main.async {
-                            CZHUD.dismiss()
-                            let fullscreenPlayController = FullscreenPlayController()
-                            fullscreenPlayController.videoURL = model.url ?? ""
-                            fullscreenPlayController.hidesBottomBarWhenPushed = true
-                            CZCommon.cz_topmostController().navigationController?.pushViewController(fullscreenPlayController, animated: true)
-                        }
-                    } else {
-                        DispatchQueue.main.async { CZHUD.showError("视频解析失败") }
-                    }
-                    break
-                case .failure(let error):
-                    DispatchQueue.main.async { CZHUD.showError("视频解析失败") }
-                    cz_print(error.localizedDescription)
-                    break
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        let directBroadcastAction = UIAlertAction(title: "直接播放", style: .default) { (action) in
+            DispatchQueue.main.async {
+                let fullscreenPlayController = FullscreenPlayController()
+                fullscreenPlayController.videoURL = url
+                fullscreenPlayController.hidesBottomBarWhenPushed = true
+                CZCommon.cz_topmostController().navigationController?.pushViewController(fullscreenPlayController, animated: true)
             }
+        }
+        let parsingPlayAction = UIAlertAction(title: "解析播放", style: .default) { (action) in
+            DispatchQueue.main.async {
+                UIApplication.shared.open(URL(string: "https://www.ckmov.com/?url=\(url)")!, options: [:], completionHandler: nil)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (action) in
+        }
+        if url.contains(".m3u8") || url.contains(".mp4") {
+            alertController.addAction(directBroadcastAction)
+        }
+        alertController.addAction(parsingPlayAction)
+        alertController.addAction(cancelAction)
+        DispatchQueue.main.async {
+            CZCommon.cz_topmostController().present(alertController, animated: true, completion: nil)
         }
         return true
     }

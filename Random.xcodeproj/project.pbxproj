@@ -34,8 +34,6 @@
 		FC0A020A24A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0A020924A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift */; };
 		FC100E50237566F1004ADEB3 /* VideoDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC100E4F237566F1004ADEB3 /* VideoDetailsController.swift */; };
 		FC100E5223756701004ADEB3 /* VideoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC100E5123756701004ADEB3 /* VideoDetailsView.swift */; };
-		FC17D9ED24C6C1260079F524 /* AppleCmsDetailsRootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */; };
-		FC17D9EF24C6C1560079F524 /* AppleCmsDetailsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */; };
 		FC17D9F124C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */; };
 		FC17D9F324C6E2C50079F524 /* ReadShadowVideoRootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9F224C6E2C50079F524 /* ReadShadowVideoRootModel.swift */; };
 		FC1826EF2484DEE800A7E740 /* MineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1826EE2484DEE800A7E740 /* MineController.swift */; };
@@ -50,7 +48,6 @@
 		FC22C99B239F3B0400EF7C08 /* HaveDownloadedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC22C99A239F3B0400EF7C08 /* HaveDownloadedTableViewCell.swift */; };
 		FC2701702487A575007A16A6 /* VideoSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC27016F2487A575007A16A6 /* VideoSearchTableViewCell.swift */; };
 		FC288A4E237A454C00B8C707 /* VideoDownloadManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC288A4D237A454C00B8C707 /* VideoDownloadManageController.swift */; };
-		FC2B54EE2379496E00637B56 /* OutlineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2B54ED2379496E00637B56 /* OutlineTableViewCell.swift */; };
 		FC2B54F023794EE200637B56 /* MoreBrilliantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2B54EF23794EE200637B56 /* MoreBrilliantTableViewCell.swift */; };
 		FC2CE09423838E0B003CAEFD /* VideoDownloadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2CE09323838E0B003CAEFD /* VideoDownloadTableViewCell.swift */; };
 		FC2E28B324A081FF00373FAF /* BookReadRecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2E28B224A081FF00373FAF /* BookReadRecordModel.swift */; };
@@ -96,6 +93,11 @@
 		FC81A930248791B000F0AE65 /* VideoSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC81A92F248791B000F0AE65 /* VideoSearchController.swift */; };
 		FC81A932248791BB00F0AE65 /* VideoSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC81A931248791BB00F0AE65 /* VideoSearchView.swift */; };
 		FC83882A239DE43B00DC2D6E /* CZRingGradientProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC838829239DE43B00DC2D6E /* CZRingGradientProgressView.swift */; };
+		FC85664824C93BEC008E0D95 /* SwitchVideoSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85664724C93BEC008E0D95 /* SwitchVideoSourceController.swift */; };
+		FC85664A24C93C15008E0D95 /* SwitchVideoSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85664924C93C15008E0D95 /* SwitchVideoSourceView.swift */; };
+		FC85664C24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85664B24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift */; };
+		FC85665124C99067008E0D95 /* AddVideoSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85665024C99067008E0D95 /* AddVideoSourceController.swift */; };
+		FC85665324C99091008E0D95 /* AddVideoSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85665224C99091008E0D95 /* AddVideoSourceView.swift */; };
 		FC859B6F249760D400ECABFC /* VideoResourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC859B6E249760D400ECABFC /* VideoResourceTableViewCell.swift */; };
 		FC859B712497697D00ECABFC /* CZReadTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC859B702497697D00ECABFC /* CZReadTabBarView.swift */; };
 		FC89298C245AD5F0005118E0 /* CZReadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC89298B245AD5F0005118E0 /* CZReadController.swift */; };
@@ -123,11 +125,9 @@
 		FCA1D46A24B6F0CD00E0AE8E /* TelevisionSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA1D46924B6F0CD00E0AE8E /* TelevisionSearchView.swift */; };
 		FCA4EBA724C54B9400D29579 /* StraightChainVideoAnalysisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBA624C54B9400D29579 /* StraightChainVideoAnalysisModel.swift */; };
 		FCA4EBA924C579F200D29579 /* VideoEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBA824C579F200D29579 /* VideoEpisodeTableViewCell.swift */; };
-		FCA4EBAB24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBAA24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift */; };
 		FCA4EBB024C5889500D29579 /* VideoIntroductionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBAF24C5889500D29579 /* VideoIntroductionController.swift */; };
 		FCA4EBB224C588AE00D29579 /* VideoIntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBB124C588AE00D29579 /* VideoIntroductionView.swift */; };
 		FCA4EBB424C5A92A00D29579 /* ReadShadowVideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */; };
-		FCA4EBB724C5AFB400D29579 /* VideoParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4EBB624C5AFB400D29579 /* VideoParsing.swift */; };
 		FCB496BE246E4EEC00AECA78 /* CZRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB496BD246E4EEC00AECA78 /* CZRegex.swift */; };
 		FCB57FF4237E9F2500A46CD7 /* VideoDownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB57FF3237E9F2500A46CD7 /* VideoDownloadView.swift */; };
 		FCB5E56323911C1B0025E191 /* CZNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB5E56223911C1B0025E191 /* CZNetwork.swift */; };
@@ -295,8 +295,6 @@
 		FC0A020924A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftTitleRightLabelTableViewCell.swift; sourceTree = "<group>"; };
 		FC100E4F237566F1004ADEB3 /* VideoDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailsController.swift; sourceTree = "<group>"; };
 		FC100E5123756701004ADEB3 /* VideoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailsView.swift; sourceTree = "<group>"; };
-		FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCmsDetailsRootModel.swift; sourceTree = "<group>"; };
-		FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCmsDetailsListModel.swift; sourceTree = "<group>"; };
 		FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoCategoryModel.swift; sourceTree = "<group>"; };
 		FC17D9F224C6E2C50079F524 /* ReadShadowVideoRootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoRootModel.swift; sourceTree = "<group>"; };
 		FC1826EE2484DEE800A7E740 /* MineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineController.swift; sourceTree = "<group>"; };
@@ -312,7 +310,6 @@
 		FC22C99A239F3B0400EF7C08 /* HaveDownloadedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaveDownloadedTableViewCell.swift; sourceTree = "<group>"; };
 		FC27016F2487A575007A16A6 /* VideoSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSearchTableViewCell.swift; sourceTree = "<group>"; };
 		FC288A4D237A454C00B8C707 /* VideoDownloadManageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloadManageController.swift; sourceTree = "<group>"; };
-		FC2B54ED2379496E00637B56 /* OutlineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTableViewCell.swift; sourceTree = "<group>"; };
 		FC2B54EF23794EE200637B56 /* MoreBrilliantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreBrilliantTableViewCell.swift; sourceTree = "<group>"; };
 		FC2CE09323838E0B003CAEFD /* VideoDownloadTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloadTableViewCell.swift; sourceTree = "<group>"; };
 		FC2E28B224A081FF00373FAF /* BookReadRecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadRecordModel.swift; sourceTree = "<group>"; };
@@ -359,6 +356,11 @@
 		FC81A92F248791B000F0AE65 /* VideoSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSearchController.swift; sourceTree = "<group>"; };
 		FC81A931248791BB00F0AE65 /* VideoSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSearchView.swift; sourceTree = "<group>"; };
 		FC838829239DE43B00DC2D6E /* CZRingGradientProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZRingGradientProgressView.swift; sourceTree = "<group>"; };
+		FC85664724C93BEC008E0D95 /* SwitchVideoSourceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVideoSourceController.swift; sourceTree = "<group>"; };
+		FC85664924C93C15008E0D95 /* SwitchVideoSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVideoSourceView.swift; sourceTree = "<group>"; };
+		FC85664B24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVideoSourceTableViewCell.swift; sourceTree = "<group>"; };
+		FC85665024C99067008E0D95 /* AddVideoSourceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVideoSourceController.swift; sourceTree = "<group>"; };
+		FC85665224C99091008E0D95 /* AddVideoSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVideoSourceView.swift; sourceTree = "<group>"; };
 		FC859B6E249760D400ECABFC /* VideoResourceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoResourceTableViewCell.swift; sourceTree = "<group>"; };
 		FC859B702497697D00ECABFC /* CZReadTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadTabBarView.swift; sourceTree = "<group>"; };
 		FC89298B245AD5F0005118E0 /* CZReadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadController.swift; sourceTree = "<group>"; };
@@ -386,11 +388,9 @@
 		FCA1D46924B6F0CD00E0AE8E /* TelevisionSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelevisionSearchView.swift; sourceTree = "<group>"; };
 		FCA4EBA624C54B9400D29579 /* StraightChainVideoAnalysisModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightChainVideoAnalysisModel.swift; sourceTree = "<group>"; };
 		FCA4EBA824C579F200D29579 /* VideoEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEpisodeTableViewCell.swift; sourceTree = "<group>"; };
-		FCA4EBAA24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEpisodeCollectionViewCell.swift; sourceTree = "<group>"; };
 		FCA4EBAF24C5889500D29579 /* VideoIntroductionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIntroductionController.swift; sourceTree = "<group>"; };
 		FCA4EBB124C588AE00D29579 /* VideoIntroductionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIntroductionView.swift; sourceTree = "<group>"; };
 		FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoModel.swift; sourceTree = "<group>"; };
-		FCA4EBB624C5AFB400D29579 /* VideoParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoParsing.swift; sourceTree = "<group>"; };
 		FCB496BD246E4EEC00AECA78 /* CZRegex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZRegex.swift; sourceTree = "<group>"; };
 		FCB57FF3237E9F2500A46CD7 /* VideoDownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloadView.swift; sourceTree = "<group>"; };
 		FCB5E56223911C1B0025E191 /* CZNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZNetwork.swift; sourceTree = "<group>"; };
@@ -653,7 +653,6 @@
 		D06E732523350DBA00886FDB /* Utility(工具) */ = {
 			isa = PBXGroup;
 			children = (
-				FCA4EBB524C5AF9800D29579 /* VideoParsing(视频解析) */,
 				FCCFC857248E298400BC4DD3 /* BookReadParsing(阅读解析) */,
 				FCC875BA23A0E85500ECA178 /* CZKit */,
 				FC838828239DE37400DC2D6E /* Progress */,
@@ -755,6 +754,7 @@
 		FC100E4C23756628004ADEB3 /* VideoDetails(视频详情) */ = {
 			isa = PBXGroup;
 			children = (
+				FC85664424C93B70008E0D95 /* SwitchVideoSource(切换视频源) */,
 				FCA4EBAC24C5884800D29579 /* VideoIntroduction(视频简介) */,
 				FC7D22AE23A1DC5E00314876 /* Model */,
 				FC100E4E237566B9004ADEB3 /* View */,
@@ -775,10 +775,8 @@
 			isa = PBXGroup;
 			children = (
 				FC100E5123756701004ADEB3 /* VideoDetailsView.swift */,
-				FC2B54ED2379496E00637B56 /* OutlineTableViewCell.swift */,
 				FC2B54EF23794EE200637B56 /* MoreBrilliantTableViewCell.swift */,
 				FCA4EBA824C579F200D29579 /* VideoEpisodeTableViewCell.swift */,
-				FCA4EBAA24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1021,8 +1019,6 @@
 			isa = PBXGroup;
 			children = (
 				FCA4EBB324C5A92A00D29579 /* ReadShadowVideoModel.swift */,
-				FC17D9EC24C6C1260079F524 /* AppleCmsDetailsRootModel.swift */,
-				FC17D9EE24C6C1560079F524 /* AppleCmsDetailsListModel.swift */,
 				FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */,
 				FC17D9F224C6E2C50079F524 /* ReadShadowVideoRootModel.swift */,
 			);
@@ -1223,6 +1219,57 @@
 				FC838829239DE43B00DC2D6E /* CZRingGradientProgressView.swift */,
 			);
 			path = Progress;
+			sourceTree = "<group>";
+		};
+		FC85664424C93B70008E0D95 /* SwitchVideoSource(切换视频源) */ = {
+			isa = PBXGroup;
+			children = (
+				FC85664624C93BCF008E0D95 /* View */,
+				FC85664524C93BC4008E0D95 /* Controller */,
+			);
+			path = "SwitchVideoSource(切换视频源)";
+			sourceTree = "<group>";
+		};
+		FC85664524C93BC4008E0D95 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FC85664724C93BEC008E0D95 /* SwitchVideoSourceController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		FC85664624C93BCF008E0D95 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FC85664924C93C15008E0D95 /* SwitchVideoSourceView.swift */,
+				FC85664B24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FC85664D24C98FC3008E0D95 /* AddVideoSource(添加影源) */ = {
+			isa = PBXGroup;
+			children = (
+				FC85664F24C9904C008E0D95 /* View */,
+				FC85664E24C98FF3008E0D95 /* Controller */,
+			);
+			path = "AddVideoSource(添加影源)";
+			sourceTree = "<group>";
+		};
+		FC85664E24C98FF3008E0D95 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FC85665024C99067008E0D95 /* AddVideoSourceController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		FC85664F24C9904C008E0D95 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FC85665224C99091008E0D95 /* AddVideoSourceView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		FC892987245AD592005118E0 /* CZRead */ = {
@@ -1457,14 +1504,6 @@
 				FCA4EBB124C588AE00D29579 /* VideoIntroductionView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		FCA4EBB524C5AF9800D29579 /* VideoParsing(视频解析) */ = {
-			isa = PBXGroup;
-			children = (
-				FCA4EBB624C5AFB400D29579 /* VideoParsing.swift */,
-			);
-			path = "VideoParsing(视频解析)";
 			sourceTree = "<group>";
 		};
 		FCB8B4E3249355D40043EFF7 /* AddBookSource(添加书源) */ = {
@@ -1703,6 +1742,7 @@
 		FCF21C2F24A2F0B1003BFD3D /* VideoSourceManage(影源管理) */ = {
 			isa = PBXGroup;
 			children = (
+				FC85664D24C98FC3008E0D95 /* AddVideoSource(添加影源) */,
 				FCF21C3224A2F0EB003BFD3D /* Model */,
 				FCF21C3124A2F0E7003BFD3D /* View */,
 				FCF21C3024A2F0E2003BFD3D /* Controller */,
@@ -2046,6 +2086,7 @@
 				FCC8760623A0E85600ECA178 /* NotificationCenter+CZKit.swift in Sources */,
 				FCA4EBB024C5889500D29579 /* VideoIntroductionController.swift in Sources */,
 				FC1826EF2484DEE800A7E740 /* MineController.swift in Sources */,
+				FC85664C24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift in Sources */,
 				FC615E512462A2970069CF24 /* CZReadContentHeaderView.swift in Sources */,
 				D06E73AF23354EB500886FDB /* VenderHeader.swift in Sources */,
 				FC799B4624ADC62500793FA9 /* BrowsingHistoryController.swift in Sources */,
@@ -2065,12 +2106,9 @@
 				FCDF994124BED3560038970B /* SearchDownloadableVideoView.swift in Sources */,
 				FC8180C9249078B400140B5E /* BookReadNewestTableViewCell.swift in Sources */,
 				FCF21C3424A2F100003BFD3D /* VideoSourceManageController.swift in Sources */,
-				FC17D9EF24C6C1560079F524 /* AppleCmsDetailsListModel.swift in Sources */,
-				FC2B54EE2379496E00637B56 /* OutlineTableViewCell.swift in Sources */,
 				FCB57FF4237E9F2500A46CD7 /* VideoDownloadView.swift in Sources */,
 				FCC875FE23A0E85600ECA178 /* CZViewExtension.swift in Sources */,
 				FC9E71C4249873F80090EE76 /* CZReadStyleCollectionCell.swift in Sources */,
-				FC17D9ED24C6C1260079F524 /* AppleCmsDetailsRootModel.swift in Sources */,
 				FC69493A2490B07600F9708A /* BookReadDirectoryView.swift in Sources */,
 				FCA4EBA924C579F200D29579 /* VideoEpisodeTableViewCell.swift in Sources */,
 				FCA4EBA724C54B9400D29579 /* StraightChainVideoAnalysisModel.swift in Sources */,
@@ -2079,6 +2117,7 @@
 				D01A3CCB23744C6A0030C18E /* VideoListController.swift in Sources */,
 				FCC8761423A0E85600ECA178 /* DateFormatter+CZKit.swift in Sources */,
 				D06E73A223350FCD00886FDB /* NSObject+Swizzling.m in Sources */,
+				FC85664A24C93C15008E0D95 /* SwitchVideoSourceView.swift in Sources */,
 				FC76CCF12462927100FE421A /* CZReadNavigationView.swift in Sources */,
 				FC83882A239DE43B00DC2D6E /* CZRingGradientProgressView.swift in Sources */,
 				FCC8761823A0E85600ECA178 /* UIButton+CZKit.swift in Sources */,
@@ -2096,7 +2135,6 @@
 				FCC8760D23A0E85600ECA178 /* HasText+CZKit.swift in Sources */,
 				FCFF172824B568EB006A88E2 /* TelevisionListView.swift in Sources */,
 				FCC875F623A0E85600ECA178 /* CZKit.swift in Sources */,
-				FCA4EBAB24C57B1B00D29579 /* VideoEpisodeCollectionViewCell.swift in Sources */,
 				D05F5ABF2335FED400FC0B52 /* CZClearCache.swift in Sources */,
 				FC5768E724B2C5A60037CBE2 /* TelevisionModel.swift in Sources */,
 				FC998408248F913600ADE067 /* BookReadModel.swift in Sources */,
@@ -2105,7 +2143,6 @@
 				FCC8762023A0E85600ECA178 /* UINavigationItem+CZKit.swift in Sources */,
 				FCC875F223A0E85600ECA178 /* CZLabel.swift in Sources */,
 				FCA1D46224B6EAA200E0AE8E /* BookReadSearchView.swift in Sources */,
-				FCA4EBB724C5AFB400D29579 /* VideoParsing.swift in Sources */,
 				FC3DDB4D2358696500052AA1 /* BaseTableController.swift in Sources */,
 				FC17D9F324C6E2C50079F524 /* ReadShadowVideoRootModel.swift in Sources */,
 				FCDF994524BEDB920038970B /* SearchDownloadableVideoCollectionHeaderView.swift in Sources */,
@@ -2118,6 +2155,7 @@
 				FC1826F12484DF8C00A7E740 /* MineView.swift in Sources */,
 				FCC8762123A0E85600ECA178 /* CZDateSheetController.swift in Sources */,
 				FC859B6F249760D400ECABFC /* VideoResourceTableViewCell.swift in Sources */,
+				FC85665324C99091008E0D95 /* AddVideoSourceView.swift in Sources */,
 				FCFF172224B56138006A88E2 /* TelevisionRootModel.swift in Sources */,
 				FCB496BE246E4EEC00AECA78 /* CZRegex.swift in Sources */,
 				FC1826FB2484F71900A7E740 /* PrivacyPolicyController.swift in Sources */,
@@ -2147,6 +2185,7 @@
 				FC998404248F89F500ADE067 /* BookReadController.swift in Sources */,
 				FCBE6489248A191800B9A0D8 /* MineTableHeaderView.swift in Sources */,
 				FCC8760A23A0E85600ECA178 /* UIPickerView+CZKit.swift in Sources */,
+				FC85664824C93BEC008E0D95 /* SwitchVideoSourceController.swift in Sources */,
 				FC69493E2490C9AC00F9708A /* BookReadDetailsHeaderView.swift in Sources */,
 				FC76CCF32462941300FE421A /* CZReadContentController.swift in Sources */,
 				FCB8B4EA2493562D0043EFF7 /* AddBookSourceView.swift in Sources */,
@@ -2185,6 +2224,7 @@
 				FC998414248FA09A00ADE067 /* BookReadDetailsView.swift in Sources */,
 				FC0A020A24A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift in Sources */,
 				FCC8761723A0E85600ECA178 /* UIBarButtonItem+CZKit.swift in Sources */,
+				FC85665124C99067008E0D95 /* AddVideoSourceController.swift in Sources */,
 				FCC8762223A0E85600ECA178 /* CZDateSheetView.swift in Sources */,
 				FC1A5BBB23A0960900F37CA1 /* FullscreenPlayController.swift in Sources */,
 				FCC8760C23A0E85600ECA178 /* UIImageView+CZKit.swift in Sources */,

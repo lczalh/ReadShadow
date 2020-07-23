@@ -55,7 +55,8 @@ var filterVideoCategorys: Array<String> = {
         "韩国主播VIP视频",
         "美女视频",
         "写真视频",
-        "DJ系列"
+        "DJ系列",
+        "MV热曲"
     ]
 }()
 

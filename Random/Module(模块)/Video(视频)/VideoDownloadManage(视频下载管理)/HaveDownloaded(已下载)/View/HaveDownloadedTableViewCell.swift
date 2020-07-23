@@ -28,7 +28,8 @@ class HaveDownloadedTableViewCell: SwipeTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.backgroundColor = UIColor.white
+        contentView.backgroundColor = UIColor.white
+        selectionStyle = .none
         titleLabel = QMUILabel()
             .cz
             .addSuperView(self.contentView)
@@ -39,6 +40,16 @@ class HaveDownloadedTableViewCell: SwipeTableViewCell {
             .font(UIFont.cz_boldSystemFont(16))
             .textColor(cz_standardTextColor)
             .build
+        
+        let _ = UIView()
+        .cz
+        .addSuperView(contentView)
+        .makeConstraints { (make) in
+            make.right.left.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        .backgroundColor(cz_dividerColor)
+        .build
     }
     
     required init?(coder: NSCoder) {
