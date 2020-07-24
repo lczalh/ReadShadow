@@ -109,16 +109,6 @@ class VideoDetailsController: BaseController {
         // 创建历史浏览记录文件夹
         _ = CZObjectStore.standard.cz_createFolder(folderPath: videoBrowsingRecordFolderPath)
         
-//        //监听当前播放时间
-//        _ = videoDetailsView.superPlayerView.rx.observeWeakly(CGFloat.self, "playCurrentTime")
-//            .takeUntil(rx.deallocated)
-//            .subscribe(onNext: {[weak self] (value) in
-//                // 记录当前播放时间 和 浏览时间
-//                self?.model.currentPlayTime = value!
-//                self?.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
-//                _ = CZObjectStore.standard.cz_archiver(object: self!.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self?.model.name ?? "").plist")
-//        })
-        
         // 分享
         videoDetailsView.shareButton.rx.tap.subscribe(onNext: {[weak self] () in
             self?.callNativeShare(items: ["我在用“\(CZCommon.cz_appName)”，快来看看吧", UIImage(named: "AppIcon")!, URL(string: "https://apps.apple.com/cn/app/悦影-小说电影神器/id\(appId)".cz_encoded())!])
@@ -232,6 +222,7 @@ class VideoDetailsController: BaseController {
                     fullscreenPlayController.videoName = self.model.name
                 }
                 fullscreenPlayController.hidesBottomBarWhenPushed = true
+                // 播放结束回调
                 fullscreenPlayController.superPlayerDidEndBlock = {[weak self] player in
                     guard self?.model.currentPlayIndex != (self?.currentSeriesUrls.count ?? 0) - 1 else { return }
                     self?.model.currentPlayIndex! += 1
@@ -241,6 +232,13 @@ class VideoDetailsController: BaseController {
                     DispatchQueue.main.async {
                         self?.videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
                     }
+                }
+                //
+                fullscreenPlayController.playCurrentTimeBlock = {[weak self] value in
+                    // 记录当前播放时间 和 浏览时间
+                    self?.model.currentPlayTime = value
+                    self?.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
+                    _ = CZObjectStore.standard.cz_archiver(object: self!.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self?.model.readShadowVideoResourceModel?.name ?? "")-\(self?.model.name ?? "").plist")
                 }
                 self.navigationController?.pushViewController(fullscreenPlayController, animated: true)
             }
@@ -261,8 +259,8 @@ class VideoDetailsController: BaseController {
             self.present(alertController, animated: true, completion: nil)
         }
         // 更新历史记录
-        self.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
-        _ = CZObjectStore.standard.cz_archiver(object: self.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self.model.name ?? "").plist")
+        model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
+        _ = CZObjectStore.standard.cz_archiver(object: model!, filePath: "\(videoBrowsingRecordFolderPath)/\(model.readShadowVideoResourceModel?.name ?? "")-\(model.name ?? "").plist")
     }
     
     // 状态栏是否隐藏

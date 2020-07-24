@@ -21,7 +21,7 @@ class HaveDownloadedView: BaseView {
             .makeConstraints({ (make) in
                 make.edges.equalToSuperview()
             })
-            .rowHeight(CZCommon.cz_dynamicFitHeight(50))
+            .rowHeight(CZCommon.cz_dynamicFitHeight(40))
             .register(HaveDownloadedTableViewCell.self, forCellReuseIdentifier: HaveDownloadedTableViewCell.identifier)
             .backgroundColor(cz_backgroundColor)
             .separatorStyle(.none)

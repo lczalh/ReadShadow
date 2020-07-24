@@ -42,8 +42,11 @@ class FullscreenPlayController: BaseController {
         }
     }
     
-    /// 播放结束通知
+    /// 播放结束回调
     var superPlayerDidEndBlock: ((_ player: SuperPlayerView) -> Void)?
+    
+    /// 实时播放时间回调
+    var playCurrentTimeBlock: ((_ currentPlayTime: CGFloat) -> Void)?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -64,6 +67,15 @@ class FullscreenPlayController: BaseController {
                 make.edges.equalToSuperview()
             }
         }
+        
+        //监听当前播放时间
+        _ = fullscreenPlayView.superPlayerView.rx.observeWeakly(CGFloat.self, "playCurrentTime")
+            .takeUntil(rx.deallocated)
+            .subscribe(onNext: {[weak self] (value) in
+                if self?.playCurrentTimeBlock != nil {
+                    self!.playCurrentTimeBlock!(value ?? 0.0)
+                }
+        })
     }
     
     // 状态栏是否隐藏

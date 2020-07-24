@@ -66,7 +66,7 @@ class VideoDownloadTableViewCell: SwipeTableViewCell {
                 make.top.equalToSuperview().offset(10)
                 make.right.equalTo(playAndPauseButton.snp.left).offset(-15)
             })
-            .font(UIFont.cz_boldSystemFont(14))
+            .font(UIFont.cz_boldSystemFont(12))
             .numberOfLines(2)
             .textColor(cz_standardTextColor)
             .build

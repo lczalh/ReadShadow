@@ -44,6 +44,9 @@ class SearchDownloadableVideoController: BaseController {
     /// 可下载视频资源站名称数组
     private var downloadableVideoResourceNames: Array<String> = []
     
+    /// 所有可下载资源
+    var allReadShadowVideoModelAry: Array<ReadShadowVideoModel> = []
+    
     override func setupNavigationItems() {
         super.setupNavigationItems()
         navigationController?.setNavigationBarHidden(false, animated: false)
@@ -60,38 +63,49 @@ class SearchDownloadableVideoController: BaseController {
     }
     
     func getDownloadableVideoModels() {
-        CZHUD.show("搜索中")
         // 获取可下载的资源站
         let downloadReadShadowVideoResourceModels = readShadowVideoResourceModels.filter{ $0.downloadPath != nil && $0.downloadPath?.isEmpty == false }
         guard downloadReadShadowVideoResourceModels.count > 0 else {
             CZHUD.showError("暂无下载资源站")
             return
         }
-        for downloadReadShadowVideoResourceModel in downloadReadShadowVideoResourceModels{
-            CZNetwork.cz_request(target: VideoDataApi.getVideoDownData(baseUrl: downloadReadShadowVideoResourceModel.baseUrl ?? "", downloadPath: downloadReadShadowVideoResourceModel.downloadPath ?? "", wd: vodName, p: nil, cid: nil),
-                                 model: ReadShadowVideoRootModel.self) {[weak self] (result) in
-                switch result {
-
-                case .success(let downModel):
-                    
-                    if let videoModels = downModel.data, videoModels.count > 0 {
-                        self?.downloadableVideoTitles.append(videoModels.first?.allPlayerSourceSeriesNames?.first ?? [])
-                        self?.downloadableVideoUrls.append(videoModels.first?.allPlayerSourceSeriesUrls?.first ?? [])
-                        self?.downloadableVideoResourceNames.append(downloadReadShadowVideoResourceModel.name ?? "")
+        let semaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.global().async {
+            for downloadReadShadowVideoResourceModel in downloadReadShadowVideoResourceModels{
+                DispatchQueue.main.async { CZHUD.show("\(downloadReadShadowVideoResourceModel.name ?? "")搜索中") }
+                CZNetwork.cz_request(target: VideoDataApi.getVideoDownData(baseUrl: downloadReadShadowVideoResourceModel.baseUrl ?? "", downloadPath: downloadReadShadowVideoResourceModel.downloadPath ?? "", wd: self.vodName, p: nil, cid: nil),
+                                     model: ReadShadowVideoRootModel.self) {[weak self] (result) in
+                    switch result {
+                    case .success(let downModel):
+                        if let videoModels = downModel.data, videoModels.count > 0 {
+//                            var videos: [ReadShadowVideoModel] = []
+                            for videoModel in videoModels {
+                                guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
+                                // 默认播放首集
+                                videoModel.currentPlayIndex = 0
+                                videoModel.readShadowVideoResourceModel = downloadReadShadowVideoResourceModel
+                                self?.allReadShadowVideoModelAry.append(videoModel)
+                            }
+                            
+                        }
                         DispatchQueue.main.async {
                             CZHUD.dismiss()
                             self?.searchDownloadableVideoView.tableView.reloadData()
+                            semaphore.signal()
                         }
-                    } else {
-                        DispatchQueue.main.async { CZHUD.dismiss() }
+                        break
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            CZHUD.showError(error.localizedDescription)
+                            semaphore.signal()
+                        }
+                        break
                     }
-                    break
-                case .failure(let error):
-                    CZHUD.showError(error.localizedDescription)
-                    break
                 }
+                semaphore.wait()
             }
         }
+        
     }
     
 
@@ -99,23 +113,24 @@ class SearchDownloadableVideoController: BaseController {
 
 extension SearchDownloadableVideoController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return downloadableVideoTitles.count
+        return allReadShadowVideoModelAry.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return downloadableVideoTitles[section].count
+        return allReadShadowVideoModelAry[section].allPlayerSourceSeriesNames?.first?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let title = downloadableVideoTitles[indexPath.section][indexPath.row]
+        let readShadowVideoModel = allReadShadowVideoModelAry[indexPath.section]
         let cell = tableView.dequeueReusableCell(withIdentifier: VideoSearchTableViewCell.identifier) as! VideoSearchTableViewCell
-        cell.videoNameLabel.text = title
+        cell.videoNameLabel.text = "\(readShadowVideoModel.name ?? "")\(readShadowVideoModel.allPlayerSourceSeriesNames?.first?[indexPath.row] ?? "")"
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let readShadowVideoModel = allReadShadowVideoModelAry[section]
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookReadHeaderView.identifier) as! BookReadHeaderView
-        headerView.bookSourceNameLabel.text = downloadableVideoResourceNames[section]
+        headerView.bookSourceNameLabel.text = readShadowVideoModel.readShadowVideoResourceModel?.name
         return headerView
     }
     
@@ -132,13 +147,14 @@ extension SearchDownloadableVideoController: UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let title = downloadableVideoTitles[indexPath.section][indexPath.row]
-        let url = downloadableVideoUrls[indexPath.section][indexPath.row]
+        let readShadowVideoModel = allReadShadowVideoModelAry[indexPath.section]
+        let seriesName = readShadowVideoModel.allPlayerSourceSeriesNames?.first?[indexPath.row] ?? ""
+        let seriesUrl = readShadowVideoModel.allPlayerSourceSeriesUrls?.first?[indexPath.row] ?? ""
         // 中文转码
-        let videoName = "\(vodName)\(title)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let videoName = "\(readShadowVideoModel.name ?? "")\(seriesName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         // 下载
         DispatchQueue.main.async {
-            appDelegate.sessionManager.download(url, fileName: "\(videoName ?? "").\(url.pathExtension)")
+            appDelegate.sessionManager.download(seriesUrl, fileName: "\(readShadowVideoModel.readShadowVideoResourceModel?.name ?? "")-\(videoName ?? "").\(seriesUrl.pathExtension)")
             CZHUD.showSuccess("下载任务添加成功")
         }
     }

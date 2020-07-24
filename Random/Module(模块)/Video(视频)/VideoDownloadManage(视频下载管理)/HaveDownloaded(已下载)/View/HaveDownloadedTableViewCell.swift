@@ -35,9 +35,10 @@ class HaveDownloadedTableViewCell: SwipeTableViewCell {
             .addSuperView(self.contentView)
             .makeConstraints({ (make) in
                 make.left.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-15)
                 make.centerY.equalToSuperview()
             })
-            .font(UIFont.cz_boldSystemFont(16))
+            .font(UIFont.cz_boldSystemFont(12))
             .textColor(cz_standardTextColor)
             .build
         

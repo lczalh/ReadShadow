@@ -97,6 +97,7 @@ class VideoSearchController: BaseController {
                                         guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
                                         // 默认播放首集
                                         videoModel.currentPlayIndex = 0
+                                        videoModel.readShadowVideoResourceModel = videoSourceModel
                                         videos.append(videoModel)
                                     }
                                     // 过滤空数组
