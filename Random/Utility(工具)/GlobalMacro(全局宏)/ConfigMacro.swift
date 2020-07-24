@@ -135,3 +135,6 @@ let bookBrowsingRecordFolderPath = CZCommon.cz_documentPath + "/bookBrowsingReco
 /// 书源规则文件夹路径
 let bookSourceRuleFolderPath = CZCommon.cz_documentPath + "/bookSourceRuleFolder"
 
+/// 解析接口文件夹路径
+let parsingInterfaceFolderPath = CZCommon.cz_documentPath + "/parsingFolderPath"
+

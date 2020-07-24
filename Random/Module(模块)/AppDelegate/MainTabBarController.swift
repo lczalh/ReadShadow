@@ -29,6 +29,7 @@ class MainTabBarController: BaseTabBarController {
         super.viewDidLoad()
         configBookResources()
         configshadowResources()
+        configshadowParsings()
 //        let majorVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
 //        // 获取当前版本状态
 //        let readShadowBasicConfigModel = getApplicationConfigModel()?.basicConfig?.filter{ $0.version == majorVersion }.first
@@ -224,6 +225,29 @@ class MainTabBarController: BaseTabBarController {
         mushroomCloud.baseUrl = "http://zy.mgys8.com"
         mushroomCloud.path = "/api.php/provide/vod"
         let _ = CZObjectStore.standard.cz_archiver(object: mushroomCloud, filePath: videoResourceFolderPath + "/" + (mushroomCloud.name ?? "") + ".plist")
+        
+    }
+    
+    /// 配置影源解析
+    func configshadowParsings() {
+        // 创建解析文件夹
+        let state = CZObjectStore.standard.cz_createFolder(folderPath: parsingInterfaceFolderPath)
+        guard state else { return }
+        
+        let ckmov = ParsingInterfaceModel()
+        ckmov.parsingName = "ckmov"
+        ckmov.parsingInterface = "https://www.ckmov.com/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: ckmov, filePath: parsingInterfaceFolderPath + "/" + (ckmov.parsingName ?? "") + ".plist")
+        
+        let yun = ParsingInterfaceModel()
+        yun.parsingName = "1717yun"
+        yun.parsingInterface = "https://www.1717yun.com/jx/ty.php?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: yun, filePath: parsingInterfaceFolderPath + "/" + (yun.parsingName ?? "") + ".plist")
+        
+        let zyc = ParsingInterfaceModel()
+        zyc.parsingName = "zyc888"
+        zyc.parsingInterface = "https://cdn.zyc888.top/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: zyc, filePath: parsingInterfaceFolderPath + "/" + (zyc.parsingName ?? "") + ".plist")
         
     }
     

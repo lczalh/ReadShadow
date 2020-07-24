@@ -91,11 +91,7 @@ class VideoSourceManageController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         videoSourceManageView.cz.addSuperView(view).makeConstraints { (make) in
-            if #available(iOS 11.0, *) {
-                make.edges.equalTo(view.safeAreaLayoutGuide)
-            } else {
-                make.edges.equalToSuperview().inset(UIEdgeInsets(top: CZCommon.cz_navigationHeight + CZCommon.cz_statusBarHeight, left: 0, bottom: 0, right: 0))
-            }
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
     }
@@ -152,34 +148,43 @@ extension VideoSourceManageController: UITableViewDataSource, UITableViewDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: VideoResourceTableViewCell.identifier, for: indexPath) as! VideoResourceTableViewCell
         let model = readShadowVideoResourceModels[indexPath.row]
         cell.titleLabel.text = model.name
+        cell.delegate = self
         return cell
     }
 }
 
-//// MARK: - SwipeTableViewCellDelegate
-//extension VideoSourceManageController: SwipeTableViewCellDelegate {
-//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-//        if orientation == .left {
-//            return nil
-//        } else {
-//            // 创建“删除”事件按钮
-//            let deleteAction = SwipeAction(style: .destructive, title: "删除") { action, indexPath in
-//                UIAlertController.cz_showAlertController("提示", "确定删除此影源？", .alert, self, "确定", { (action) in
-//                    var models = self.videoSourceModels
-//                    models.remove(at: indexPath.row)
-//                    _ = CZObjectStore.standard.cz_objectWritePlist(object: models, filePath: bookSourceRulePath, key: bookSourceRuleKey)
-//                    DispatchQueue.main.async { tableView.reloadData() }
-//                }, "取消", nil)
-//            }
-//            //返回右侧事件按钮
-//            return [deleteAction]
-//        }
-//    }
-//
-//    //自定义滑动过渡行为（可选）
-//    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
-//        var options = SwipeTableOptions()
-//        options.transitionStyle = .reveal
-//        return options
-//    }
-//}
+// MARK: - SwipeTableViewCellDelegate
+extension VideoSourceManageController: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        if orientation == .left {
+            return nil
+        } else {
+            // 创建“删除”事件按钮
+            let readShadowVideoResourceModel = readShadowVideoResourceModels[indexPath.row]
+            let deleteAction = SwipeAction(style: .destructive, title: "删除") { action, indexPath in
+                UIAlertController.cz_showAlertController("提示", "确定删除\(readShadowVideoResourceModel.name ?? "")？", .alert, self, "确定", { (action) in
+                    do {
+                        try FileManager().removeItem(atPath: videoResourceFolderPath + "/" + (readShadowVideoResourceModel.name ?? "") + ".plist")
+                        DispatchQueue.main.async {
+                            CZHUD.showSuccess("删除成功")
+                            tableView.reloadData()
+                        }
+                    } catch  {
+                        DispatchQueue.main.async {
+                            CZHUD.showError("删除失败")
+                        }
+                    }
+                }, "取消", nil)
+            }
+            //返回右侧事件按钮
+            return [deleteAction]
+        }
+    }
+
+    //自定义滑动过渡行为（可选）
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        var options = SwipeTableOptions()
+        options.transitionStyle = .reveal
+        return options
+    }
+}

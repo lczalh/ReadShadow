@@ -58,7 +58,7 @@ class VideoHomeController: BaseController {
         }
         listContainerView.cz.addSuperView(videoHomeView).makeConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(CZCommon.cz_navigationHeight * 2)
+            make.top.equalTo(videoHomeView.segmentedView.snp.bottom)
         }
         
         // 搜索

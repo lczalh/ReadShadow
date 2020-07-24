@@ -12,7 +12,7 @@ class TelevisionView: BaseView {
 
     /// 搜索视图
     private lazy var searchFeatureView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_navigationHeight))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_dynamicFitHeight(40)))
         return view
     }()
     
@@ -27,7 +27,7 @@ class TelevisionView: BaseView {
     
     /// 初始化JXSegmentedView
     lazy var segmentedView: JXSegmentedView = {
-        let view = JXSegmentedView(frame: CGRect(x: 0, y: searchFeatureView.height, width: CZCommon.cz_screenWidth, height: CZCommon.cz_navigationHeight))
+        let view = JXSegmentedView(frame: CGRect(x: 0, y: searchFeatureView.height, width: CZCommon.cz_screenWidth, height: CZCommon.cz_dynamicFitHeight(40)))
         view.dataSource = self.segmentedDataSource
         return view
     }()
@@ -38,8 +38,8 @@ class TelevisionView: BaseView {
         dataSource.isTitleColorGradientEnabled = true
         dataSource.titleNormalColor = cz_unselectedColor
         dataSource.titleSelectedColor = cz_selectedColor
-        dataSource.titleNormalFont = UIFont.cz_systemFont(16)
-        dataSource.titleSelectedFont = UIFont.cz_boldSystemFont(22)
+        dataSource.titleNormalFont = UIFont.cz_systemFont(14)
+        dataSource.titleSelectedFont = UIFont.cz_boldSystemFont(16)
         return dataSource
     }()
 

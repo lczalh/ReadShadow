@@ -42,6 +42,14 @@ class FullscreenPlayController: BaseController {
         }
     }
     
+    
+    /// 起始播放时间
+    var startTime: CGFloat = 0.0 {
+        didSet {
+            fullscreenPlayView.superPlayerView.startTime = startTime
+        }
+    }
+    
     /// 播放结束回调
     var superPlayerDidEndBlock: ((_ player: SuperPlayerView) -> Void)?
     

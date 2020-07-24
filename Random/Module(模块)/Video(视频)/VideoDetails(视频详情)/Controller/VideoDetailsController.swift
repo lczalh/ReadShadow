@@ -17,8 +17,6 @@ class VideoDetailsController: BaseController {
         let view = VideoDetailsView()
         view.tableView.dataSource = self
         view.tableView.delegate = self
-//        view.superPlayerView.delegate = self
-//        view.superPlayerView.startTime = model.currentPlayTime
         return view
     }()
     
@@ -26,6 +24,7 @@ class VideoDetailsController: BaseController {
     var model: ReadShadowVideoModel! {
         didSet {
             currentPlayerSourceIndex = 0
+            currentPlayerParsingIndex = 0
         }
     }
     
@@ -38,7 +37,6 @@ class VideoDetailsController: BaseController {
             DispatchQueue.main.async {
                 self.videoDetailsView.switchSourceButton.setTitle(self.currentPlayerSourceName, for: .normal)
                 self.videoDetailsView.tableView.reloadData()
-               // self.playerVideo()
             }
         }
     }
@@ -52,11 +50,18 @@ class VideoDetailsController: BaseController {
     /// 当前播放源
     private var currentPlayerSourceName: String = ""
     
-    /// 播放模型
-//    lazy var superPlayerModel: SuperPlayerModel = {
-//        let model = SuperPlayerModel()
-//        return model
-//    }()
+    /// 当前播放解析索引
+    private var currentPlayerParsingIndex: Int = 0 {
+        didSet {
+            let parsingInterfaceModel = parsingInterfaceModels[currentPlayerParsingIndex]
+            currentParsingInterface = parsingInterfaceModel.parsingInterface ?? ""
+            // 设置解析名称
+            DispatchQueue.main.async { self.videoDetailsView.switchParsingButton.setTitle(parsingInterfaceModel.parsingName, for: .normal) }
+        }
+    }
+    
+    /// 当前解析接口
+    private var currentParsingInterface: String = ""
     
     /// 所有影源模型
     var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> {
@@ -76,11 +81,20 @@ class VideoDetailsController: BaseController {
     /// 更多精彩模型数据
     private var moreWonderfulModels: Array<ReadShadowVideoModel> = []
     
-//    var statusBarHidden: Bool = false {
-//        didSet {
-//            DispatchQueue.main.async { self.setNeedsStatusBarAppearanceUpdate() }
-//        }
-//    }
+    /// 所有解析接口
+    lazy var parsingInterfaceModels: Array<ParsingInterfaceModel> = {
+        do {
+            var models: Array<ParsingInterfaceModel> = []
+            let files = try FileManager().contentsOfDirectory(atPath: parsingInterfaceFolderPath).filter{ $0.pathExtension == "plist" }
+            for file in files {
+                let model = CZObjectStore.standard.cz_unarchiver(filePath: "\(parsingInterfaceFolderPath)/\(file)") as? ParsingInterfaceModel
+                models.append(model!)
+            }
+            return models
+        } catch  {
+            return []
+        }
+    }()
     
     /// 插页式广告
     var gadInterstitial: GADInterstitial!
@@ -137,9 +151,23 @@ class VideoDetailsController: BaseController {
         videoDetailsView.switchSourceButton.rx.tap.subscribe(onNext: {[weak self] () in
             DispatchQueue.main.async {
                 let switchVideoSourceController = SwitchVideoSourceController()
+                switchVideoSourceController.titleName = "切换播放源"
                 switchVideoSourceController.allPlayerSourceNames = self?.model.allPlayerSourceNames ?? []
                 switchVideoSourceController.didSelectRowBlock = {[weak self] index in
                     self?.currentPlayerSourceIndex = index
+                }
+                self?.present(switchVideoSourceController, animated: false, completion: nil)
+            }
+        }).disposed(by: rx.disposeBag)
+        
+        // 切换解析
+        videoDetailsView.switchParsingButton.rx.tap.subscribe(onNext: {[weak self] () in
+            DispatchQueue.main.async {
+                let switchVideoSourceController = SwitchVideoSourceController()
+                switchVideoSourceController.titleName = "切换解析接口"
+                switchVideoSourceController.allPlayerSourceNames = self?.parsingInterfaceModels.map{ $0.parsingName ?? "" } ?? []
+                switchVideoSourceController.didSelectRowBlock = {[weak self] index in
+                    self?.currentPlayerParsingIndex = index
                 }
                 self?.present(switchVideoSourceController, animated: false, completion: nil)
             }
@@ -215,6 +243,7 @@ class VideoDetailsController: BaseController {
         let directBroadcastAction = UIAlertAction(title: "直接播放", style: .default) { (action) in
             DispatchQueue.main.async {
                 let fullscreenPlayController = FullscreenPlayController()
+                fullscreenPlayController.startTime = self.model.currentPlayTime
                 fullscreenPlayController.videoURL = url
                 if self.currentSeriesNames.count > 1 {
                     fullscreenPlayController.videoName = "\(self.model.name ?? "")\(self.currentSeriesNames[self.model.currentPlayIndex ?? 0])"
@@ -244,8 +273,13 @@ class VideoDetailsController: BaseController {
             }
         }
         let parsingPlayAction = UIAlertAction(title: "解析播放", style: .default) { (action) in
-            DispatchQueue.main.async {
-                UIApplication.shared.open(URL(string: "https://www.ckmov.com/?url=\(url)")!, options: [:], completionHandler: nil)
+            let url = "\(self.currentParsingInterface)\(url)"
+            if (try? String(contentsOf: URL(string: url)!)) != nil {
+                DispatchQueue.main.async {
+                    UIApplication.shared.open(URL(string: "\(self.currentParsingInterface)\(url)")!, options: [:], completionHandler: nil)
+                }
+            } else {
+                CZHUD.showError("无效的解析接口")
             }
         }
         let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (action) in
@@ -263,13 +297,8 @@ class VideoDetailsController: BaseController {
         _ = CZObjectStore.standard.cz_archiver(object: model!, filePath: "\(videoBrowsingRecordFolderPath)/\(model.readShadowVideoResourceModel?.name ?? "")-\(model.name ?? "").plist")
     }
     
-    // 状态栏是否隐藏
-//    override var prefersStatusBarHidden: Bool {  return statusBarHidden }
 
-    deinit {
-        /// 清理播放器内部状态，释放内存
-        //videoDetailsView.superPlayerView.resetPlayer()
-    }
+    deinit { }
 
 }
 
@@ -313,31 +342,6 @@ extension VideoDetailsController: JXSegmentedViewDelegate {
         playerVideo()
     }
 }
-
-//extension VideoDetailsController: SuperPlayerDelegate {
-//
-//    /// 返回事件
-//    func superPlayerBackAction(_ player: SuperPlayerView!) {
-//        DispatchQueue.main.async { self.navigationController?.popViewController(animated: true, nil) }
-//    }
-//
-//    /// 播放结束通知
-//    func superPlayerDidEnd(_ player: SuperPlayerView!) {
-//        guard model.currentPlayIndex != (model.allPlayerSourceSeriesUrls?.count ?? 0) - 1 else { return }
-//        model.currentPlayIndex! += 1
-//        playerVideo()
-//        videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-//    }
-//
-//    /// 全屏改变通知
-//    func superPlayerFullScreenChanged(_ player: SuperPlayerView!) {
-//        statusBarHidden = player.isFullScreen
-//        if player.isFullScreen {
-//            let spDefaultControlView = (player.controlView as! SPDefaultControlView)
-//            spDefaultControlView.danmakuBtn.isHidden = true
-//        }
-//    }
-//}
 
 extension VideoDetailsController: GADInterstitialDelegate {
     /// 广告加载成功

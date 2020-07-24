@@ -25,6 +25,9 @@ class SwitchVideoSourceController: BaseController {
         return view
     }()
     
+    /// 标题名称
+    var titleName: String?
+    
     /// 所有源名称
     var allPlayerSourceNames: Array<String> = []
     
@@ -43,6 +46,8 @@ class SwitchVideoSourceController: BaseController {
         super.viewDidLoad()
         view.backgroundColor = .cz_rgbColor(0, 0, 0, 0)
         switchVideoSourceView.cz.addSuperView(view)
+        
+        switchVideoSourceView.titleLabel.text = titleName
         
         switchVideoSourceView.closeButton.rx.tap.subscribe(onNext: {[weak self] () in
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {

@@ -105,16 +105,12 @@ class VideoDownloadManageController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         videoDownloadManageView.cz.addSuperView(view).makeConstraints { (make) in
-            if #available(iOS 11.0, *) {
-                make.edges.equalTo(view.safeAreaLayoutGuide)
-            } else {
-                make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 0, bottom: CZCommon.cz_tabbarHeight, right: 0))
-            }
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         listContainerView.cz.addSuperView(videoDownloadManageView).makeConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(CZCommon.cz_screenWidthScale * CZCommon.cz_navigationHeight)
+            make.top.equalTo(videoDownloadManageView.segmentedView.snp.bottom)
         }
 
     }

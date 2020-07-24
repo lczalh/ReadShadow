@@ -32,6 +32,9 @@
 		FC0A020624A9BAA2007AA1B0 /* BookSourceDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0A020524A9BAA2007AA1B0 /* BookSourceDetailController.swift */; };
 		FC0A020824A9BAF1007AA1B0 /* BookSourceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0A020724A9BAF1007AA1B0 /* BookSourceDetailView.swift */; };
 		FC0A020A24A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0A020924A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift */; };
+		FC0CEBC124CAD4C80035DD16 /* ParsingManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0CEBC024CAD4C80035DD16 /* ParsingManageView.swift */; };
+		FC0CEBC324CAD4F90035DD16 /* ParsingManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0CEBC224CAD4F90035DD16 /* ParsingManageController.swift */; };
+		FC0CEBC624CADCC40035DD16 /* ParsingInterfaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0CEBC524CADCC40035DD16 /* ParsingInterfaceModel.swift */; };
 		FC100E50237566F1004ADEB3 /* VideoDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC100E4F237566F1004ADEB3 /* VideoDetailsController.swift */; };
 		FC100E5223756701004ADEB3 /* VideoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC100E5123756701004ADEB3 /* VideoDetailsView.swift */; };
 		FC17D9F124C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */; };
@@ -291,6 +294,9 @@
 		FC0A020524A9BAA2007AA1B0 /* BookSourceDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSourceDetailController.swift; sourceTree = "<group>"; };
 		FC0A020724A9BAF1007AA1B0 /* BookSourceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSourceDetailView.swift; sourceTree = "<group>"; };
 		FC0A020924A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftTitleRightLabelTableViewCell.swift; sourceTree = "<group>"; };
+		FC0CEBC024CAD4C80035DD16 /* ParsingManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingManageView.swift; sourceTree = "<group>"; };
+		FC0CEBC224CAD4F90035DD16 /* ParsingManageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingManageController.swift; sourceTree = "<group>"; };
+		FC0CEBC524CADCC40035DD16 /* ParsingInterfaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingInterfaceModel.swift; sourceTree = "<group>"; };
 		FC100E4F237566F1004ADEB3 /* VideoDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailsController.swift; sourceTree = "<group>"; };
 		FC100E5123756701004ADEB3 /* VideoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailsView.swift; sourceTree = "<group>"; };
 		FC17D9F024C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadShadowVideoCategoryModel.swift; sourceTree = "<group>"; };
@@ -747,6 +753,40 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		FC0CEBBD24CAD45E0035DD16 /* ParsingManage(解析管理) */ = {
+			isa = PBXGroup;
+			children = (
+				FC0CEBC424CADCA20035DD16 /* Model */,
+				FC0CEBBF24CAD4B10035DD16 /* View */,
+				FC0CEBBE24CAD4AC0035DD16 /* Controller */,
+			);
+			path = "ParsingManage(解析管理)";
+			sourceTree = "<group>";
+		};
+		FC0CEBBE24CAD4AC0035DD16 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FC0CEBC224CAD4F90035DD16 /* ParsingManageController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		FC0CEBBF24CAD4B10035DD16 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FC0CEBC024CAD4C80035DD16 /* ParsingManageView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FC0CEBC424CADCA20035DD16 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FC0CEBC524CADCC40035DD16 /* ParsingInterfaceModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		FC100E4C23756628004ADEB3 /* VideoDetails(视频详情) */ = {
 			isa = PBXGroup;
 			children = (
@@ -780,6 +820,7 @@
 		FC1826EA2484DE6D00A7E740 /* Mine(我的) */ = {
 			isa = PBXGroup;
 			children = (
+				FC0CEBBD24CAD45E0035DD16 /* ParsingManage(解析管理) */,
 				FC799B4124ADC5C900793FA9 /* BrowsingHistory(浏览记录) */,
 				FCF21C2F24A2F0B1003BFD3D /* VideoSourceManage(影源管理) */,
 				FCF3C7DA249352DE0072AC50 /* BookSourceManage(书源管理) */,
@@ -2047,6 +2088,7 @@
 				FC76CCF82462947300FE421A /* CZReadContentView.swift in Sources */,
 				D06E72F823350D2D00886FDB /* ViewController.swift in Sources */,
 				FCDB6EB323710A82002785B4 /* VideoHomeController.swift in Sources */,
+				FC0CEBC624CADCC40035DD16 /* ParsingInterfaceModel.swift in Sources */,
 				FC80B0FB24B5CFEF00E19F13 /* ConfigMacro.swift in Sources */,
 				FC81A92924873EA200F0AE65 /* VideoSearchFeatureView.swift in Sources */,
 				FCC8760323A0E85600ECA178 /* UITextField+CZKit.swift in Sources */,
@@ -2083,6 +2125,7 @@
 				FCA4EBA924C579F200D29579 /* VideoEpisodeTableViewCell.swift in Sources */,
 				FCA4EBA724C54B9400D29579 /* StraightChainVideoAnalysisModel.swift in Sources */,
 				FCFF173224B5A7FF006A88E2 /* StartupPageView.swift in Sources */,
+				FC0CEBC124CAD4C80035DD16 /* ParsingManageView.swift in Sources */,
 				FC69493C2490B3C300F9708A /* BookReadDirectoryTableViewCell.swift in Sources */,
 				D01A3CCB23744C6A0030C18E /* VideoListController.swift in Sources */,
 				FCC8761423A0E85600ECA178 /* DateFormatter+CZKit.swift in Sources */,
@@ -2092,6 +2135,7 @@
 				FC83882A239DE43B00DC2D6E /* CZRingGradientProgressView.swift in Sources */,
 				FCC8761823A0E85600ECA178 /* UIButton+CZKit.swift in Sources */,
 				FCB8B4EC249358410043EFF7 /* LeftTitleRightTextFieldTableViewCell.swift in Sources */,
+				FC0CEBC324CAD4F90035DD16 /* ParsingManageController.swift in Sources */,
 				FC778DC4246AAFBB000F3533 /* CZObjectStore.swift in Sources */,
 				FC6949382490B06700F9708A /* BookReadDirectoryController.swift in Sources */,
 				FC6E50C62488DFC30028CDFE /* VideoListCollectionViewCell.swift in Sources */,

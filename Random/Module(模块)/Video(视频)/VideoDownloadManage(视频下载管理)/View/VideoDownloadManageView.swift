@@ -12,7 +12,7 @@ class VideoDownloadManageView: BaseView {
 
     /// 初始化JXSegmentedView
     lazy var segmentedView: JXSegmentedView = {
-        let view = JXSegmentedView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_screenWidthScale * CZCommon.cz_navigationHeight))
+        let view = JXSegmentedView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_dynamicFitHeight(40)))
         view.dataSource = self.segmentedDataSource
         view.indicators = [indicator]
         view.backgroundColor = UIColor.white
@@ -25,8 +25,8 @@ class VideoDownloadManageView: BaseView {
         dataSource.isTitleColorGradientEnabled = true
         dataSource.titleNormalColor = cz_unselectedColor
         dataSource.titleSelectedColor = cz_selectedColor
-        dataSource.titleNormalFont = UIFont.cz_systemFont(16)
-        dataSource.titleSelectedFont = UIFont.cz_boldSystemFont(16)
+        dataSource.titleNormalFont = UIFont.cz_systemFont(14)
+        dataSource.titleSelectedFont = UIFont.cz_boldSystemFont(14)
         return dataSource
     }()
     

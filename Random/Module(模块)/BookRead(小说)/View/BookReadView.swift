@@ -12,7 +12,7 @@ class BookReadView: BaseView {
     
     /// 搜索视图
     private lazy var searchFeatureView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_navigationHeight))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_dynamicFitHeight(40)))
         return view
     }()
     

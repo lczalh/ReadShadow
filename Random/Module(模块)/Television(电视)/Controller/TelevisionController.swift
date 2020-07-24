@@ -47,7 +47,7 @@ class TelevisionController: BaseController {
         }
         listContainerView.cz.addSuperView(televisionView).makeConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(CZCommon.cz_navigationHeight * 2)
+            make.top.equalTo(televisionView.segmentedView.snp.bottom)
         }
         
         televisionView.tapSearchLabelBlock = {[weak self] recognizer in

@@ -22,6 +22,7 @@ class MineController: BaseController {
         return [
             "书源管理",
             "影源管理",
+            "解析管理",
             "观影记录",
             "阅读记录",
             "给个好评",
@@ -34,6 +35,7 @@ class MineController: BaseController {
     
     lazy var sectionImages: Array<String> = {
         return [
+            "Icon_VideoResourceManage",
             "Icon_VideoResourceManage",
             "Icon_VideoResourceManage",
             "Icon_Record",
@@ -246,9 +248,9 @@ extension MineController: UITableViewDataSource, UITableViewDelegate {
             headerView.leftImageView.image = UIImage(named: sectionImage)
             headerView.tapBlock = {[weak self] recognizer in
                 if sectionTitle == "书源管理" {
-                    let bookSourceManageController = BookSourceManageController()
-                    bookSourceManageController.hidesBottomBarWhenPushed = true
                     DispatchQueue.main.async {
+                        let bookSourceManageController = BookSourceManageController()
+                        bookSourceManageController.hidesBottomBarWhenPushed = true
                         self?.navigationController?.pushViewController(bookSourceManageController, animated: true)
                     }
                 } else if sectionTitle == "影源管理" {
@@ -274,17 +276,21 @@ extension MineController: UITableViewDataSource, UITableViewDelegate {
                 } else if sectionTitle == "给个好评" {
                     DispatchQueue.main.async { SKStoreReviewController.requestReview() }
                 } else if sectionTitle == "免责声明" {
-                   let privacyPolicyController = PrivacyPolicyController()
-                   privacyPolicyController.titleView?.title = sectionTitle
-                   privacyPolicyController.fileURLWithPath = Bundle.main.path(forResource: "Disclaimer", ofType: "txt")
-                   privacyPolicyController.hidesBottomBarWhenPushed = true
-                   DispatchQueue.main.async { self?.navigationController?.pushViewController(privacyPolicyController, animated: true) }
+                   DispatchQueue.main.async {
+                        let privacyPolicyController = PrivacyPolicyController()
+                       privacyPolicyController.titleView?.title = sectionTitle
+                       privacyPolicyController.fileURLWithPath = Bundle.main.path(forResource: "Disclaimer", ofType: "txt")
+                       privacyPolicyController.hidesBottomBarWhenPushed = true
+                       self?.navigationController?.pushViewController(privacyPolicyController, animated: true)
+                    }
                 } else if sectionTitle == "隐私政策" {
-                    let privacyPolicyController = PrivacyPolicyController()
-                    privacyPolicyController.titleView?.title = sectionTitle
-                    privacyPolicyController.fileURLWithPath = Bundle.main.path(forResource: "PrivacyPolicy", ofType: "txt")
-                    privacyPolicyController.hidesBottomBarWhenPushed = true
-                    DispatchQueue.main.async { self?.navigationController?.pushViewController(privacyPolicyController, animated: true) }
+                    DispatchQueue.main.async {
+                        let privacyPolicyController = PrivacyPolicyController()
+                        privacyPolicyController.titleView?.title = sectionTitle
+                        privacyPolicyController.fileURLWithPath = Bundle.main.path(forResource: "PrivacyPolicy", ofType: "txt")
+                        privacyPolicyController.hidesBottomBarWhenPushed = true
+                        self?.navigationController?.pushViewController(privacyPolicyController, animated: true)
+                    }
                 } else if sectionTitle == "免广告特权" {
                     DispatchQueue.main.async {
                         if self!.gadRewardedAd?.isReady == true {
@@ -292,6 +298,12 @@ extension MineController: UITableViewDataSource, UITableViewDelegate {
                         } else {
                             CZHUD.showError("广告加载中，请稍后再试!")
                         }
+                    }
+                } else if sectionTitle == "解析管理" {
+                    DispatchQueue.main.async {
+                        let parsingManageController = ParsingManageController()
+                        parsingManageController.hidesBottomBarWhenPushed = true
+                        self?.navigationController?.pushViewController(parsingManageController, animated: true)
                     }
                 }
             }

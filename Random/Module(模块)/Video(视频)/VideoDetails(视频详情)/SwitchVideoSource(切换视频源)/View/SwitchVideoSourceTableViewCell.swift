@@ -33,6 +33,7 @@ class SwitchVideoSourceTableViewCell: BaseTableViewCell {
             .makeConstraints({ (make) in
                 make.centerY.equalToSuperview()
                 make.left.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-15)
             })
             .textColor(cz_unStandardTextColor)
             .font(.cz_systemFont(12))

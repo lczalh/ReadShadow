@@ -38,8 +38,8 @@ class SwitchVideoSourceView: BaseView {
                 make.left.equalToSuperview().offset(15)
                 make.top.equalToSuperview().offset(5)
                 make.height.equalTo(CZCommon.cz_dynamicFitHeight(20))
+                make.right.equalToSuperview().offset(-15)
             })
-            .text("选择播放源")
             .font(.cz_boldSystemFont(14))
             .textColor(cz_standardTextColor)
             .build

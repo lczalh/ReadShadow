@@ -72,14 +72,14 @@ class VideoDetailsView: BaseView {
     /// 视频信息 评分、年、地区、类别
     var videoInfoLabel: UILabel!
     
-//    /// 播放源
-//    var playerSourceLabel: UILabel!
-    
     /// 简介按钮
     var introductionButton: UIButton!
     
     /// 切换源按钮
     var switchSourceButton: UIButton!
+    
+    /// 切换解析
+    var switchParsingButton: UIButton!
     
     // MARK: - 初始化
     override init(frame: CGRect) {
@@ -151,6 +151,8 @@ class VideoDetailsView: BaseView {
             .font(.cz_systemFont(10))
             .textColor(cz_unStandardTextColor)
             .text("切换播放源:")
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
         
         switchSourceButton = UIButton()
@@ -162,6 +164,8 @@ class VideoDetailsView: BaseView {
             })
             .titleColor(cz_standardTextColor, for: .normal)
             .font(.cz_boldSystemFont(10))
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
         
         // 下载
@@ -173,6 +177,8 @@ class VideoDetailsView: BaseView {
                 make.right.equalToSuperview().offset(-10)
             })
             .image(UIImage(named: "Icon_Video_Download"), for: .normal)
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
 
         // 分享
@@ -184,6 +190,8 @@ class VideoDetailsView: BaseView {
                 make.right.equalTo(downloadButton.snp.left).offset(-10)
             })
             .image(UIImage(named: "Icon_Video_Share"), for: .normal)
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
 
         // 投屏
@@ -195,8 +203,40 @@ class VideoDetailsView: BaseView {
                 make.right.equalTo(shareButton.snp.left).offset(-10)
             })
             .tintColor(.black)
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
         avRoutePickerView.activeTintColor = .black
+        
+        switchParsingButton = UIButton()
+            .cz
+            .addSuperView(tableHeaderView)
+            .makeConstraints({ (make) in
+                make.right.equalTo(avRoutePickerView.snp.left).offset(-10)
+                make.centerY.equalTo(switchSourceButton)
+            })
+            .titleColor(cz_standardTextColor, for: .normal)
+            .font(.cz_boldSystemFont(10))
+            .setContentHuggingPriority(.required, for: .horizontal)
+           // .setContentCompressionResistancePriority(.required, for: .horizontal)
+            .build
+        
+        let _ = UILabel()
+            .cz
+            .addSuperView(tableHeaderView)
+            .makeConstraints({ (make) in
+                make.left.equalTo(switchSourceButton.snp.right).offset(10)
+                make.right.equalTo(switchParsingButton.snp.left).offset(-5)
+                make.centerY.equalTo(switchSourceButton)
+            })
+            .font(.cz_systemFont(10))
+            .textColor(cz_unStandardTextColor)
+            .text("切换解析接口:")
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
+            .textAlignment(.right)
+        // .setContentHuggingPriority(.required, for: .horizontal)
+         //.setContentCompressionResistancePriority(.required, for: .horizontal)
+            .build
         
         let _ = UIView()
             .cz
