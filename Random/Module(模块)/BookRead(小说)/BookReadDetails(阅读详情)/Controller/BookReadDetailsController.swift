@@ -62,12 +62,12 @@ class BookReadDetailsController: BaseController {
                 // 记录浏览时间
                 self?.bookReadModel?.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
                 // 更新记录
-                _ = CZObjectStore.standard.cz_archiver(object: self!.bookReadModel!, filePath: "\(bookBrowsingRecordFolderPath)/\(self!.bookReadModel?.bookName ?? "").plist")
+                _ = CZObjectStore.standard.cz_archiver(object: self!.bookReadModel!, filePath: "\(bookBrowsingRecordFolderPath)/\(self!.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(self!.bookReadModel?.bookName ?? "").plist")
                 
                 DispatchQueue.main.async {
                     CZHUD.dismiss()
                     // 判断对象是否存在
-                    let bookcaseModel = CZObjectStore.standard.cz_unarchiver(filePath: "\(bookcaseFolderPath)/\(self!.bookReadModel?.bookName ?? "").plist") as? BookReadModel
+                    let bookcaseModel = CZObjectStore.standard.cz_unarchiver(filePath: "\(bookcaseFolderPath)/\(self!.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(self!.bookReadModel?.bookName ?? "").plist") as? BookReadModel
                     if bookcaseModel == nil {
                         self?.bookReadDetailsView.addBookcaseButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_BookRead_Bookcase")?.cz_alterColor(color: cz_selectedColor), title: "加书架", titlePosition: .right, additionalSpacing: 5, state: .normal)
                         self?.bookReadDetailsView.addBookcaseButton.setTitleColor(cz_selectedColor, for: .normal)
@@ -106,7 +106,7 @@ class BookReadDetailsController: BaseController {
         
         // 添加书架
         bookReadDetailsView.addBookcaseButton.rx.tap.subscribe(onNext: {[weak self] () in
-            let state = CZObjectStore.standard.cz_archiver(object: self!.bookReadModel!, filePath: "\(bookcaseFolderPath)/\(self!.bookReadModel?.bookName ?? "").plist")
+            let state = CZObjectStore.standard.cz_archiver(object: self!.bookReadModel!, filePath: "\(bookcaseFolderPath)/\(self!.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(self!.bookReadModel?.bookName ?? "").plist")
             guard state == true else {
                 CZHUD.showError("添加失败")
                 return

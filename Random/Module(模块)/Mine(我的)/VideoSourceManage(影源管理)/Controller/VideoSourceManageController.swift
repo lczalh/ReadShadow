@@ -69,7 +69,7 @@ class VideoSourceManageController: BaseController {
                                 readShadowVideoResourceModel.downloadPath = downloadPath
                                 let _ = CZObjectStore.standard.cz_archiver(object: readShadowVideoResourceModel, filePath: videoResourceFolderPath + "/" + (readShadowVideoResourceModel.name ?? "") + ".plist")
                                 CZHUD.showSuccess("影源匹配成功")
-                                if self?.readShadowVideoResourceModels.count == 0 {
+                                if self?.readShadowVideoResourceModels.count == 1 {
                                     let tabBarController = MainTabBarController()
                                     let transtition = CATransition()
                                     transtition.duration = 0.5

@@ -19,11 +19,6 @@ class BookReadSearchController: BaseController {
         return view
     }()
     
-    /// 所有书源模型数组
-//    private lazy var readShadowBookRuleResourceModels: Array<ReadShadowBookRuleResourceModel> = {
-//        return getApplicationConfigModel()?.bookRuleResources ?? []
-//    }()
-    
     /// 所有书源模型
     private var readShadowBookRuleResourceModels: Array<ReadShadowBookRuleResourceModel> {
         do {
@@ -49,8 +44,6 @@ class BookReadSearchController: BaseController {
     /// 小说搜索结果模型数组
     private var bookReadSearchResultModels: [[BookReadModel]] = []
     
-    /// 测试专用规则模型数组
-    private var ceShiBookRuleResourceModels: Array<ReadShadowBookRuleResourceModel> = []
     
     override func setupNavigationItems() {
         super.setupNavigationItems()
@@ -71,12 +64,8 @@ class BookReadSearchController: BaseController {
                 guard self?.bookReadSearchView.searchTextField.text?.isEmpty == false && self?.bookReadSearchView.searchTextField.text != nil else { return }
                 guard self?.searchName != self?.bookReadSearchView.searchTextField.text else { return }
                 self?.searchName = self?.bookReadSearchView.searchTextField.text
-                if self?.searchName?.isEmpty == true {
-                    self?.bookReadSearchResultModels.removeAll()
-                    self?.bookReadSearchView.searchResultTableView.reloadData()
-                } else {
-                    self?.searchBooksData()
-                }
+                self?.bookReadSearchResultModels.removeAll()
+                self?.searchBooksData()
             }).disposed(by: rx.disposeBag)
         
         bookReadSearchView.cancelButton.rx.tap.subscribe(onNext: {[weak self] () in
@@ -85,37 +74,14 @@ class BookReadSearchController: BaseController {
                 self?.navigationController?.popViewController(animated: true, nil)
             }
         }).disposed(by: rx.disposeBag)
-        
-        // 新笔趣阁
-        let newPenBoringPavilion = ReadShadowBookRuleResourceModel()
-        newPenBoringPavilion.bookSourceName = "绿色小说网"
-        newPenBoringPavilion.bookSourceUrl = "https://www.lvsetxt.com"
-        newPenBoringPavilion.bookSearchEncoding = "0"
-        newPenBoringPavilion.bookSearchUrl = "https://so.biqusoso.com/s.php?ie=gbk&siteid=lvsetxt.com&s=2758772450457967865&q="
-        newPenBoringPavilion.bookSearchListNameRule = "//*[@id='search-main']/div[@class='search-list']/ul/li[position()>1]/span[@class='s2']/a"
-        newPenBoringPavilion.bookSearchListDetailUrlRule = "//*[@id='search-main']/div[@class='search-list']/ul/li[position()>1]/span[@class='s2']/a"
-        newPenBoringPavilion.bookSearchListLatestChapterNameRule = ""
-        newPenBoringPavilion.bookSearchListCategoryNameRule = ""
-        newPenBoringPavilion.bookSearchListSerialStateRule = ""
-        newPenBoringPavilion.bookDetailPageEncoding = "1"
-        newPenBoringPavilion.bookDetailImageUrlRule = "//div[@class='book']/div[@class='info']/div[@class='cover']/img"
-        newPenBoringPavilion.bookDetailAuthorRule = "//div[@class='book']/div[@class='info']/h2"
-        newPenBoringPavilion.bookDetailIntroductionRule = "//div[@class='intro']"
-        newPenBoringPavilion.bookDetailCategoryNameRule = "//div[@class='small']/span[2]"
-        newPenBoringPavilion.bookChapterDetailUrlRule = "//div[@class='listmain']/dl/dd/a"
-        newPenBoringPavilion.bookChapterDetailContentRule = "//*[@id='content']"
-        newPenBoringPavilion.bookDetailRecommendReadRule = "//div[@class='link']/span/a"
-      //  newPenBoringPavilion.bookDetailCategoryNameRule = "//*[@id='wrapper']/div[@class='box_con']/div[@class='con_top']/a[2]"
-        newPenBoringPavilion.bookDetailSerialStateRule = "//div[@class='small']/span[3]"
-        ceShiBookRuleResourceModels.append(newPenBoringPavilion)
     }
     
 
     @objc func searchBooksData() {
-        CZHUD.show("小说搜索中")
-        for bookParsingRuleModel in readShadowBookRuleResourceModels {
-            autoreleasepool {
-                bookSearchQueue.async(group: bookSearchGroup, execute: DispatchWorkItem.init(block: {
+        DispatchQueue.global().async {
+            for bookParsingRuleModel in self.readShadowBookRuleResourceModels {
+                autoreleasepool {
+                    DispatchQueue.main.async { CZHUD.show("\(bookParsingRuleModel.bookSourceName!)搜索中") }
                     var encoding: String.Encoding
                     var url = "\(bookParsingRuleModel.bookSearchUrl ?? "")\(self.searchName ?? "")"
                     if bookParsingRuleModel.bookSearchEncoding == "0" {
@@ -210,20 +176,18 @@ class BookReadSearchController: BaseController {
                             } else {
                                 cz_print("连载状态解析失败")
                             }
-                            DispatchQueue.main.async {
-                                CZHUD.dismiss()
-                                self.bookReadSearchResultModels.append(bookReadModels)
-                                self.bookReadSearchView.searchResultTableView.reloadData()
-                            }
-                           // allBookReadModels.append(bookReadModels)
+                            self.bookReadSearchResultModels.append(bookReadModels)
                         }
                     } else {
                         cz_print("小说搜索失败")
                     }
-                }))
+                    DispatchQueue.main.async {
+                        CZHUD.dismiss()
+                        self.bookReadSearchView.searchResultTableView.reloadData()
+                    }
+                }
             }
         }
-    
     }
 
 }

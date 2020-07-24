@@ -96,8 +96,6 @@
 		FC85664824C93BEC008E0D95 /* SwitchVideoSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85664724C93BEC008E0D95 /* SwitchVideoSourceController.swift */; };
 		FC85664A24C93C15008E0D95 /* SwitchVideoSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85664924C93C15008E0D95 /* SwitchVideoSourceView.swift */; };
 		FC85664C24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85664B24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift */; };
-		FC85665124C99067008E0D95 /* AddVideoSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85665024C99067008E0D95 /* AddVideoSourceController.swift */; };
-		FC85665324C99091008E0D95 /* AddVideoSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85665224C99091008E0D95 /* AddVideoSourceView.swift */; };
 		FC859B6F249760D400ECABFC /* VideoResourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC859B6E249760D400ECABFC /* VideoResourceTableViewCell.swift */; };
 		FC859B712497697D00ECABFC /* CZReadTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC859B702497697D00ECABFC /* CZReadTabBarView.swift */; };
 		FC89298C245AD5F0005118E0 /* CZReadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC89298B245AD5F0005118E0 /* CZReadController.swift */; };
@@ -359,8 +357,6 @@
 		FC85664724C93BEC008E0D95 /* SwitchVideoSourceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVideoSourceController.swift; sourceTree = "<group>"; };
 		FC85664924C93C15008E0D95 /* SwitchVideoSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVideoSourceView.swift; sourceTree = "<group>"; };
 		FC85664B24C93C3A008E0D95 /* SwitchVideoSourceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVideoSourceTableViewCell.swift; sourceTree = "<group>"; };
-		FC85665024C99067008E0D95 /* AddVideoSourceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVideoSourceController.swift; sourceTree = "<group>"; };
-		FC85665224C99091008E0D95 /* AddVideoSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVideoSourceView.swift; sourceTree = "<group>"; };
 		FC859B6E249760D400ECABFC /* VideoResourceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoResourceTableViewCell.swift; sourceTree = "<group>"; };
 		FC859B702497697D00ECABFC /* CZReadTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadTabBarView.swift; sourceTree = "<group>"; };
 		FC89298B245AD5F0005118E0 /* CZReadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadController.swift; sourceTree = "<group>"; };
@@ -1247,31 +1243,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		FC85664D24C98FC3008E0D95 /* AddVideoSource(添加影源) */ = {
-			isa = PBXGroup;
-			children = (
-				FC85664F24C9904C008E0D95 /* View */,
-				FC85664E24C98FF3008E0D95 /* Controller */,
-			);
-			path = "AddVideoSource(添加影源)";
-			sourceTree = "<group>";
-		};
-		FC85664E24C98FF3008E0D95 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				FC85665024C99067008E0D95 /* AddVideoSourceController.swift */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		FC85664F24C9904C008E0D95 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				FC85665224C99091008E0D95 /* AddVideoSourceView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		FC892987245AD592005118E0 /* CZRead */ = {
 			isa = PBXGroup;
 			children = (
@@ -1742,7 +1713,6 @@
 		FCF21C2F24A2F0B1003BFD3D /* VideoSourceManage(影源管理) */ = {
 			isa = PBXGroup;
 			children = (
-				FC85664D24C98FC3008E0D95 /* AddVideoSource(添加影源) */,
 				FCF21C3224A2F0EB003BFD3D /* Model */,
 				FCF21C3124A2F0E7003BFD3D /* View */,
 				FCF21C3024A2F0E2003BFD3D /* Controller */,
@@ -2155,7 +2125,6 @@
 				FC1826F12484DF8C00A7E740 /* MineView.swift in Sources */,
 				FCC8762123A0E85600ECA178 /* CZDateSheetController.swift in Sources */,
 				FC859B6F249760D400ECABFC /* VideoResourceTableViewCell.swift in Sources */,
-				FC85665324C99091008E0D95 /* AddVideoSourceView.swift in Sources */,
 				FCFF172224B56138006A88E2 /* TelevisionRootModel.swift in Sources */,
 				FCB496BE246E4EEC00AECA78 /* CZRegex.swift in Sources */,
 				FC1826FB2484F71900A7E740 /* PrivacyPolicyController.swift in Sources */,
@@ -2224,7 +2193,6 @@
 				FC998414248FA09A00ADE067 /* BookReadDetailsView.swift in Sources */,
 				FC0A020A24A9BD61007AA1B0 /* LeftTitleRightLabelTableViewCell.swift in Sources */,
 				FCC8761723A0E85600ECA178 /* UIBarButtonItem+CZKit.swift in Sources */,
-				FC85665124C99067008E0D95 /* AddVideoSourceController.swift in Sources */,
 				FCC8762223A0E85600ECA178 /* CZDateSheetView.swift in Sources */,
 				FC1A5BBB23A0960900F37CA1 /* FullscreenPlayController.swift in Sources */,
 				FCC8760C23A0E85600ECA178 /* UIImageView+CZKit.swift in Sources */,

@@ -29,7 +29,7 @@ class BookReadController: BaseController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 1) {
+        DispatchQueue.global().async {
             self.bookcaseModels = self.getBookcaseModels()
         }
     }
@@ -58,7 +58,7 @@ class BookReadController: BaseController {
     
     /// 获取书架模型数组
     /// - Returns: 书架模型数组
-    func getBookcaseModels() -> Array<BookReadModel> {
+    private func getBookcaseModels() -> Array<BookReadModel> {
         do {
             var models: Array<BookReadModel> = []
             let files = try FileManager().contentsOfDirectory(atPath: bookcaseFolderPath).filter{ $0.pathExtension == "plist" }
@@ -84,54 +84,110 @@ extension BookReadController: UICollectionViewDataSource, UICollectionViewDelega
         let model = bookcaseModels[indexPath.row]
         cell.bookImageView.kf.indicatorType = .activity
         cell.bookImageView.kf.setImage(with: URL(string: model.bookImageUrl), placeholder: UIImage(named: "Icon_Book_Placeholder"))
-        cell.bookTitleLabel.text = model.bookName
-        cell.updateBookButton.addTarget(self, action: #selector(updateBookButtonAction), for: .touchUpInside)
-        cell.removeBookButton.addTarget(self, action: #selector(removeBookButtonAction), for: .touchUpInside)
+        cell.bookTitleLabel.text = "\(model.bookReadParsingRule?.bookSourceName ?? "")-\(model.bookName ?? "")"
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(cellLongPressGestureRecognizerAction))
+        cell.contentView.addGestureRecognizer(longPressGestureRecognizer)
         return cell
     }
     
-    /// 更新
-    @objc func updateBookButtonAction(sender: UIButton) {
-        let cell = sender.cz_superView(seekSuperView: BookcaseCollectionViewCell.self)
+    @objc private func cellLongPressGestureRecognizerAction(recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began else { return }
+        let cell = recognizer.view?.cz_superView(seekSuperView: BookcaseCollectionViewCell.self)
         let indexPath = bookReadView.collectionView.indexPath(for: cell!)
         let bookcaseModel = bookcaseModels[indexPath!.row]
-        CZHUD.show("更新中")
-        BookReadParsing.bookReadDetailParsing(bookReadModel: bookcaseModel) {[weak self] (model) in
-            if model == nil {
-                DispatchQueue.main.async { CZHUD.showError("更新失败") }
-            } else {
-                let state = CZObjectStore.standard.cz_archiver(object: bookcaseModel, filePath: "\(bookcaseFolderPath)/\(bookcaseModel.bookName ?? "").plist")
-                guard state == true else {
-                    CZHUD.showError("更新失败")
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        let updateAction = UIAlertAction(title: "更新", style: .default) { (action) in
+            CZHUD.show("更新中")
+            BookReadParsing.bookReadDetailParsing(bookReadModel: bookcaseModel) {[weak self] (model) in
+                guard model != nil else {
+                    DispatchQueue.main.async { CZHUD.showError("更新失败") }
                     return
                 }
-                DispatchQueue.main.async {
-                    CZHUD.showSuccess("更新成功")
-                    self?.bookReadView.collectionView.reloadData()
+                if bookcaseModel.bookReadChapter?.count ?? 0 < model?.bookReadChapter?.count ?? 0 { // 存在新章节
+                    let _ = CZObjectStore.standard.cz_archiver(object: bookcaseModel, filePath: "\(bookcaseFolderPath)/\(bookcaseModel.bookReadParsingRule?.bookSourceName ?? "")-\(bookcaseModel.bookName ?? "").plist")
+                    DispatchQueue.main.async {
+                        CZHUD.showSuccess("成功更新至最新章节")
+                        self?.bookcaseModels = self?.getBookcaseModels() ?? []
+                    }
+                } else { // 无须更新
+                    DispatchQueue.main.async {
+                        CZHUD.showError("当前已是最新章节")
+                    }
                 }
             }
         }
+        let removeAction = UIAlertAction(title: "移除", style: .default) { (action) in
+            do {
+                try FileManager().removeItem(atPath: bookcaseFolderPath + "/\(bookcaseModel.bookReadParsingRule?.bookSourceName ?? "")-\(bookcaseModel.bookName ?? "").plist")
+                DispatchQueue.main.async {
+                    CZHUD.showSuccess("移除成功")
+                    self.bookcaseModels = self.getBookcaseModels()
+                }
+            } catch  {
+                DispatchQueue.main.async {
+                    CZHUD.showError("移除失败")
+                }
+                
+            }
+        }
+        let infoAction = UIAlertAction(title: "信息", style: .default) { (action) in
+            DispatchQueue.main.async {
+                let bookReadDetailsController = BookReadDetailsController()
+                bookReadDetailsController.bookReadModel = bookcaseModel
+                bookReadDetailsController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(bookReadDetailsController, animated: true)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "取消", style: .default) { (action) in }
+        alertController.addAction(updateAction)
+        alertController.addAction(removeAction)
+        alertController.addAction(infoAction)
+        alertController.addAction(cancelAction)
+        DispatchQueue.main.async { self.present(alertController, animated: true, completion: nil) }
     }
     
-    /// 移除
-    @objc func removeBookButtonAction(sender: UIButton) {
-        let cell = sender.cz_superView(seekSuperView: BookcaseCollectionViewCell.self)
-        let indexPath = bookReadView.collectionView.indexPath(for: cell!)
-        let model = bookcaseModels[indexPath!.row]
-        do {
-            try FileManager().removeItem(atPath: bookcaseFolderPath + "/\(model.bookName ?? "").plist")
-            DispatchQueue.main.async {
-                self.bookReadView.collectionView.reloadData()
-                CZHUD.showSuccess("已移除")
-            }
-        } catch  {
-            DispatchQueue.main.async {
-                CZHUD.showError("移除失败")
-            }
-            
-        }
-        
-    }
+//    /// 更新
+//    @objc func updateBookButtonAction(sender: UIButton) {
+//        let cell = sender.cz_superView(seekSuperView: BookcaseCollectionViewCell.self)
+//        let indexPath = bookReadView.collectionView.indexPath(for: cell!)
+//        let bookcaseModel = bookcaseModels[indexPath!.row]
+//        CZHUD.show("更新中")
+//        BookReadParsing.bookReadDetailParsing(bookReadModel: bookcaseModel) {[weak self] (model) in
+//            if model == nil {
+//                DispatchQueue.main.async { CZHUD.showError("更新失败") }
+//            } else {
+//                let state = CZObjectStore.standard.cz_archiver(object: bookcaseModel, filePath: "\(bookcaseFolderPath)/\(bookcaseModel.bookReadParsingRule?.bookSourceName ?? "")-\(bookcaseModel.bookName ?? "").plist")
+//                guard state == true else {
+//                    CZHUD.showError("更新失败")
+//                    return
+//                }
+//                DispatchQueue.main.async {
+//                    CZHUD.showSuccess("更新成功")
+//                    self?.bookReadView.collectionView.reloadData()
+//                }
+//            }
+//        }
+//    }
+//    
+//    /// 移除
+//    @objc func removeBookButtonAction(sender: UIButton) {
+//        let cell = sender.cz_superView(seekSuperView: BookcaseCollectionViewCell.self)
+//        let indexPath = bookReadView.collectionView.indexPath(for: cell!)
+//        let model = bookcaseModels[indexPath!.row]
+//        do {
+//            try FileManager().removeItem(atPath: bookcaseFolderPath + "/\(model.bookName ?? "").plist")
+//            DispatchQueue.main.async {
+//                self.bookReadView.collectionView.reloadData()
+//                CZHUD.showSuccess("已移除")
+//            }
+//        } catch  {
+//            DispatchQueue.main.async {
+//                CZHUD.showError("移除失败")
+//            }
+//            
+//        }
+//        
+//    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let model = bookcaseModels[indexPath.row]

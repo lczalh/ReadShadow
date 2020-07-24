@@ -430,13 +430,13 @@ class CZReadController: BaseController {
     func updateLocalData() {
         bookReadModel?.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
         // 书架
-        let bookcaseModel = CZObjectStore.standard.cz_readObjectInPlist(filePath: "\(bookcaseFolderPath)/\(bookReadModel?.bookName ?? "").plist", key: (self.bookReadModel?.bookName)!) as? BookReadModel
+        let bookcaseModel = CZObjectStore.standard.cz_unarchiver(filePath: "\(bookcaseFolderPath)/\(self.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(bookReadModel?.bookName ?? "").plist") as? BookReadModel
         // 在书架
         if bookcaseModel != nil {
-            let _ = CZObjectStore.standard.cz_objectWritePlist(object: self.bookReadModel!, filePath: "\(bookcaseFolderPath)/\(bookReadModel?.bookName ?? "").plist", key: (self.bookReadModel?.bookName)!)
+            let _ = CZObjectStore.standard.cz_archiver(object: self.bookReadModel!, filePath: "\(bookcaseFolderPath)/\(self.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(bookReadModel?.bookName ?? "").plist")
         }
         // 更新历史记录
-        _ = CZObjectStore.standard.cz_archiver(object: bookReadModel!, filePath: "\(bookBrowsingRecordFolderPath)/\(bookReadModel?.bookName ?? "").plist")
+        _ = CZObjectStore.standard.cz_archiver(object: bookReadModel!, filePath: "\(bookBrowsingRecordFolderPath)/\(self.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(bookReadModel?.bookName ?? "").plist")
     }
     
     deinit {

@@ -32,7 +32,7 @@ class BookReadView: BaseView {
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         if CZCommon.cz_isIphone {
-            layout.itemSize = CGSize(width: (CZCommon.cz_screenWidth - minimumInteritemSpacing * 2 - 30) / 3, height: CZCommon.cz_dynamicFitHeight(140))
+            layout.itemSize = CGSize(width: (CZCommon.cz_screenWidth - minimumInteritemSpacing * 2 - 30) / 3, height: CZCommon.cz_dynamicFitHeight(160))
         } else {
             layout.itemSize = CGSize(width: (CZCommon.cz_screenWidth - minimumInteritemSpacing * 3 - 30) / 4, height: CZCommon.cz_dynamicFitHeight(220))
         }
