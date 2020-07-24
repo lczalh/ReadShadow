@@ -121,7 +121,6 @@ class VideoDetailsController: BaseController {
         
         // 分享
         videoDetailsView.shareButton.rx.tap.subscribe(onNext: {[weak self] () in
-          //  self?.videoDetailsView.superPlayerView.pause()
             self?.callNativeShare(items: ["我在用“\(CZCommon.cz_appName)”，快来看看吧", UIImage(named: "AppIcon")!, URL(string: "https://apps.apple.com/cn/app/悦影-小说电影神器/id\(appId)".cz_encoded())!])
         }).disposed(by: rx.disposeBag)
         
@@ -161,11 +160,9 @@ class VideoDetailsController: BaseController {
         videoDetailsView.playerImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
         // 设置视频名称
         videoDetailsView.videoNameLabel.text = model.name
-        videoDetailsView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))"
+        videoDetailsView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))·\(model.continu ?? "未知")"
         
         getMoreWonderfulModels()
-        
-      //  playerVideo()
     }
     
     /// 请求广告
@@ -218,9 +215,6 @@ class VideoDetailsController: BaseController {
             UIActivity.ActivityType.airDrop,
             UIActivity.ActivityType.openInIBooks
         ]
-//        controller.completionWithItemsHandler = {[weak self] activityType, completed, returnedItems, activityError in
-//            //self?.videoDetailsView.superPlayerView.resume()
-//        }
         DispatchQueue.main.async { self.present(controller, animated: true, completion: nil) }
     }
     
@@ -238,6 +232,16 @@ class VideoDetailsController: BaseController {
                     fullscreenPlayController.videoName = self.model.name
                 }
                 fullscreenPlayController.hidesBottomBarWhenPushed = true
+                fullscreenPlayController.superPlayerDidEndBlock = {[weak self] player in
+                    guard self?.model.currentPlayIndex != (self?.currentSeriesUrls.count ?? 0) - 1 else { return }
+                    self?.model.currentPlayIndex! += 1
+                    let url = self?.currentSeriesUrls[self!.model.currentPlayIndex!]
+                    fullscreenPlayController.videoURL = url!
+                    fullscreenPlayController.videoName = "\(self?.model.name ?? "")\(self?.currentSeriesNames[self?.model.currentPlayIndex ?? 0] ?? "")"
+                    DispatchQueue.main.async {
+                        self?.videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+                    }
+                }
                 self.navigationController?.pushViewController(fullscreenPlayController, animated: true)
             }
         }
@@ -311,57 +315,6 @@ extension VideoDetailsController: JXSegmentedViewDelegate {
         playerVideo()
     }
 }
-
-//extension VideoDetailsController: SFSafariViewControllerDelegate {
-//
-//    /*
-//     当用户点击操作按钮后，视图控制器要显示UIActivityViewController时，@abstract被调用。
-//     该网页的URL。
-//     网页的标题。
-//     @result返回一个将被附加到UIActivityViewController的UIActivity实例数组。
-//     */
-////    func safariViewController(_ controller: SFSafariViewController, activityItemsFor URL: URL, title: String?) -> [UIActivity] {
-////
-////    }
-//    /*
-//     当用户点击动作按钮时，@abstract允许你从UIActivityViewController中排除特定的uiactivitytype。
-//     当用户点击操作按钮后，视图控制器要显示一个UIActivityViewController时调用@discussion。
-//     当前网页的URL。
-//     当前网页的标题。
-//     @result返回你想要从UIActivityViewController中排除的任何uiactivity类型的数组。
-//     */
-////    func safariViewController(_ controller: SFSafariViewController, excludedActivityTypesFor URL: URL, title: String?) -> [UIActivity.ActivityType] {
-////        return [UIActivity.ActivityType.]
-////    }
-//
-//    /*
-//     当用户点击Done按钮时调用Delegate回调。在这个调用中，视图控制器被模态解散。
-//     */
-//    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-//
-//    }
-//
-//    /*
-//     @abstract在初始URL加载完成时调用。
-//     @param didloadsuccess如果加载成功为YES，如果加载失败为NO。
-//     当SFSafariViewController完成您传递的URL的加载时，将调用此方法
-//     初始值设定项。在同一个SFSafariViewController实例中，它不会被随后加载的任何页面调用。
-//     */
-//    func safariViewController(_ controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
-//
-//    }
-//
-//    /*
-//     当浏览器在加载初始页面时被重定向到另一个URL时调用。
-//     浏览器被重定向到的新URL。
-//     这个方法可能在-safariViewController:didCompleteInitialLoad: if之后被调用
-//     web页面执行额外的重定向，无需用户交互。
-//     */
-//    func safariViewController(_ controller: SFSafariViewController, initialLoadDidRedirectTo URL: URL) {
-//        cz_print(URL.absoluteString)
-//       // controller.dismiss(animated: true, completion: nil)
-//    }
-//}
 
 //extension VideoDetailsController: SuperPlayerDelegate {
 //

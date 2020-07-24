@@ -42,6 +42,9 @@ class FullscreenPlayController: BaseController {
         }
     }
     
+    /// 播放结束通知
+    var superPlayerDidEndBlock: ((_ player: SuperPlayerView) -> Void)?
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -82,7 +85,9 @@ extension FullscreenPlayController: SuperPlayerDelegate {
     
     /// 播放结束通知
     func superPlayerDidEnd(_ player: SuperPlayerView!) {
-
+        if superPlayerDidEndBlock != nil {
+            superPlayerDidEndBlock!(player)
+        }
     }
     
     /// 全屏改变通知
