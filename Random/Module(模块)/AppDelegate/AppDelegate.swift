@@ -55,6 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 将右边Done改成完成
         IQKeyboardManager.shared.toolbarDoneBarButtonItemText = "完成"
         
+        let expirationTime = Date() + 1.days
+        CZObjectStore.standard.cz_objectWriteUserDefault(object: expirationTime, key: "expirationTime")
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.white
         // 应用是否是第一次启动

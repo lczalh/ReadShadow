@@ -33,11 +33,6 @@ class VideoSourceManageController: BaseController {
         }
     }
     
-//    /// 所有影源模型
-//    private lazy var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> = {
-//        return getApplicationConfigModel()?.videoResources ?? []
-//    }()
-    
     override func setupNavigationItems() {
         titleView?.title = "我的影源"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "添加", style: .done, target: nil, action: nil)
@@ -45,7 +40,6 @@ class VideoSourceManageController: BaseController {
             DispatchQueue.main.async {
                 let dialogTextFieldViewController = QMUIDialogTextFieldViewController()
                 dialogTextFieldViewController.titleView?.title = "添加影源"
-                dialogTextFieldViewController.submitButton?.isEnabled = true
                 dialogTextFieldViewController.addTextField(withTitle: "影源名称") { (label, textField, layer) in
 
                 }
@@ -54,32 +48,38 @@ class VideoSourceManageController: BaseController {
                 }
                 dialogTextFieldViewController.addCancelButton(withText: "取消") { _ in }
                 dialogTextFieldViewController.addSubmitButton(withText: "添加") { (viewController) in
-                    let videoSourceName = dialogTextFieldViewController.textFields?[0].text ?? ""
-                    let videoSourceAddress = dialogTextFieldViewController.textFields?[1].text ?? ""
-                    DispatchQueue.main.async { CZHUD.show("影源匹配中") }
-                    // 匹配路径
-                    let path = self?.videoSourcePathMatching(baseUrl: videoSourceAddress)
-                    guard path != nil else {
-                        DispatchQueue.main.async { CZHUD.show("影源匹配失败") }
-                        return
-                    }
-                    // 匹配下载地址
-                    let downloadPath = self?.videoSourceDownloadPathMatching(baseUrl: videoSourceAddress)
-                    let mushroomCloud = ReadShadowVideoResourceModel()
-                    mushroomCloud.name = videoSourceName
-                    mushroomCloud.baseUrl = videoSourceAddress
-                    mushroomCloud.path = path
-                    mushroomCloud.downloadPath = downloadPath
-                    let _ = CZObjectStore.standard.cz_archiver(object: mushroomCloud, filePath: videoResourceFolderPath + "/" + (mushroomCloud.name ?? "") + ".plist")
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                        CZHUD.dismiss()
-                        dialogTextFieldViewController.hideWith(animated: true) { _ in
-                            let tabBarController = MainTabBarController()
-                            let transtition = CATransition()
-                            transtition.duration = 0.5
-                            transtition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-                            UIApplication.shared.delegate?.window??.layer.add(transtition, forKey: "animation")
-                            UIApplication.shared.delegate?.window??.rootViewController = tabBarController
+                    dialogTextFieldViewController.hideWith(animated: true) { _ in
+                        let videoSourceName = dialogTextFieldViewController.textFields?[0].text ?? ""
+                        let videoSourceAddress = dialogTextFieldViewController.textFields?[1].text ?? ""
+                        CZHUD.show("影源匹配中")
+                        DispatchQueue.global().async {
+                            // 匹配路径
+                            let path = self?.videoSourcePathMatching(baseUrl: videoSourceAddress)
+                            guard path != nil else {
+                                DispatchQueue.main.async { CZHUD.showError("影源匹配失败") }
+                                return
+                            }
+                            // 匹配下载地址
+                            let downloadPath = self?.videoSourceDownloadPathMatching(baseUrl: videoSourceAddress)
+                            DispatchQueue.main.async {
+                                let readShadowVideoResourceModel = ReadShadowVideoResourceModel()
+                                readShadowVideoResourceModel.name = videoSourceName
+                                readShadowVideoResourceModel.baseUrl = videoSourceAddress
+                                readShadowVideoResourceModel.path = path
+                                readShadowVideoResourceModel.downloadPath = downloadPath
+                                let _ = CZObjectStore.standard.cz_archiver(object: readShadowVideoResourceModel, filePath: videoResourceFolderPath + "/" + (readShadowVideoResourceModel.name ?? "") + ".plist")
+                                CZHUD.showSuccess("影源匹配成功")
+                                if self?.readShadowVideoResourceModels.count == 0 {
+                                    let tabBarController = MainTabBarController()
+                                    let transtition = CATransition()
+                                    transtition.duration = 0.5
+                                    transtition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+                                    UIApplication.shared.delegate?.window??.layer.add(transtition, forKey: "animation")
+                                    UIApplication.shared.delegate?.window??.rootViewController = tabBarController
+                                } else {
+                                    self?.videoSourceManageView.tableView.reloadData()
+                                }
+                            }
                         }
                     }
                 }
@@ -105,25 +105,25 @@ class VideoSourceManageController: BaseController {
     /// - Parameter baseUrl: 影源地址
     /// - Returns: 影源路径
     func videoSourcePathMatching(baseUrl: String) -> String? {
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/api.php/provide/vod")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/api.php/provide/vod".cz_encoded())!) {
             return "/api.php/provide/vod"
         }
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifeikkm3u8")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifeikkm3u8".cz_encoded())!) {
             return "/inc/s_feifeikkm3u8"
         }
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifei3zuidam3u8")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifei3zuidam3u8".cz_encoded())!) {
             return "/inc/s_feifei3zuidam3u8"
         }
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifei3")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/s_feifei3".cz_encoded())!) {
             return "/inc/s_feifei3"
         }
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3ckm3u8s")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3ckm3u8s".cz_encoded())!) {
             return "/inc/feifei3ckm3u8s"
         }
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3".cz_encoded())!) {
             return "/inc/feifei3"
         }
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3.4s")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3.4s".cz_encoded())!) {
             return "/inc/feifei3.4s"
         }
         return nil
@@ -133,10 +133,10 @@ class VideoSourceManageController: BaseController {
     /// - Parameter baseUrl: 影源地址
     /// - Returns: 影源下载路径
     func videoSourceDownloadPathMatching(baseUrl: String) -> String? {
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3down")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifei3down".cz_encoded())!) {
             return "/inc/feifei3down"
         }
-        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifeidown")!) {
+        if let _ = try? String(contentsOf: URL(string: "\(baseUrl)/inc/feifeidown".cz_encoded())!) {
             return "/inc/feifeidown"
         }
         return nil

@@ -13,7 +13,7 @@ class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
     var data : [ReadShadowVideoModel]?
     var category : [ReadShadowVideoCategoryModel]?
   //  var page : VideoPageModel?
-    var code : Int?
+//    var code : Int?
 
 
     class func newInstance(map: Map) -> Mappable?{
@@ -26,24 +26,23 @@ class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
     {
         if data == nil || data?.isEmpty == true {
             data <- map["data"]
+            category <- map["list"]
         }
         if data == nil || data?.isEmpty == true {
             data <- map["list"]
-        }
-        
-        if category == nil || category?.isEmpty == true {
-            category <- map["list"]
-        }
-        if category == nil || category?.isEmpty == true {
             category <- map["class"]
         }
         
-        if code == nil {
-            code <- map["status"]
-        }
-        if code == nil {
-            code <- map["code"]
-        }
+//        if category == nil || category?.isEmpty == true {
+//            category <- map["list"]
+//        }
+        
+//        if code == nil {
+//            code <- map["status"]
+//        }
+//        if code == nil {
+//            code <- map["code"]
+//        }
         
     }
 
@@ -56,7 +55,7 @@ class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
          data = aDecoder.decodeObject(forKey: "data") as? [ReadShadowVideoModel]
          category = aDecoder.decodeObject(forKey: "list") as? [ReadShadowVideoCategoryModel]
 //         page = aDecoder.decodeObject(forKey: "page") as? VideoPageModel
-         code = aDecoder.decodeObject(forKey: "status") as? Int
+//         code = aDecoder.decodeObject(forKey: "status") as? Int
 
     }
 
@@ -75,9 +74,9 @@ class ReadShadowVideoRootModel : NSObject, NSCoding, Mappable{
 //        if page != nil{
 //            aCoder.encode(page, forKey: "page")
 //        }
-        if code != nil{
-            aCoder.encode(code, forKey: "status")
-        }
+//        if code != nil{
+//            aCoder.encode(code, forKey: "status")
+//        }
 
     }
 
