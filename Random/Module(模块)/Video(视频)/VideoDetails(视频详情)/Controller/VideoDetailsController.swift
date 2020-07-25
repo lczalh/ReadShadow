@@ -273,8 +273,7 @@ class VideoDetailsController: BaseController {
             }
         }
         let parsingPlayAction = UIAlertAction(title: "解析播放", style: .default) { (action) in
-            let url = "\(self.currentParsingInterface)\(url)"
-            if (try? String(contentsOf: URL(string: url)!)) != nil {
+            if (try? String(contentsOf: URL(string: self.currentParsingInterface)!)) != nil {
                 DispatchQueue.main.async {
                     UIApplication.shared.open(URL(string: "\(self.currentParsingInterface)\(url)")!, options: [:], completionHandler: nil)
                 }
