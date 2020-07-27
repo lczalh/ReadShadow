@@ -30,13 +30,16 @@ class VideoDetailsView: BaseView {
     /// 网页播放器
     lazy var wkWebView: WKWebView = {
         let wkWebViewConfiguration = WKWebViewConfiguration()
+        // 是使用h5的视频播放器在线播放, 还是使用原生播放器全屏播放
         wkWebViewConfiguration.allowsInlineMediaPlayback = true
         wkWebViewConfiguration.allowsAirPlayForMediaPlayback = true
+        wkWebViewConfiguration.mediaTypesRequiringUserActionForPlayback = .all
+        //设置是否允许画中画技术 在特定设备上有效
+        wkWebViewConfiguration.allowsPictureInPictureMediaPlayback = true
         let view = WKWebView(frame: playerImageView.bounds, configuration: wkWebViewConfiguration)
         // 请求桌面网站
         view.customUserAgent = "ASDF"
         view.isHidden = true
-        
         return view
     }()
     
