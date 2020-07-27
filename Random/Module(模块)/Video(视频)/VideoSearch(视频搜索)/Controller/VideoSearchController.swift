@@ -101,10 +101,10 @@ class VideoSearchController: BaseController {
                                         videos.append(videoModel)
                                     }
                                     // 过滤空数组
-                                    guard videos.count > 0 else { return }
-                                    self?.videoModels.append(videos)
-                                    self?.sectionTitles.append(videoSourceModel.name!)
-                                    
+                                    if videos.count > 0 {
+                                        self?.videoModels.append(videos)
+                                        self?.sectionTitles.append(videoSourceModel.name!)
+                                    }
                                 }
                                 DispatchQueue.main.async {
                                     CZHUD.dismiss()

@@ -40,6 +40,9 @@ class VideoDetailsView: BaseView {
         // 请求桌面网站
         view.customUserAgent = "ASDF"
         view.isHidden = true
+        view.scrollView.bounces = false
+        view.scrollView.showsVerticalScrollIndicator = false
+        view.scrollView.isScrollEnabled = false
         return view
     }()
     

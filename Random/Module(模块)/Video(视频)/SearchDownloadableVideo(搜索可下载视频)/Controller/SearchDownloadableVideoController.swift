@@ -78,7 +78,6 @@ class SearchDownloadableVideoController: BaseController {
                     switch result {
                     case .success(let downModel):
                         if let videoModels = downModel.data, videoModels.count > 0 {
-//                            var videos: [ReadShadowVideoModel] = []
                             for videoModel in videoModels {
                                 guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
                                 // 默认播放首集

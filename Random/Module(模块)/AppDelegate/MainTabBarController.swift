@@ -226,6 +226,24 @@ class MainTabBarController: BaseTabBarController {
         mushroomCloud.path = "/api.php/provide/vod"
         let _ = CZObjectStore.standard.cz_archiver(object: mushroomCloud, filePath: videoResourceFolderPath + "/" + (mushroomCloud.name ?? "") + ".plist")
         
+        let darkNight = ReadShadowVideoResourceModel()
+        darkNight.name = "暗夜"
+        darkNight.baseUrl = "https://vip.aywlkj.xyz"
+        darkNight.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: darkNight, filePath: videoResourceFolderPath + "/" + (darkNight.name ?? "") + ".plist")
+        
+        let qt = ReadShadowVideoResourceModel()
+        qt.name = "QT"
+        qt.baseUrl = "http://zy.potatost.xyz"
+        qt.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: videoResourceFolderPath + "/" + (qt.name ?? "") + ".plist")
+        
+        let terroristDuck = ReadShadowVideoResourceModel()
+        terroristDuck.name = "恐怖鸭"
+        terroristDuck.baseUrl = "https://ya.kongbuya.com"
+        terroristDuck.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: terroristDuck, filePath: videoResourceFolderPath + "/" + (terroristDuck.name ?? "") + ".plist")
+        
     }
     
     /// 配置影源解析
@@ -248,6 +266,26 @@ class MainTabBarController: BaseTabBarController {
         six18g.parsingName = "618g"
         six18g.parsingInterface = "https://jx.618g.com/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: six18g, filePath: parsingInterfaceFolderPath + "/" + (six18g.parsingName ?? "") + ".plist")
+        
+        let zy8090 = ParsingInterfaceModel()
+        zy8090.parsingName = "8090"
+        zy8090.parsingInterface = "https://www.8090g.cn/jiexi/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: zy8090, filePath: parsingInterfaceFolderPath + "/" + (zy8090.parsingName ?? "") + ".plist")
+        
+        let darkNight = ParsingInterfaceModel()
+        darkNight.parsingName = "暗夜"
+        darkNight.parsingInterface = "http://jx.aywlkj.xyz/jiexi/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: darkNight, filePath: parsingInterfaceFolderPath + "/" + (darkNight.parsingName ?? "") + ".plist")
+        
+        let qt = ParsingInterfaceModel()
+        qt.parsingName = "QT"
+        qt.parsingInterface = "https://api.potatost.xyz/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: parsingInterfaceFolderPath + "/" + (qt.parsingName ?? "") + ".plist")
+        
+        let terroristDuck = ParsingInterfaceModel()
+        terroristDuck.parsingName = "恐怖鸭"
+        terroristDuck.parsingInterface = "https://vv.kongbuya.com/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: terroristDuck, filePath: parsingInterfaceFolderPath + "/" + (terroristDuck.parsingName ?? "") + ".plist")
         
         let dreamCloudOne = ParsingInterfaceModel()
         dreamCloudOne.parsingName = "集梦云1"

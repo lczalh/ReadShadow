@@ -18,7 +18,6 @@ class VideoDetailsController: BaseController {
         view.tableView.dataSource = self
         view.tableView.delegate = self
         view.superPlayerView.delegate = self
-        view.wkWebView.navigationDelegate = self
         return view
     }()
     
@@ -400,20 +399,6 @@ extension VideoDetailsController: SuperPlayerDelegate {
             spDefaultControlView.danmakuBtn.isHidden = true
         }
     }
-}
-
-extension VideoDetailsController: WKNavigationDelegate {
-    
-    // 页面加载完成之后调用
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        
-    }
-    
-//    // 根据WebView对于即将跳转的HTTP请求头信息和相关信息来决定是否跳转
-//    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-//        let a = navigationAction.request.url?.absoluteString
-//        cz_print(a)
-//    }
 }
 
 extension VideoDetailsController: GADInterstitialDelegate {
