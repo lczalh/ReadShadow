@@ -239,15 +239,27 @@ class MainTabBarController: BaseTabBarController {
         ckmov.parsingInterface = "https://www.ckmov.com/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: ckmov, filePath: parsingInterfaceFolderPath + "/" + (ckmov.parsingName ?? "") + ".plist")
         
-        let yun = ParsingInterfaceModel()
-        yun.parsingName = "1717yun"
-        yun.parsingInterface = "https://www.1717yun.com/jx/ty.php?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: yun, filePath: parsingInterfaceFolderPath + "/" + (yun.parsingName ?? "") + ".plist")
-        
         let zyc = ParsingInterfaceModel()
         zyc.parsingName = "zyc888"
         zyc.parsingInterface = "https://cdn.zyc888.top/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: zyc, filePath: parsingInterfaceFolderPath + "/" + (zyc.parsingName ?? "") + ".plist")
+        
+        let six18g = ParsingInterfaceModel()
+        six18g.parsingName = "618g"
+        six18g.parsingInterface = "https://jx.618g.com/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: six18g, filePath: parsingInterfaceFolderPath + "/" + (six18g.parsingName ?? "") + ".plist")
+        
+        let dreamCloudOne = ParsingInterfaceModel()
+        dreamCloudOne.parsingName = "集梦云1"
+        dreamCloudOne.parsingInterface = "https://jx.ys520.club/om/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: dreamCloudOne, filePath: parsingInterfaceFolderPath + "/" + (dreamCloudOne.parsingName ?? "") + ".plist")
+        
+        let dreamCloudTwo = ParsingInterfaceModel()
+        dreamCloudTwo.parsingName = "集梦云2"
+        dreamCloudTwo.parsingInterface = "https://ys.ys520.club/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: dreamCloudTwo, filePath: parsingInterfaceFolderPath + "/" + (dreamCloudTwo.parsingName ?? "") + ".plist")
+        
+        
         
     }
     

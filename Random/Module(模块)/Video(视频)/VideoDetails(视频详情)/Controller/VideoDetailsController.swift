@@ -17,6 +17,8 @@ class VideoDetailsController: BaseController {
         let view = VideoDetailsView()
         view.tableView.dataSource = self
         view.tableView.delegate = self
+        view.superPlayerView.delegate = self
+        view.wkWebView.navigationDelegate = self
         return view
     }()
     
@@ -64,7 +66,7 @@ class VideoDetailsController: BaseController {
     private var currentParsingInterface: String = ""
     
     /// 所有影源模型
-    var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> {
+    private var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> {
         do {
             var models: Array<ReadShadowVideoResourceModel> = []
             let files = try FileManager().contentsOfDirectory(atPath: videoResourceFolderPath).filter{ $0.pathExtension == "plist" }
@@ -82,7 +84,7 @@ class VideoDetailsController: BaseController {
     private var moreWonderfulModels: Array<ReadShadowVideoModel> = []
     
     /// 所有解析接口
-    lazy var parsingInterfaceModels: Array<ParsingInterfaceModel> = {
+    private lazy var parsingInterfaceModels: Array<ParsingInterfaceModel> = {
         do {
             var models: Array<ParsingInterfaceModel> = []
             let files = try FileManager().contentsOfDirectory(atPath: parsingInterfaceFolderPath).filter{ $0.pathExtension == "plist" }
@@ -97,12 +99,34 @@ class VideoDetailsController: BaseController {
     }()
     
     /// 插页式广告
-    var gadInterstitial: GADInterstitial!
+    private var gadInterstitial: GADInterstitial!
     
     /// 广告特权
-    lazy var isAdvertisingPrivilege: Bool = {
+    private lazy var isAdvertisingPrivilege: Bool = {
         return isGetAdvertisingPrivilege()
     }()
+    
+    /// 腾讯视频播放器播放模型
+    private lazy var superPlayerModel: SuperPlayerModel = {
+        let model = SuperPlayerModel()
+        return model
+    }()
+    
+    /// 是否显示状态栏
+    private var statusBarHidden: Bool = false {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    // 播放类型枚举
+    private enum VideoPlayType {
+        case parsingPlay // 解析播放
+        case directlyPlay // 直接播放
+    }
+    
+    /// 记录当前播放类型
+    private var currentPlayType: VideoPlayType?
     
     override func setupNavigationItems() {
         super.setupNavigationItems()
@@ -173,13 +197,24 @@ class VideoDetailsController: BaseController {
             }
         }).disposed(by: rx.disposeBag)
         
+        //监听腾讯视频播放器当前播放时间
+        _ = videoDetailsView.superPlayerView.rx.observeWeakly(CGFloat.self, "playCurrentTime")
+            .takeUntil(rx.deallocated)
+            .subscribe(onNext: {[weak self] (value) in
+                // 记录当前播放时间 和 浏览时间
+                self?.model.currentPlayTime = value ?? 0.0
+                self?.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
+                _ = CZObjectStore.standard.cz_archiver(object: self!.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self?.model.readShadowVideoResourceModel?.name ?? "")-\(self?.model.name ?? "").plist")
+        })
+        
         // 设置封面
         videoDetailsView.playerImageView.kf.indicatorType = .activity
         videoDetailsView.playerImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
         // 设置视频名称
         videoDetailsView.videoNameLabel.text = model.name
         videoDetailsView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))·\(model.continu ?? "未知")"
-        
+        // 默认加载一次解析接口
+        videoDetailsView.wkWebView.load(URLRequest(url: URL(string: currentParsingInterface)!))
         getMoreWonderfulModels()
     }
     
@@ -241,48 +276,35 @@ class VideoDetailsController: BaseController {
         let url = currentSeriesUrls[model.currentPlayIndex!]
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         let directBroadcastAction = UIAlertAction(title: "直接播放", style: .default) { (action) in
+            self.currentPlayType = .directlyPlay
             DispatchQueue.main.async {
-                let fullscreenPlayController = FullscreenPlayController()
-                fullscreenPlayController.startTime = self.model.currentPlayTime
-                fullscreenPlayController.videoURL = url
+                self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.currentParsingInterface)!))
+                self.videoDetailsView.wkWebView.isHidden = true
+                self.videoDetailsView.superPlayerView.isHidden = false
+                self.videoDetailsView.superPlayerView.startTime = self.model.currentPlayTime
                 if self.currentSeriesNames.count > 1 {
-                    fullscreenPlayController.videoName = "\(self.model.name ?? "")\(self.currentSeriesNames[self.model.currentPlayIndex ?? 0])"
+                    self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.name ?? "")\(self.currentSeriesNames[self.model.currentPlayIndex ?? 0])"
                 } else {
-                    fullscreenPlayController.videoName = self.model.name
+                    self.videoDetailsView.superPlayerView.controlView.title = self.model.name
                 }
-                fullscreenPlayController.hidesBottomBarWhenPushed = true
-                // 播放结束回调
-                fullscreenPlayController.superPlayerDidEndBlock = {[weak self] player in
-                    guard self?.model.currentPlayIndex != (self?.currentSeriesUrls.count ?? 0) - 1 else { return }
-                    self?.model.currentPlayIndex! += 1
-                    let url = self?.currentSeriesUrls[self!.model.currentPlayIndex!]
-                    fullscreenPlayController.videoURL = url!
-                    fullscreenPlayController.videoName = "\(self?.model.name ?? "")\(self?.currentSeriesNames[self?.model.currentPlayIndex ?? 0] ?? "")"
-                    DispatchQueue.main.async {
-                        self?.videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-                    }
-                }
-                //
-                fullscreenPlayController.playCurrentTimeBlock = {[weak self] value in
-                    // 记录当前播放时间 和 浏览时间
-                    self?.model.currentPlayTime = value
-                    self?.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
-                    _ = CZObjectStore.standard.cz_archiver(object: self!.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self?.model.readShadowVideoResourceModel?.name ?? "")-\(self?.model.name ?? "").plist")
-                }
-                self.navigationController?.pushViewController(fullscreenPlayController, animated: true)
+                self.superPlayerModel.videoURL = url
+                self.videoDetailsView.superPlayerView.play(with: self.superPlayerModel)
             }
         }
         let parsingPlayAction = UIAlertAction(title: "解析播放", style: .default) { (action) in
             if (try? String(contentsOf: URL(string: self.currentParsingInterface)!)) != nil {
+                self.currentPlayType = .parsingPlay
                 DispatchQueue.main.async {
-                    UIApplication.shared.open(URL(string: "\(self.currentParsingInterface)\(url)")!, options: [:], completionHandler: nil)
+                    self.videoDetailsView.superPlayerView.resetPlayer()
+                    self.videoDetailsView.superPlayerView.isHidden = true
+                    self.videoDetailsView.wkWebView.isHidden = false
+                    self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.currentParsingInterface)\(url)")!))
                 }
             } else {
                 CZHUD.showError("无效的解析接口")
             }
         }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (action) in
-        }
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (action) in }
         if url.contains(".m3u8") || url.contains(".mp4") {
             alertController.addAction(directBroadcastAction)
         }
@@ -296,8 +318,13 @@ class VideoDetailsController: BaseController {
         _ = CZObjectStore.standard.cz_archiver(object: model!, filePath: "\(videoBrowsingRecordFolderPath)/\(model.readShadowVideoResourceModel?.name ?? "")-\(model.name ?? "").plist")
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return statusBarHidden
+    }
 
-    deinit { }
+    deinit {
+        self.videoDetailsView.superPlayerView.resetPlayer()
+    }
 
 }
 
@@ -339,6 +366,46 @@ extension VideoDetailsController: JXSegmentedViewDelegate {
     func segmentedView(_ segmentedView: JXSegmentedView, didClickSelectedItemAt index: Int) {
         model.currentPlayIndex = index
         playerVideo()
+    }
+}
+
+extension VideoDetailsController: SuperPlayerDelegate {
+    /// 返回事件
+    func superPlayerBackAction(_ player: SuperPlayerView!) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    /// 播放结束通知
+    func superPlayerDidEnd(_ player: SuperPlayerView!) {
+        guard model.currentPlayIndex != currentSeriesUrls.count - 1 else { return }
+        model.currentPlayIndex! += 1
+        let url = currentSeriesUrls[model.currentPlayIndex!]
+        // 重置wkWebView 并隐藏
+        videoDetailsView.wkWebView.load(URLRequest(url: URL(string: currentParsingInterface)!))
+        videoDetailsView.wkWebView.isHidden = true
+        videoDetailsView.superPlayerView.isHidden = false
+        superPlayerModel.videoURL = url
+        videoDetailsView.superPlayerView.controlView.title = "\(model.name ?? "")\(currentSeriesNames[model.currentPlayIndex ?? 0])"
+        videoDetailsView.superPlayerView.play(with: superPlayerModel)
+        DispatchQueue.main.async {
+            self.videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        }
+    }
+    
+    /// 全屏改变通知
+    func superPlayerFullScreenChanged(_ player: SuperPlayerView!) {
+        statusBarHidden = player.isFullScreen
+        if player.isFullScreen {
+            let spDefaultControlView = (player.controlView as! SPDefaultControlView)
+            spDefaultControlView.danmakuBtn.isHidden = true
+        }
+    }
+}
+
+extension VideoDetailsController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        
     }
 }
 

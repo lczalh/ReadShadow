@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import WebKit
 
 class VideoDetailsView: BaseView {
     
@@ -25,17 +26,31 @@ class VideoDetailsView: BaseView {
         return view
     }()
     
-//    lazy var superPlayerView: SuperPlayerView = {
-//        let view = SuperPlayerView(frame: playerImageView.bounds)
-//        //view.autoPlay = false
-//        view.coverImageView.contentMode = .scaleAspectFill
-//      //  view.fatherView = playerImageView
-//        let superPlayerViewConfig = SuperPlayerViewConfig()
-//        superPlayerViewConfig.maxCacheItem = 100
-//        superPlayerViewConfig.renderMode = 0
-//        view.playerConfig = superPlayerViewConfig
-//        return view
-//    }()
+    
+    /// 网页播放器
+    lazy var wkWebView: WKWebView = {
+        let wkWebViewConfiguration = WKWebViewConfiguration()
+        wkWebViewConfiguration.allowsInlineMediaPlayback = true
+        wkWebViewConfiguration.allowsAirPlayForMediaPlayback = true
+        let view = WKWebView(frame: playerImageView.bounds, configuration: wkWebViewConfiguration)
+        // 请求桌面网站
+        view.customUserAgent = "ASDF"
+        view.isHidden = true
+        
+        return view
+    }()
+    
+    /// 腾讯视频播放器
+    lazy var superPlayerView: SuperPlayerView = {
+        let view = SuperPlayerView(frame: playerImageView.bounds)
+        view.coverImageView.contentMode = .scaleAspectFill
+        view.fatherView = playerImageView
+        let superPlayerViewConfig = SuperPlayerViewConfig()
+        superPlayerViewConfig.maxCacheItem = 100
+        view.playerConfig = superPlayerViewConfig
+        view.isHidden = true
+        return view
+    }()
     
     /// 流动提示
     lazy var marqueeLabel: QMUIMarqueeLabel = {
@@ -85,6 +100,7 @@ class VideoDetailsView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(playerImageView)
+        wkWebView.cz.addSuperView(playerImageView)
         marqueeLabel.cz.addSuperView(self).makeConstraints { (make) in
             make.top.equalTo(playerImageView.snp.bottom)
             make.left.right.equalToSuperview()
