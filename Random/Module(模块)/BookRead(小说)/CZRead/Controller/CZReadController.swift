@@ -553,11 +553,13 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
         let vc = pendingViewControllers.first as! CZReadContentController
         recordCurrentChapterPagingIndex = vc.chapterPagingCurrentIndex! - 1
         recordCurrentChapterIndex = vc.chapterCurrentIndex!
+        cz_print("开始滚动或翻页的时候触发: recordCurrentChapterPagingIndex：\(recordCurrentChapterPagingIndex), recordCurrentChapterIndex：\(recordCurrentChapterIndex)")
     }
     
     
     /// 结束滚动或翻页的时候触发
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        cz_print("是否成功翻页：\(completed)---------是否动画完成：\(finished)")
         if completed == true && finished == true { // 成功翻页在修改 章节索引和分页索引
             bookReadModel?.bookLastReadChapterIndex = recordCurrentChapterIndex
             bookReadModel?.bookLastReadChapterPagingIndex = recordCurrentChapterPagingIndex
@@ -605,32 +607,47 @@ extension CZReadController: CZBasePageControllerDelegate {
         }
         // 判断是否是第一页
         if (bookReadModel?.bookLastReadChapterPagingIndex ?? 0) == 0 {
-            // 修改章节索引
-            bookReadModel?.bookLastReadChapterIndex! -= 1
+        
+            // 临时定义一个下一页章节索引。待分页成功在改变当前阅读模型的章节索引
+            let previousPageChapterIndex = (bookReadModel?.bookLastReadChapterIndex)! - 1
             // 获取章节模型
-            let chapterModel = bookReadModel?.bookReadChapter?[bookReadModel?.bookLastReadChapterIndex ?? 0]
+            let chapterModel = bookReadModel?.bookReadChapter?[previousPageChapterIndex]
+            // 临时定义一个下一页分页索引。待分页成功在改变当前阅读模型的分页索引
+            let previousPageChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
             // 判断是否存在分页数据
             if chapterModel?.chapterPaging?.count ?? 0 > 0 { // 存在分页数据
-                // 页号为前一章的最大页数
-                bookReadModel?.bookLastReadChapterPagingIndex! = (chapterModel?.chapterPaging!.count)! - 1
                 if bookReadStyleName == "仿真" {  // 仿真
-                    self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                    self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: previousPageChapterIndex, chapterPagingIndex: previousPageChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                        guard state == true else { return }
+                        self.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
+                        self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                    })
                 } else if bookReadStyleName == "平移" {  // 平移
-                    self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                    self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: previousPageChapterIndex, chapterPagingIndex: previousPageChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                        guard state == true else { return }
+                        self.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
+                        self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                    })
                 }
                 updateLocalData()
             } else { // 不存在则解析数据
                 CZHUD.show("解析中")
-                BookReadParsing.chapterContentParsing(currentChapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, bookReadModel: bookReadModel!) {[weak self] state in
+                BookReadParsing.chapterContentParsing(currentChapterIndex: previousPageChapterIndex, bookReadModel: bookReadModel!) {[weak self] state in
                     DispatchQueue.main.async {
                         if state == true {
                             CZHUD.dismiss()
-                            // 页号为前一章的最大页数
-                            self?.bookReadModel?.bookLastReadChapterPagingIndex! = (chapterModel?.chapterPaging!.count)! - 1
                             if bookReadStyleName == "仿真" {  // 仿真
-                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: previousPageChapterIndex, chapterPagingIndex: previousPageChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    self?.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                                })
                             } else if bookReadStyleName == "平移" {  // 平移
-                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: previousPageChapterIndex, chapterPagingIndex: previousPageChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    self?.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                                })
                             }
                             self?.updateLocalData()
                         } else {
@@ -640,12 +657,22 @@ extension CZReadController: CZBasePageControllerDelegate {
                 }
             }
         } else {
-            bookReadModel?.bookLastReadChapterPagingIndex! -= 1
+            // 临时定义一个上一页分页索引。待分页成功在改变当前阅读模型的分页索引
+            let previousPageChapterPagingIndex = (bookReadModel?.bookLastReadChapterPagingIndex!)! - 1
             if bookReadStyleName == "仿真" {  // 仿真
-                self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: previousPageChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                    guard state == true else { return }
+                    self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                    cz_print("仿真----点击上一页----完成状态：\(state)")
+                })
             } else if bookReadStyleName == "平移" {  // 平移
-                self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: previousPageChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                    guard state == true else { return }
+                    self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                    cz_print("平移----点击上一页----完成状态：\(state)")
+                })
             }
+            cz_print("点击上一页------分页索引：\(bookReadModel!.bookLastReadChapterPagingIndex!), 章节索引：\(bookReadModel!.bookLastReadChapterIndex!)")
             updateLocalData()
         }
     }
@@ -662,30 +689,54 @@ extension CZReadController: CZBasePageControllerDelegate {
         
         // 判断是否是最后页
         if (bookReadModel?.bookLastReadChapterPagingIndex ?? 0) == (chapterModel?.chapterPaging!.count)! - 1 {
-            // 修改章节索引
-            bookReadModel?.bookLastReadChapterIndex! += 1
-            // 页号为前一章的最大页数
-            bookReadModel?.bookLastReadChapterPagingIndex! = 0
+            // 临时定义一个下一页分页索引。待分页成功在改变当前阅读模型的分页索引
+            let nextPageChapterPagingIndex = 0
+            // 临时定义一个下一页章节索引。待分页成功在改变当前阅读模型的章节索引
+            let nextPageChapterIndex = (bookReadModel?.bookLastReadChapterIndex)! + 1
             // 获取下一章模型
-            let nextChapterModel = bookReadModel?.bookReadChapter?[bookReadModel?.bookLastReadChapterIndex ?? 0]
+            let nextChapterModel = bookReadModel?.bookReadChapter?[nextPageChapterIndex]
             // 判断是否存在分页数据
             if nextChapterModel?.chapterPaging?.count ?? 0 > 0 { // 存在分页数据
                 if bookReadStyleName == "仿真" {  // 仿真
-                    self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                    self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: nextPageChapterIndex, chapterPagingIndex: nextPageChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                        guard state == true else { return }
+                        // 修改章节索引
+                        self.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
+                        // 修改章节分页索引
+                        self.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                    })
                 } else if bookReadStyleName == "平移" {  // 平移
-                    self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                    self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: nextPageChapterIndex, chapterPagingIndex: nextPageChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                        guard state == true else { return }
+                        // 修改章节索引
+                        self.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
+                        // 修改章节分页索引
+                        self.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                    })
                 }
                 updateLocalData()
             } else { // 不存在则解析数据
                 CZHUD.show("解析中")
-                BookReadParsing.chapterContentParsing(currentChapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, bookReadModel: bookReadModel!) {[weak self] state in
+                BookReadParsing.chapterContentParsing(currentChapterIndex: nextPageChapterIndex, bookReadModel: bookReadModel!) {[weak self] state in
                     DispatchQueue.main.async {
                         if state == true {
                             CZHUD.dismiss()
                             if bookReadStyleName == "仿真" {  // 仿真
-                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: nextPageChapterIndex, chapterPagingIndex: nextPageChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    // 修改章节索引
+                                    self?.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
+                                    // 修改章节分页索引
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                                })
                             } else if bookReadStyleName == "平移" {  // 平移
-                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: nextPageChapterIndex, chapterPagingIndex: nextPageChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    // 修改章节索引
+                                    self?.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
+                                    // 修改章节分页索引
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                                })
                             }
                             self?.updateLocalData()
                         } else {
@@ -695,12 +746,22 @@ extension CZReadController: CZBasePageControllerDelegate {
                 }
             }
         } else {
-            bookReadModel?.bookLastReadChapterPagingIndex! += 1
+            // 临时定义一个下一页分页索引。待分页成功在改变当前阅读模型的分页索引
+            let nextPageChapterPagingIndex = (bookReadModel?.bookLastReadChapterPagingIndex!)! + 1
             if bookReadStyleName == "仿真" {  // 仿真
-                self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: nextPageChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                    guard state == true else { return }
+                    self.bookReadModel?.bookLastReadChapterPagingIndex = nextPageChapterPagingIndex
+                    cz_print("仿真----点击下一页----完成状态：\(state)")
+                })
             } else if bookReadStyleName == "平移" {  // 平移
-                self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                self.smoothPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: nextPageChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                    guard state == true else { return }
+                    self.bookReadModel?.bookLastReadChapterPagingIndex = nextPageChapterPagingIndex
+                    cz_print("平移----点击下一页----完成状态：\(state)")
+                })
             }
+            cz_print("点击下一页------分页索引：\(bookReadModel!.bookLastReadChapterPagingIndex!), 章节索引：\(bookReadModel!.bookLastReadChapterIndex!)")
             updateLocalData()
         }
         
