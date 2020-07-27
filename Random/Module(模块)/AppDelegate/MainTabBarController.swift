@@ -153,10 +153,10 @@ class MainTabBarController: BaseTabBarController {
 
 
         let _ = CZObjectStore.standard.cz_archiver(object: newPenBoringPavilion, filePath: bookSourceRuleFolderPath + "/" + (newPenBoringPavilion.bookSourceName ?? "") + ".plist")
-      //  let _ = CZObjectStore.standard.cz_archiver(object: penBoringNest, filePath: bookSourceRuleFolderPath + "/" + (penBoringNest.bookSourceName ?? "") + ".plist")
-     //   let _ = CZObjectStore.standard.cz_archiver(object: vertexNovel, filePath: bookSourceRuleFolderPath + "/" + (vertexNovel.bookSourceName ?? "") + ".plist")
-     //   let _ = CZObjectStore.standard.cz_archiver(object: penBoringPavilionTwo, filePath: bookSourceRuleFolderPath + "/" + (penBoringPavilionTwo.bookSourceName ?? "") + ".plist")
-     //   let _ = CZObjectStore.standard.cz_archiver(object: greenFiction, filePath: bookSourceRuleFolderPath + "/" + (greenFiction.bookSourceName ?? "") + ".plist")
+        let _ = CZObjectStore.standard.cz_archiver(object: penBoringNest, filePath: bookSourceRuleFolderPath + "/" + (penBoringNest.bookSourceName ?? "") + ".plist")
+        let _ = CZObjectStore.standard.cz_archiver(object: vertexNovel, filePath: bookSourceRuleFolderPath + "/" + (vertexNovel.bookSourceName ?? "") + ".plist")
+        let _ = CZObjectStore.standard.cz_archiver(object: penBoringPavilionTwo, filePath: bookSourceRuleFolderPath + "/" + (penBoringPavilionTwo.bookSourceName ?? "") + ".plist")
+        let _ = CZObjectStore.standard.cz_archiver(object: greenFiction, filePath: bookSourceRuleFolderPath + "/" + (greenFiction.bookSourceName ?? "") + ".plist")
 
 
     }

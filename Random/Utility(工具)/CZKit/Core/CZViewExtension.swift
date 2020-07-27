@@ -54,6 +54,7 @@ public extension UIView {
     private func cz_selectSubView<T: UIView>(currenView: UIView, superView: T.Type) -> T? {
         // 遍历子视图
         for view in currenView.subviews {
+            cz_print(view)
             if view.isKind(of: T.self) == true {
                 return view as? T
             } else {
