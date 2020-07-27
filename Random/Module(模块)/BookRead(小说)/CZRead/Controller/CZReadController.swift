@@ -460,10 +460,10 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
             currentChapterIndex -= 1
             // 获取章节模型
             let chapterModel = bookReadModel?.bookReadChapter?[currentChapterIndex]
+            // 页号为前一章的最大页数
+            currentChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
             // 判断是否存在分页数据
             if chapterModel?.chapterPaging?.count ?? 0 > 0 { // 存在分页数据
-                // 页号为前一章的最大页数
-                currentChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
                 return getSpecifyController(chapterIndex: currentChapterIndex, chapterPagingIndex: currentChapterPagingIndex)
             } else { // 不存在则解析数据
                 CZHUD.show("解析中")
@@ -471,14 +471,30 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
                     DispatchQueue.main.async {
                         if state == true {
                             CZHUD.dismiss()
-                            self?.bookReadModel?.bookLastReadChapterIndex! -= 1
-                            let beforeChapterModel = self?.bookReadModel?.bookReadChapter?[self?.bookReadModel?.bookLastReadChapterIndex ?? 0]
-                            // 页号为前一章的最大页数
-                            self?.bookReadModel?.bookLastReadChapterPagingIndex = (beforeChapterModel?.chapterPaging!.count)! - 1
+//                            self?.bookReadModel?.bookLastReadChapterIndex! -= 1
+//                            let beforeChapterModel = self?.bookReadModel?.bookReadChapter?[self?.bookReadModel?.bookLastReadChapterIndex ?? 0]
+//                            // 页号为前一章的最大页数
+//                            self?.bookReadModel?.bookLastReadChapterPagingIndex = (beforeChapterModel?.chapterPaging!.count)! - 1
                             if bookReadStyleName == "仿真" {  // 仿真
-                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: currentChapterIndex, chapterPagingIndex: currentChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    // 修改章节索引
+                                    self?.bookReadModel?.bookLastReadChapterIndex! = currentChapterIndex
+                                    // 修改章节分页索引
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
+                                    self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
+                                    self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                })
                             } else if bookReadStyleName == "平移" { // 平移
-                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .reverse, animated: true, completion: nil)
+                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: currentChapterIndex, chapterPagingIndex: currentChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    // 修改章节索引
+                                    self?.bookReadModel?.bookLastReadChapterIndex! = currentChapterIndex
+                                    // 修改章节分页索引
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
+                                    self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
+                                    self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                })
                             }
                             self?.updateLocalData()
                         } else {
@@ -525,14 +541,26 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
                     DispatchQueue.main.async {
                         if state == true {
                             CZHUD.dismiss()
-                            // 修改章节索引
-                            self?.bookReadModel?.bookLastReadChapterIndex! += 1
-                            // 修改章节分页索引
-                            self?.bookReadModel?.bookLastReadChapterPagingIndex = 0
                             if bookReadStyleName == "仿真" {  // 仿真
-                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: currentChapterIndex, chapterPagingIndex: currentChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    // 修改章节索引
+                                    self?.bookReadModel?.bookLastReadChapterIndex! = currentChapterIndex
+                                    // 修改章节分页索引
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
+                                    self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
+                                    self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                })
                             } else if bookReadStyleName == "平移" { // 平移
-                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: true, completion: nil)
+                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: currentChapterIndex, chapterPagingIndex: currentChapterPagingIndex)], direction: .forward, animated: true, completion: { state in
+                                    guard state == true else { return }
+                                    // 修改章节索引
+                                    self?.bookReadModel?.bookLastReadChapterIndex! = currentChapterIndex
+                                    // 修改章节分页索引
+                                    self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
+                                    self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
+                                    self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                })
                             }
                             self?.updateLocalData()
                         } else {
