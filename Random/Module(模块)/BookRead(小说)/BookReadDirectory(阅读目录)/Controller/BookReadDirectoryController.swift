@@ -34,19 +34,12 @@ class BookReadDirectoryController: BaseController {
         bookReadDirectoryView.cz.addSuperView(view).makeConstraints { (make) in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        // Do any additional setup after loading the view.
+        
+        bookReadDirectoryView.sortButton.rx.tap.subscribe(onNext: {[weak self] () in
+            self?.bookReadModel?.bookReadChapter = self?.bookReadModel?.bookReadChapter?.reversed()
+            self?.bookReadDirectoryView.tableView.reloadData()
+        }).disposed(by: rx.disposeBag)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -59,14 +52,10 @@ extension BookReadDirectoryController: UITableViewDataSource, UITableViewDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: BookReadDirectoryTableViewCell.identifier, for: indexPath) as! BookReadDirectoryTableViewCell
         let bookReadChapterModel = bookReadModel?.bookReadChapter?[indexPath.row]
         cell.chapterNameLabel.text = bookReadChapterModel?.chapterName
-        if bookReadModel?.bookLastReadChapterIndex == indexPath.row {
-            cell.chapterNameLabel.textColor = cz_selectedColor
-        } else {
-            if bookReadChapterModel?.chapterPaging == nil || bookReadChapterModel?.chapterPaging?.count ?? 0 == 0 { // 章节没有加载
-                cell.chapterNameLabel.textColor = cz_unselectedColor
-            } else { // 章节已加载过
-                cell.chapterNameLabel.textColor = cz_standardTextColor
-            }
+        if bookReadChapterModel?.chapterPaging == nil || bookReadChapterModel?.chapterPaging?.count ?? 0 == 0 { // 章节没有加载
+            cell.chapterNameLabel.textColor = cz_unselectedColor
+        } else { // 章节已加载过
+            cell.chapterNameLabel.textColor = cz_standardTextColor
         }
         return cell
     }

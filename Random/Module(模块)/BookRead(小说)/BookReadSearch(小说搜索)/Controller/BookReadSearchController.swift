@@ -99,6 +99,8 @@ class BookReadSearchController: BaseController {
                             for name in bookNames {
                                 autoreleasepool {
                                     let bookReadModel = BookReadModel()
+                                    // 默认章节正序
+                                    bookReadModel.bookReadChapterSortState = "0"
                                     // 默认章节index
                                     bookReadModel.bookLastReadChapterIndex = 0
                                     // 默认章节分页索引

@@ -36,7 +36,7 @@ class BookReadDirectoryTableViewCell: BaseTableViewCell {
                 make.centerY.equalToSuperview()
                 make.right.equalToSuperview().offset(-15)
            })
-           .font(.cz_systemFont(14))
+           .font(.cz_systemFont(12))
            .textColor(cz_unStandardTextColor)
            .setContentHuggingPriority(.required, for: .horizontal)
            .setContentCompressionResistancePriority(.required, for: .horizontal)

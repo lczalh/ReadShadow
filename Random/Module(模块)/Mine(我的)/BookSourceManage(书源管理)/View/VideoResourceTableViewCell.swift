@@ -39,7 +39,7 @@ class VideoResourceTableViewCell: SwipeTableViewCell {
                 make.left.equalToSuperview().offset(15)
                 make.centerY.equalToSuperview()
             })
-            .font(UIFont.cz_systemFont(14))
+            .font(UIFont.cz_systemFont(12))
             .textColor(cz_standardTextColor)
             .build
         

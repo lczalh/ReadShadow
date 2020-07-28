@@ -15,9 +15,6 @@ class BookReadDirectoryView: BaseView {
                 .cz
             .rowHeight(CZCommon.cz_dynamicFitHeight(40))
                 .register(BookReadDirectoryTableViewCell.self, forCellReuseIdentifier: BookReadDirectoryTableViewCell.identifier)
-//                .register(VideoSearchTableViewCell.self, forCellReuseIdentifier: VideoSearchTableViewCell.identifier)
-//                .register(BookReadIntroductionTableViewCell.self, forCellReuseIdentifier: BookReadIntroductionTableViewCell.identifier)
-//                .register(BookReadNewestTableViewCell.self, forCellReuseIdentifier: BookReadNewestTableViewCell.identifier)
                 .backgroundColor(cz_backgroundColor)
                 .separatorStyle(.none)
                 .keyboardDismissMode(.onDrag)
@@ -30,11 +27,27 @@ class BookReadDirectoryView: BaseView {
     
     /// 连载状态
     var serialStateLabel: UILabel!
+    
+    /// 排序按钮
+    var sortButton: UIButton!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: CZCommon.cz_screenWidth, height: CZCommon.cz_dynamicFitHeight(40)))
         headerView.cz.addSuperView(self)
+        
+        sortButton = UIButton()
+            .cz
+            .addSuperView(headerView)
+            .makeConstraints({ (make) in
+                make.right.equalToSuperview().offset(-15)
+                make.centerY.equalToSuperview()
+            })
+            .image(UIImage(named: "Icon_BookRead_Sort"), for: .normal)
+            .contentMode(.scaleAspectFit)
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
+            .build
         
         serialStateLabel = UILabel()
             .cz
@@ -43,7 +56,7 @@ class BookReadDirectoryView: BaseView {
                 make.left.equalToSuperview().offset(15)
                 make.centerY.equalToSuperview()
             }
-            .font(.cz_systemFont(14))
+            .font(.cz_boldSystemFont(12))
             .textColor(cz_standardTextColor)
             .build
         
@@ -53,8 +66,9 @@ class BookReadDirectoryView: BaseView {
             .makeConstraints { (make) in
                 make.left.equalTo(serialStateLabel.snp.right).offset(10)
                 make.centerY.equalToSuperview()
+                make.right.equalTo(sortButton.snp.left).offset(-10)
             }
-            .font(.cz_systemFont(14))
+            .font(.cz_boldSystemFont(12))
             .textColor(cz_standardTextColor)
             .build
         

@@ -58,7 +58,9 @@ class CZReadController: BaseController {
     // 目录
     lazy var readDirectoryView: CZReadDirectoryView = {
         let view = CZReadDirectoryView(frame: CGRect(x: 0, y: CZCommon.cz_screenHeight, width: CZCommon.cz_screenWidth, height: CZCommon.cz_screenHeight - CZCommon.cz_navigationHeight * 2 - CZCommon.cz_statusBarHeight - CZCommon.cz_safeAreaHeight))
-        view.bookReadModel = bookReadModel
+        view.bookSerialState = bookReadModel?.bookSerialState
+        view.bookReadChapter = bookReadModel?.bookReadChapter ?? []
+        view.bookReadChapterSortState = bookReadModel?.bookReadChapterSortState ?? "0"
         return view
     }()
     
@@ -152,6 +154,10 @@ class CZReadController: BaseController {
         
         // 目录按钮事件
         readTabBarView.directoryButton.rx.tap.subscribe(onNext: {[weak self] () in
+            // 重置排序状态
+            self?.readDirectoryView.bookReadChapterSortState = self?.bookReadModel?.bookReadChapterSortState ?? "0"
+            // 重置章节列表
+            self?.readDirectoryView.bookReadChapter = self?.bookReadModel?.bookReadChapter ?? []
             self?.readDirectoryView.tableView.reloadData()
             self?.isHiddenBrightnessView(isHidden: false)
             self?.isHiddenWordSizeView(isHidden: false)
@@ -192,10 +198,19 @@ class CZReadController: BaseController {
             BookReadParsing.filterLoadedChapterContentAndPaging(bookReadModel: self!.bookReadModel!)
             self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: false, completion: nil)
         }).disposed(by: rx.disposeBag)
+        
         // 目录点击章节事件
-        readDirectoryView.tapChapterBlock = {[weak self] in
+        readDirectoryView.tapChapterBlock = {[weak self] index, isDetermineChangeOrdering in
+            self?.bookReadModel?.bookLastReadChapterPagingIndex = 0
+            self?.bookReadModel?.bookLastReadChapterIndex = index
             self?.recordCurrentChapterPagingIndex = self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0
             self?.recordCurrentChapterIndex = self?.bookReadModel?.bookLastReadChapterIndex ?? 0
+            if isDetermineChangeOrdering == true {
+                // 修改排序状态
+                self?.bookReadModel?.bookReadChapterSortState = self?.bookReadModel?.bookReadChapterSortState == "0" ? "1" : "0"
+                // 章节列表反向排序
+                self?.bookReadModel?.bookReadChapter = self?.bookReadModel?.bookReadChapter?.reversed()
+            }
             // 获取章节模型
             let chapterModel = self?.bookReadModel?.bookReadChapter?[self?.bookReadModel?.bookLastReadChapterIndex ?? 0]
             // 判断是否存在分页数据

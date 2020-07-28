@@ -27,6 +27,7 @@ class BookReadModel: NSObject, NSCoding {
         coder.encode(bookReadParsingRule, forKey: "bookReadParsingRule")
         coder.encode(bookLastReadChapterPagingIndex, forKey: "bookLastReadChapterPagingIndex")
         coder.encode(bookReadRecordModel, forKey: "bookReadRecordModel")
+        coder.encode(bookReadChapterSortState, forKey: "bookReadChapterSortState")
     }
     
     required init?(coder: NSCoder) {
@@ -46,6 +47,7 @@ class BookReadModel: NSObject, NSCoding {
         bookReadParsingRule = coder.decodeObject(forKey: "bookReadParsingRule") as? ReadShadowBookRuleResourceModel
         bookLastReadChapterPagingIndex = coder.decodeObject(forKey: "bookLastReadChapterPagingIndex") as? Int
         bookReadRecordModel = coder.decodeObject(forKey: "bookReadRecordModel") as? BookReadRecordModel
+        bookReadChapterSortState = coder.decodeObject(forKey: "bookReadChapterSortState") as? String
     }
     
     override init() { }
@@ -92,24 +94,11 @@ class BookReadModel: NSObject, NSCoding {
     /// 阅读记录
     var bookReadRecordModel: BookReadRecordModel?
     
-    // MARK: - 样式
-    
-//    /// 字体名称
-//    var familyName: String?
-    
     /// 最后阅读章节分页索引
     var bookLastReadChapterPagingIndex: Int?
     
-//    /// 主题颜色
-//    var themeColor: UIColor?
-//
-//    /// 字体颜色
-//    var fontColor: UIColor?
-//
-//    /// 字体大小
-//    var fontSize: CGFloat?
-//
-//    /// 风格名称
-//    var styleName: String?
+    /// 排序状态 默认是正序 0:正序 1:倒叙
+    var bookReadChapterSortState: String?
+    
  
 }
