@@ -28,7 +28,6 @@ class AddBookSourceView: BaseView {
         .register(BookReadHeaderView.self, forHeaderFooterViewReuseIdentifier: BookReadHeaderView.identifier)
         .backgroundColor(cz_backgroundColor)
         .separatorStyle(.none)
-        .contentInset(UIEdgeInsets(top: 0, left: 0, bottom: CZCommon.cz_dynamicFitHeight(40), right: 0))
         .build
         
         addButton = UIButton()

@@ -31,10 +31,10 @@ class AddBookSourceController: BaseController {
             [
                 "书源名称*",
                 "书源地址*",
-                "编码格式(0: UTF-8, 1: GBK)*",
                 "搜索地址*"
             ],
             [
+                "搜索页编码格式*",
                 "书本名称*",
                 "书本详情地址*",
                 "书本最新章节",
@@ -42,6 +42,7 @@ class AddBookSourceController: BaseController {
                 "书本连载状态"
             ],
             [
+                "书详情页编码格式*",
                 "书本图片地址",
                 "书本类别",
                 "书本作者",
@@ -59,7 +60,7 @@ class AddBookSourceController: BaseController {
     }
     
     /// 书源规则
-    var bookReadParsingRuleModel: BookReadParsingRuleModel = BookReadParsingRuleModel()
+    var bookReadParsingRuleModel: ReadShadowBookRuleResourceModel = ReadShadowBookRuleResourceModel()
     
     /// 上级页面更新回调
     var superiorPageUpdateBlock: (() -> Void)?
@@ -91,8 +92,8 @@ class AddBookSourceController: BaseController {
                 CZHUD.showError("还未输入书源地址")
                 return
             }
-            if self?.bookReadParsingRuleModel.bookSearchEncoding == nil {
-                CZHUD.showError("还未输入编码格式")
+            if self?.bookReadParsingRuleModel.bookSearchEncoding == nil || self?.bookReadParsingRuleModel.bookSearchEncoding?.isEmpty == true {
+                CZHUD.showError("还未输入搜索页编码格式")
                 return
             }
             if self?.bookReadParsingRuleModel.bookSearchUrl == nil || self?.bookReadParsingRuleModel.bookSearchUrl?.isEmpty == true {
@@ -100,11 +101,15 @@ class AddBookSourceController: BaseController {
                 return
             }
             if self?.bookReadParsingRuleModel.bookSearchListNameRule == nil || self?.bookReadParsingRuleModel.bookSearchListNameRule?.isEmpty == true {
-                CZHUD.showError("还未输入书本名称规则")
+                CZHUD.showError("还未输入搜索列表书本名称规则")
                 return
             }
             if self?.bookReadParsingRuleModel.bookSearchListDetailUrlRule == nil || self?.bookReadParsingRuleModel.bookSearchListDetailUrlRule?.isEmpty == true {
-                CZHUD.showError("还未输入书本详情地址规则")
+                CZHUD.showError("还未输入搜索列表书本详情地址规则")
+                return
+            }
+            if self?.bookReadParsingRuleModel.bookDetailPageEncoding == nil || self?.bookReadParsingRuleModel.bookDetailPageEncoding?.isEmpty == true {
+                CZHUD.showError("还未输入详情页编码格式")
                 return
             }
             if self?.bookReadParsingRuleModel.bookChapterDetailUrlRule == nil || self?.bookReadParsingRuleModel.bookChapterDetailUrlRule?.isEmpty == true {
@@ -155,7 +160,7 @@ extension AddBookSourceController: UITableViewDataSource, UITableViewDelegate {
         } else {
             cell.titleLabel.text = cellTitle
         }
-        
+        cell.textField.isEnabled = true
         if sectionTitle == "基础信息" {
             if cellTitle == "书源名称*" {
                 if type == "0" {
@@ -175,16 +180,6 @@ extension AddBookSourceController: UITableViewDataSource, UITableViewDelegate {
                 cell.returnInputText = {[weak self] text in
                     self?.bookReadParsingRuleModel.bookSourceUrl = text
                 }
-            } else if cellTitle == "编码格式(0: UTF-8, 1: GBK)*" {
-                cell.textField.placeholder = "请输入编码格式"
-                cell.textField.text = bookReadParsingRuleModel.bookSearchEncoding == nil ? nil : (bookReadParsingRuleModel.bookSearchEncoding == .utf8 ? "0" : "1")
-                cell.returnInputText = {[weak self] text in
-                    if text == "0" {
-                        self?.bookReadParsingRuleModel.bookSearchEncoding = .utf8
-                    } else {
-                        self?.bookReadParsingRuleModel.bookSearchEncoding = .gbk
-                    }
-                }
             } else if cellTitle == "搜索地址*" {
                 cell.textField.placeholder = "请输入搜索地址"
                 cell.textField.text = bookReadParsingRuleModel.bookSearchUrl
@@ -193,7 +188,13 @@ extension AddBookSourceController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         } else if sectionTitle == "搜索列表页规则" {
-            if cellTitle == "书本名称*" {
+            if cellTitle == "搜索页编码格式*" {
+                cell.textField.placeholder = "请输入搜索页编码格式"
+                cell.textField.text = bookReadParsingRuleModel.bookSearchEncoding
+                cell.returnInputText = {[weak self] text in
+                    self?.bookReadParsingRuleModel.bookSearchEncoding = text
+                }
+            } else if cellTitle == "书本名称*" {
                 cell.textField.placeholder = "请输入书本名称规则"
                 cell.textField.text = bookReadParsingRuleModel.bookSearchListNameRule
                 cell.returnInputText = {[weak self] text in
@@ -225,7 +226,13 @@ extension AddBookSourceController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         } else if sectionTitle == "书本详情页规则" {
-            if cellTitle == "书本图片地址" {
+            if cellTitle == "书详情页编码格式*" {
+                cell.textField.placeholder = "请输入详情页编码格式"
+                cell.textField.text = bookReadParsingRuleModel.bookSearchEncoding
+                cell.returnInputText = {[weak self] text in
+                    self?.bookReadParsingRuleModel.bookDetailPageEncoding = text
+                }
+            } else if cellTitle == "书本图片地址" {
                 cell.textField.placeholder = "请输入书本图片地址规则"
                 cell.textField.text = bookReadParsingRuleModel.bookDetailImageUrlRule
                 cell.returnInputText = {[weak self] text in

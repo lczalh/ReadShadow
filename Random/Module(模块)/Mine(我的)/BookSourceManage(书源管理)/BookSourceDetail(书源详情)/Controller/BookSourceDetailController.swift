@@ -31,10 +31,10 @@ class BookSourceDetailController: BaseController {
             [
                 "书源名称",
                 "书源地址",
-                "编码格式",
                 "搜索地址"
             ],
             [
+                "搜索页编码格式",
                 "书本名称",
                 "书本详情地址",
                 "书本最新章节",
@@ -42,6 +42,7 @@ class BookSourceDetailController: BaseController {
                 "书本连载状态"
             ],
             [
+                "书详情页编码格式",
                 "书本图片地址",
                 "书本类别",
                 "书本作者",
@@ -58,7 +59,7 @@ class BookSourceDetailController: BaseController {
         ]
     }
     
-    var bookReadParsingRuleModel: BookReadParsingRuleModel?
+    var bookReadParsingRuleModel: ReadShadowBookRuleResourceModel?
     
     override func setupNavigationItems() {
         titleView?.title = "书源详情"
@@ -111,13 +112,13 @@ extension BookSourceDetailController: UITableViewDataSource, UITableViewDelegate
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookSourceName
             } else if cellTitle == "书源地址" {
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookSourceUrl
-            } else if cellTitle == "编码格式" {
-                cell.rightLabel.text = bookReadParsingRuleModel?.bookSearchEncoding == .utf8 ? "UTF-8" : "GBK"
             } else if cellTitle == "搜索地址" {
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookSearchUrl
             }
         } else if sectionTitle == "搜索列表页规则" {
-            if cellTitle == "书本名称" {
+            if cellTitle == "搜索页编码格式" {
+                cell.rightLabel.text = bookReadParsingRuleModel?.bookSearchEncoding
+            } else if cellTitle == "书本名称" {
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookSearchListNameRule
             } else if cellTitle == "书本详情地址" {
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookSearchListDetailUrlRule
@@ -129,7 +130,9 @@ extension BookSourceDetailController: UITableViewDataSource, UITableViewDelegate
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookSearchListSerialStateRule
             }
         } else if sectionTitle == "书本详情页规则" {
-            if cellTitle == "书本图片地址" {
+            if cellTitle == "书详情页编码格式" {
+                cell.rightLabel.text = bookReadParsingRuleModel?.bookDetailPageEncoding
+            } else if cellTitle == "书本图片地址" {
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookDetailImageUrlRule
             } else if cellTitle == "书本类别" {
                 cell.rightLabel.text = bookReadParsingRuleModel?.bookDetailCategoryNameRule

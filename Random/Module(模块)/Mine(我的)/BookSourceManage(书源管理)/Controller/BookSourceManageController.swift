@@ -32,26 +32,21 @@ class BookSourceManageController: BaseController {
         }
     }
     
-//    /// 所有书源模型数组
-//    lazy var readShadowBookRuleResourceModels: Array<ReadShadowBookRuleResourceModel> = {
-//        return getApplicationConfigModel()?.bookRuleResources ?? []
-//    }()
-//
     override func setupNavigationItems() {
         titleView?.title = "我的书源"
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "添加", style: .done, target: nil, action: nil)
-//        navigationItem.rightBarButtonItem?.rx.tap.subscribe(onNext: {[weak self] () in
-//            DispatchQueue.main.async {
-//                let addBookSourceController = AddBookSourceController()
-//                addBookSourceController.type = "0"
-//                addBookSourceController.superiorPageUpdateBlock = {[weak self] in
-//                    DispatchQueue.main.async {
-//                        self?.bookSourceManageView.tableView.reloadData()
-//                    }
-//                }
-//                self?.navigationController?.pushViewController(addBookSourceController, animated: true)
-//            }
-//        }).disposed(by: rx.disposeBag)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "添加", style: .done, target: nil, action: nil)
+        navigationItem.rightBarButtonItem?.rx.tap.subscribe(onNext: {[weak self] () in
+            DispatchQueue.main.async {
+                let addBookSourceController = AddBookSourceController()
+                addBookSourceController.type = "0"
+                addBookSourceController.superiorPageUpdateBlock = {[weak self] in
+                    DispatchQueue.main.async {
+                        self?.bookSourceManageView.tableView.reloadData()
+                    }
+                }
+                self?.navigationController?.pushViewController(addBookSourceController, animated: true)
+            }
+        }).disposed(by: rx.disposeBag)
     }
 
     override func viewDidLoad() {
@@ -93,12 +88,12 @@ extension BookSourceManageController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let model = readShadowBookRuleResourceModels[indexPath.row]
-//        DispatchQueue.main.async {
-//            let bookSourceDetailController = BookSourceDetailController()
-//            bookSourceDetailController.bookReadParsingRuleModel = model
-//            self.navigationController?.pushViewController(bookSourceDetailController, animated: true)
-//        }
+        let model = readShadowBookRuleResourceModels[indexPath.row]
+        DispatchQueue.main.async {
+            let bookSourceDetailController = BookSourceDetailController()
+            bookSourceDetailController.bookReadParsingRuleModel = model
+            self.navigationController?.pushViewController(bookSourceDetailController, animated: true)
+        }
     }
 }
 

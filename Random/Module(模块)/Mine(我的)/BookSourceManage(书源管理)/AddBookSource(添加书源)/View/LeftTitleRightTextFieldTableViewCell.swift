@@ -41,7 +41,7 @@ class LeftTitleRightTextFieldTableViewCell: BaseTableViewCell {
                 make.left.equalToSuperview().offset(15)
                 make.centerY.equalToSuperview()
             })
-            .font(UIFont.cz_systemFont(14))
+            .font(UIFont.cz_systemFont(12))
             .textColor(cz_standardTextColor)
             .setContentHuggingPriority(.required, for: .horizontal)
             .setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -55,7 +55,7 @@ class LeftTitleRightTextFieldTableViewCell: BaseTableViewCell {
                 make.centerY.equalToSuperview()
                 make.left.equalTo(titleLabel.snp.right).offset(10)
             })
-            .font(UIFont.cz_systemFont(14))
+            .font(UIFont.cz_systemFont(12))
             .textColor(cz_standardTextColor)
             .textAlignment(.right)
             .build
