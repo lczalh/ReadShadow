@@ -215,6 +215,8 @@ class VideoDetailsController: BaseController {
         // 默认加载一次解析接口
         videoDetailsView.wkWebView.load(URLRequest(url: URL(string: currentParsingInterface)!))
         getMoreWonderfulModels()
+        
+        playerVideo()
     }
     
     /// 请求广告

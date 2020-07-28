@@ -257,10 +257,10 @@ class MainTabBarController: BaseTabBarController {
         ckmov.parsingInterface = "https://www.ckmov.com/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: ckmov, filePath: parsingInterfaceFolderPath + "/" + (ckmov.parsingName ?? "") + ".plist")
         
-//        let zyc = ParsingInterfaceModel()
-//        zyc.parsingName = "zyc888"
-//        zyc.parsingInterface = "https://cdn.zyc888.top/?url="
-//        let _ = CZObjectStore.standard.cz_archiver(object: zyc, filePath: parsingInterfaceFolderPath + "/" + (zyc.parsingName ?? "") + ".plist")
+        let readShadow = ParsingInterfaceModel()
+        readShadow.parsingName = "阅影"
+        readShadow.parsingInterface = "https://jx.letaoshijie.com/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: readShadow, filePath: parsingInterfaceFolderPath + "/" + (readShadow.parsingName ?? "") + ".plist")
         
         let six18g = ParsingInterfaceModel()
         six18g.parsingName = "618g"
