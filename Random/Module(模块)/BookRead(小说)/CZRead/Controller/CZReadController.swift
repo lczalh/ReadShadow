@@ -71,13 +71,6 @@ class CZReadController: BaseController {
         return view
     }()
     
-    /// 书架modes
-   // var bookcaseModels: Array<BookReadModel> = CZObjectStore.standard.cz_readObjectInPlist(filePath: bookcasePath, key: bookcaseKey) as? Array<BookReadModel> ?? []
-    
-    /// 历史浏览modes
-//    var bookBrowsingRecordModels: Array<BookReadModel> = CZObjectStore.standard.cz_readObjectInPlist(filePath: bookBrowsingRecordPath, key: bookBrowsingRecordKey) as? Array<BookReadModel> ?? []
-    
-    
     /// 单机手势  需要过滤的视图
     private var needFilterViews: Array<String> {
         return [
@@ -95,6 +88,9 @@ class CZReadController: BaseController {
             "UISlider",
         ]
     }
+    
+    /// 阅读返回回调
+    var readBackActionBlock: (() -> Void)?
     
     // MARK: - 仿真模式 使用
     
@@ -146,7 +142,9 @@ class CZReadController: BaseController {
         readNavigationView.returnButton.rx.tap.subscribe(onNext: {[weak self] () in
             DispatchQueue.main.async {
                 self?.navigationController?.popViewController(animated: true, {
-                    //self?.updateLocalData()
+                    if self?.readBackActionBlock != nil {
+                        self!.readBackActionBlock!()
+                    }
                 })
             }
         }).disposed(by: rx.disposeBag)
@@ -215,22 +213,51 @@ class CZReadController: BaseController {
             let chapterModel = self?.bookReadModel?.bookReadChapter?[self?.bookReadModel?.bookLastReadChapterIndex ?? 0]
             // 判断是否存在分页数据
             if chapterModel?.chapterPaging?.count ?? 0 > 0 { // 存在分页数据
-                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: false, completion: { _ in
-                    self?.isHiddenDirectoryView(isHidden: false)
-                    self?.isHiddenReadNavigationView(isHidden: false)
-                    self?.isHiddenReadTabBarView(isHidden: false)
-                })
+                if bookReadStyleName == "仿真" {  // 仿真
+                    self?.simulationPageViewController.view.isUserInteractionEnabled = false
+                    self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: false, completion: { _ in
+                        self?.simulationPageViewController.view.isUserInteractionEnabled = true
+                        self?.isHiddenDirectoryView(isHidden: false)
+                        self?.isHiddenReadNavigationView(isHidden: false)
+                        self?.isHiddenReadTabBarView(isHidden: false)
+                        self?.updateLocalData()
+                    })
+                } else if bookReadStyleName == "平移" {
+                    self?.smoothPageViewController.view.isUserInteractionEnabled = false
+                    self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: false, completion: { _ in
+                        self?.smoothPageViewController.view.isUserInteractionEnabled = true
+                        self?.isHiddenDirectoryView(isHidden: false)
+                        self?.isHiddenReadNavigationView(isHidden: false)
+                        self?.isHiddenReadTabBarView(isHidden: false)
+                        self?.updateLocalData()
+                    })
+                }
             } else { // 不存在
                 CZHUD.show("解析中")
                 BookReadParsing.chapterContentParsing(currentChapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, bookReadModel: self!.bookReadModel!) {[weak self] state in
                     DispatchQueue.main.async {
                         if state == true {
                             CZHUD.dismiss()
-                            self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: false, completion: { _ in
-                                self?.isHiddenDirectoryView(isHidden: false)
-                                self?.isHiddenReadNavigationView(isHidden: false)
-                                self?.isHiddenReadTabBarView(isHidden: false)
-                            })
+                            if bookReadStyleName == "仿真" {  // 仿真
+                                self?.simulationPageViewController.view.isUserInteractionEnabled = false
+                                self?.simulationPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: false, completion: { _ in
+                                    self?.simulationPageViewController.view.isUserInteractionEnabled = true
+                                    self?.isHiddenDirectoryView(isHidden: false)
+                                    self?.isHiddenReadNavigationView(isHidden: false)
+                                    self?.isHiddenReadTabBarView(isHidden: false)
+                                    self?.updateLocalData()
+                                })
+                            } else if bookReadStyleName == "平移" {
+                                self?.smoothPageViewController.view.isUserInteractionEnabled = false
+                                self?.smoothPageViewController?.setViewControllers([self!.getSpecifyController(chapterIndex: self?.bookReadModel?.bookLastReadChapterIndex ?? 0, chapterPagingIndex: self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0)], direction: .forward, animated: false, completion: { _ in
+                                    self?.smoothPageViewController.view.isUserInteractionEnabled = true
+                                    self?.isHiddenDirectoryView(isHidden: false)
+                                    self?.isHiddenReadNavigationView(isHidden: false)
+                                    self?.isHiddenReadTabBarView(isHidden: false)
+                                    self?.updateLocalData()
+                                })
+                            }
+                            
                         } else {
                             CZHUD.showError("解析失败")
                         }
@@ -499,6 +526,7 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
                                     self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
                                     self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                    self?.updateLocalData()
                                 })
                             } else if bookReadStyleName == "平移" { // 平移
                                 self?.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -511,9 +539,9 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
                                     self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
                                     self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                    self?.updateLocalData()
                                 })
                             }
-                            self?.updateLocalData()
                         } else {
                             CZHUD.showError("解析失败")
                         }
@@ -569,6 +597,7 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
                                     self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
                                     self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                    self?.updateLocalData()
                                 })
                             } else if bookReadStyleName == "平移" { // 平移
                                 self?.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -581,9 +610,9 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = currentChapterPagingIndex
                                     self?.recordCurrentChapterPagingIndex = self!.bookReadModel!.bookLastReadChapterPagingIndex!
                                     self?.recordCurrentChapterIndex = self!.bookReadModel!.bookLastReadChapterIndex!
+                                    self?.updateLocalData()
                                 })
                             }
-                            self?.updateLocalData()
                         } else {
                             CZHUD.showError("解析失败")
                         }
@@ -672,6 +701,7 @@ extension CZReadController: CZBasePageControllerDelegate {
                         guard state == true else { return }
                         self.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
                         self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                        self.updateLocalData()
                     })
                 } else if bookReadStyleName == "平移" {  // 平移
                     self.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -680,9 +710,9 @@ extension CZReadController: CZBasePageControllerDelegate {
                         guard state == true else { return }
                         self.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
                         self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                        self.updateLocalData()
                     })
                 }
-                updateLocalData()
             } else { // 不存在则解析数据
                 CZHUD.show("解析中")
                 BookReadParsing.chapterContentParsing(currentChapterIndex: previousPageChapterIndex, bookReadModel: bookReadModel!) {[weak self] state in
@@ -700,6 +730,7 @@ extension CZReadController: CZBasePageControllerDelegate {
                                     guard state == true else { return }
                                     self?.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                                    self?.updateLocalData()
                                 })
                             } else if bookReadStyleName == "平移" {  // 平移
                                 self?.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -708,9 +739,9 @@ extension CZReadController: CZBasePageControllerDelegate {
                                     guard state == true else { return }
                                     self?.bookReadModel?.bookLastReadChapterIndex = previousPageChapterIndex
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
+                                    self?.updateLocalData()
                                 })
                             }
-                            self?.updateLocalData()
                         } else {
                             CZHUD.showError("解析失败")
                         }
@@ -727,6 +758,7 @@ extension CZReadController: CZBasePageControllerDelegate {
                     guard state == true else { return }
                     self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
                     cz_print("仿真----点击上一页----完成状态：\(state)")
+                    self.updateLocalData()
                 })
             } else if bookReadStyleName == "平移" {  // 平移
                 self.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -735,10 +767,10 @@ extension CZReadController: CZBasePageControllerDelegate {
                     guard state == true else { return }
                     self.bookReadModel?.bookLastReadChapterPagingIndex = previousPageChapterPagingIndex
                     cz_print("平移----点击上一页----完成状态：\(state)")
+                    self.updateLocalData()
                 })
             }
             cz_print("点击上一页------分页索引：\(bookReadModel!.bookLastReadChapterPagingIndex!), 章节索引：\(bookReadModel!.bookLastReadChapterIndex!)")
-            updateLocalData()
         }
     }
     
@@ -771,6 +803,7 @@ extension CZReadController: CZBasePageControllerDelegate {
                         self.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
                         // 修改章节分页索引
                         self.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                        self.updateLocalData()
                     })
                 } else if bookReadStyleName == "平移" {  // 平移
                     self.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -781,9 +814,9 @@ extension CZReadController: CZBasePageControllerDelegate {
                         self.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
                         // 修改章节分页索引
                         self.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                        self.updateLocalData()
                     })
                 }
-                updateLocalData()
             } else { // 不存在则解析数据
                 CZHUD.show("解析中")
                 BookReadParsing.chapterContentParsing(currentChapterIndex: nextPageChapterIndex, bookReadModel: bookReadModel!) {[weak self] state in
@@ -799,6 +832,7 @@ extension CZReadController: CZBasePageControllerDelegate {
                                     self?.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
                                     // 修改章节分页索引
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                                    self?.updateLocalData()
                                 })
                             } else if bookReadStyleName == "平移" {  // 平移
                                 self?.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -809,9 +843,9 @@ extension CZReadController: CZBasePageControllerDelegate {
                                     self?.bookReadModel?.bookLastReadChapterIndex = nextPageChapterIndex
                                     // 修改章节分页索引
                                     self?.bookReadModel?.bookLastReadChapterPagingIndex = 0
+                                    self?.updateLocalData()
                                 })
                             }
-                            self?.updateLocalData()
                         } else {
                             CZHUD.showError("解析失败")
                         }
@@ -828,6 +862,7 @@ extension CZReadController: CZBasePageControllerDelegate {
                     guard state == true else { return }
                     self.bookReadModel?.bookLastReadChapterPagingIndex = nextPageChapterPagingIndex
                     cz_print("仿真----点击下一页----完成状态：\(state)")
+                    self.updateLocalData()
                 })
             } else if bookReadStyleName == "平移" {  // 平移
                 self.smoothPageViewController.view.isUserInteractionEnabled = false
@@ -836,10 +871,10 @@ extension CZReadController: CZBasePageControllerDelegate {
                     guard state == true else { return }
                     self.bookReadModel?.bookLastReadChapterPagingIndex = nextPageChapterPagingIndex
                     cz_print("平移----点击下一页----完成状态：\(state)")
+                    self.updateLocalData()
                 })
             }
             cz_print("点击下一页------分页索引：\(bookReadModel!.bookLastReadChapterPagingIndex!), 章节索引：\(bookReadModel!.bookLastReadChapterIndex!)")
-            updateLocalData()
         }
         
     }

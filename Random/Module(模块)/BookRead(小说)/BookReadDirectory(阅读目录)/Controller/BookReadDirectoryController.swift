@@ -66,6 +66,9 @@ extension BookReadDirectoryController: UITableViewDataSource, UITableViewDelegat
             self.bookReadModel?.bookLastReadChapterIndex = indexPath.row
             self.bookReadModel?.bookLastReadChapterPagingIndex = 0
             czReadController.bookReadModel = self.bookReadModel
+            czReadController.readBackActionBlock = {
+                DispatchQueue.main.async { tableView.reloadData() }
+            }
             self.navigationController?.pushViewController(czReadController, animated: true)
         }
     }

@@ -54,46 +54,20 @@ class BookReadDetailsController: BaseController {
         _ = CZObjectStore.standard.cz_createFolder(folderPath: bookBrowsingRecordFolderPath)
         
         bookReadDetailsView.isHidden = true
-        CZHUD.show("解析中")
-        BookReadParsing.bookReadDetailParsing(bookReadModel: bookReadModel!) {[weak self] (model) in
-            if model == nil {
-                DispatchQueue.main.async { CZHUD.showError("解析失败") }
-            } else {
-                // 记录浏览时间
-                self?.bookReadModel?.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
-                // 更新记录
-                _ = CZObjectStore.standard.cz_archiver(object: self!.bookReadModel!, filePath: "\(bookBrowsingRecordFolderPath)/\(self!.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(self!.bookReadModel?.bookName ?? "").plist")
-                
-                DispatchQueue.main.async {
-                    CZHUD.dismiss()
-                    // 判断对象是否存在
-                    let bookcaseModel = CZObjectStore.standard.cz_unarchiver(filePath: "\(bookcaseFolderPath)/\(self!.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(self!.bookReadModel?.bookName ?? "").plist") as? BookReadModel
-                    if bookcaseModel == nil {
-                        self?.bookReadDetailsView.addBookcaseButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_BookRead_Bookcase")?.cz_alterColor(color: cz_selectedColor), title: "加书架", titlePosition: .right, additionalSpacing: 5, state: .normal)
-                        self?.bookReadDetailsView.addBookcaseButton.setTitleColor(cz_selectedColor, for: .normal)
-                        self?.bookReadDetailsView.addBookcaseButton.isEnabled = true
-                    } else {
-                        if bookcaseModel?.bookReadChapter?.count ?? 0 >= self?.bookReadModel?.bookReadChapter?.count ?? 0 { // 无须更新
-                            self?.bookReadDetailsView.addBookcaseButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_BookRead_Bookcase")?.cz_alterColor(color: cz_unselectedColor), title: "在书架", titlePosition: .right, additionalSpacing: 5, state: .normal)
-                            self?.bookReadDetailsView.addBookcaseButton.setTitleColor(cz_unselectedColor, for: .normal)
-                            self?.bookReadDetailsView.addBookcaseButton.isEnabled = false
-                        } else {
-                            self?.bookReadDetailsView.addBookcaseButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_BookRead_Bookcase")?.cz_alterColor(color: .red), title: "更新书架", titlePosition: .right, additionalSpacing: 5, state: .normal)
-                            self?.bookReadDetailsView.addBookcaseButton.setTitleColor(.red, for: .normal)
-                            self?.bookReadDetailsView.addBookcaseButton.isEnabled = true
-                        }
-                    }
-                    if self?.bookReadModel?.bookLastReadChapterIndex == 0 {
-                        self?.bookReadDetailsView.readButton.setTitle("开始阅读", for: .normal)
-                    } else {
-                        self?.bookReadDetailsView.readButton.setTitle("继续阅读", for: .normal)
-                    }
-                    
-                    self?.bookReadDetailsView.isHidden = false
-                    self?.bookReadDetailsView.tableView.reloadData()
+        
+        if bookReadModel?.bookReadChapter?.count ?? 0 > 0 { // 存在章节数据了
+            updateRecordsAndUi()
+        } else {
+            CZHUD.show("解析中")
+            BookReadParsing.bookReadDetailParsing(bookReadModel: bookReadModel!) {[weak self] (model) in
+                if model == nil {
+                    DispatchQueue.main.async { CZHUD.showError("解析失败") }
+                } else {
+                    self?.updateRecordsAndUi()
                 }
             }
         }
+        
         
         // 开始阅读
         bookReadDetailsView.readButton.rx.tap.subscribe(onNext: {[weak self] () in
@@ -117,6 +91,43 @@ class BookReadDetailsController: BaseController {
                 self?.bookReadDetailsView.addBookcaseButton.isEnabled = false
             }
         }).disposed(by: rx.disposeBag)
+    }
+    
+    /// 更新记录和UI
+    func updateRecordsAndUi() {
+       // self.bookReadModel?.bookReadChapter = self.bookReadModel?.bookReadChapterSortState == "0" ? self.bookReadModel?.bookReadChapter : self.bookReadModel?.bookReadChapter?.reversed()
+        // 记录浏览时间
+        self.bookReadModel?.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
+        // 更新记录
+        _ = CZObjectStore.standard.cz_archiver(object: self.bookReadModel!, filePath: "\(bookBrowsingRecordFolderPath)/\(self.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(self.bookReadModel?.bookName ?? "").plist")
+        
+        DispatchQueue.main.async {
+            CZHUD.dismiss()
+            // 判断对象是否存在
+            let bookcaseModel = CZObjectStore.standard.cz_unarchiver(filePath: "\(bookcaseFolderPath)/\(self.bookReadModel?.bookReadParsingRule?.bookSourceName ?? "")-\(self.bookReadModel?.bookName ?? "").plist") as? BookReadModel
+            if bookcaseModel == nil {
+                self.bookReadDetailsView.addBookcaseButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_BookRead_Bookcase")?.cz_alterColor(color: cz_selectedColor), title: "加书架", titlePosition: .right, additionalSpacing: 5, state: .normal)
+                self.bookReadDetailsView.addBookcaseButton.setTitleColor(cz_selectedColor, for: .normal)
+                self.bookReadDetailsView.addBookcaseButton.isEnabled = true
+            } else {
+                if bookcaseModel?.bookReadChapter?.count ?? 0 >= self.bookReadModel?.bookReadChapter?.count ?? 0 { // 无须更新
+                    self.bookReadDetailsView.addBookcaseButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_BookRead_Bookcase")?.cz_alterColor(color: cz_unselectedColor), title: "在书架", titlePosition: .right, additionalSpacing: 5, state: .normal)
+                    self.bookReadDetailsView.addBookcaseButton.setTitleColor(cz_unselectedColor, for: .normal)
+                    self.bookReadDetailsView.addBookcaseButton.isEnabled = false
+                } else {
+                    self.bookReadDetailsView.addBookcaseButton.cz_textAndPictureLocation(image: UIImage(named: "Icon_BookRead_Bookcase")?.cz_alterColor(color: .red), title: "更新书架", titlePosition: .right, additionalSpacing: 5, state: .normal)
+                    self.bookReadDetailsView.addBookcaseButton.setTitleColor(.red, for: .normal)
+                    self.bookReadDetailsView.addBookcaseButton.isEnabled = true
+                }
+            }
+            if self.bookReadModel?.bookLastReadChapterIndex == 0 {
+                self.bookReadDetailsView.readButton.setTitle("开始阅读", for: .normal)
+            } else {
+                self.bookReadDetailsView.readButton.setTitle("继续阅读", for: .normal)
+            }
+            self.bookReadDetailsView.isHidden = false
+            self.bookReadDetailsView.tableView.reloadData()
+        }
     }
     
     /// 请求广告

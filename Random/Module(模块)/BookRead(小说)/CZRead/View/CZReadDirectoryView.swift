@@ -47,7 +47,11 @@ class CZReadDirectoryView: BaseView {
     private var sortState: String = "0"
     
     /// 记录当前排序状态  0:正序 1:倒叙
-    var bookReadChapterSortState: String = "0"
+    var bookReadChapterSortState: String = "0" {
+        didSet {
+            sortState = bookReadChapterSortState
+        }
+    }
 
 
     override init(frame: CGRect) {
@@ -128,7 +132,7 @@ extension CZReadDirectoryView: UITableViewDataSource, UITableViewDelegate {
         if tapChapterBlock != nil {
             var isDetermineChangeOrdering: Bool = false
             if bookReadChapterSortState != sortState {
-                bookReadChapterSortState = sortState
+              //  bookReadChapterSortState = sortState
                 isDetermineChangeOrdering = true
             }
             

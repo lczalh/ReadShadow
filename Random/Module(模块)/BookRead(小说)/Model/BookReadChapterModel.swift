@@ -23,20 +23,12 @@ class BookReadChapterModel: NSObject, NSCoding {
     /// 章节分页模型
     var chapterPaging: Array<BookReadChapterPagingModel>?
     
-//    /// 上一章章节索引 没有为nil
-//    var beforeChapterIndex: Int?
-//
-//    /// 下一章章节索引 没有为nil
-//    var afterChapterIndex: Int?
     
     func encode(with coder: NSCoder) {
         coder.encode(chapterName, forKey: "chapterName")
         coder.encode(chapterContent, forKey: "chapterContent")
         coder.encode(chapterUrl, forKey: "chapterUrl")
         coder.encode(chapterPaging, forKey: "chapterPaging")
-        
-//        coder.encode(beforeChapterIndex, forKey: "beforeChapterIndex")
-//        coder.encode(afterChapterIndex, forKey: "afterChapterIndex")
     }
     
     required init?(coder: NSCoder) {
@@ -44,9 +36,6 @@ class BookReadChapterModel: NSObject, NSCoding {
         chapterContent = coder.decodeObject(forKey: "chapterContent") as? String
         chapterUrl = coder.decodeObject(forKey: "chapterUrl") as? String
         chapterPaging = coder.decodeObject(forKey: "chapterPaging") as? Array<BookReadChapterPagingModel>
-        
-//        beforeChapterIndex = coder.decodeObject(forKey: "beforeChapterIndex") as? Int
-//        afterChapterIndex = coder.decodeObject(forKey: "afterChapterIndex") as? Int
     }
     
     override init() { }
