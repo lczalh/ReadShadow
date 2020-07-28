@@ -200,10 +200,12 @@ class BookReadParsing: NSObject {
     class func chapterContentParsing(currentChapterIndex: Int, bookReadModel: BookReadModel, num: Int = 2, complete: @escaping ((_ state: Bool) -> Void)) {
         // 判断索引是否超过章节数量
         let tailChapterIndex = currentChapterIndex + num >= (bookReadModel.bookReadChapter?.count ?? 0) ? (bookReadModel.bookReadChapter?.count ?? 0) : currentChapterIndex + num
+        // 计算前一个索引
+        let startIndex = currentChapterIndex - 1 < 0 ? 0 : currentChapterIndex - 1
         DispatchQueue.global().async {
             let queue = DispatchQueue.init(label: "chapterContentParsing")
             let group = DispatchGroup()
-            for index in currentChapterIndex..<tailChapterIndex {
+            for index in startIndex..<tailChapterIndex {
                 autoreleasepool {
                     queue.async(group: group, execute: DispatchWorkItem.init(block: {
                         let chapterModel = bookReadModel.bookReadChapter?[index]

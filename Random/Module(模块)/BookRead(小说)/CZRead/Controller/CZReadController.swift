@@ -125,11 +125,7 @@ class CZReadController: BaseController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         createReadController()
-        
-        
-        
 
         // 单机手势
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizerAction))
@@ -198,6 +194,8 @@ class CZReadController: BaseController {
         }).disposed(by: rx.disposeBag)
         // 目录点击章节事件
         readDirectoryView.tapChapterBlock = {[weak self] in
+            self?.recordCurrentChapterPagingIndex = self?.bookReadModel?.bookLastReadChapterPagingIndex ?? 0
+            self?.recordCurrentChapterIndex = self?.bookReadModel?.bookLastReadChapterIndex ?? 0
             // 获取章节模型
             let chapterModel = self?.bookReadModel?.bookReadChapter?[self?.bookReadModel?.bookLastReadChapterIndex ?? 0]
             // 判断是否存在分页数据
@@ -458,16 +456,20 @@ extension CZReadController: UIPageViewControllerDataSource, UIPageViewController
         if currentChapterPagingIndex == 0 {
             // 修改章节索引
             currentChapterIndex -= 1
-            // 获取章节模型
+            // 获取上一章节模型
             let chapterModel = bookReadModel?.bookReadChapter?[currentChapterIndex]
-            // 页号为前一章的最大页数
-            currentChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
             // 判断是否存在分页数据
             if chapterModel?.chapterPaging?.count ?? 0 > 0 { // 存在分页数据
+                // 页号为前一章的最大页数
+                currentChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
                 return getSpecifyController(chapterIndex: currentChapterIndex, chapterPagingIndex: currentChapterPagingIndex)
             } else { // 不存在则解析数据
                 CZHUD.show("解析中")
                 BookReadParsing.chapterContentParsing(currentChapterIndex: currentChapterIndex, bookReadModel: bookReadModel!) {[weak self] state in
+                    // 获取上一章节模型
+                    let chapterModel = self?.bookReadModel?.bookReadChapter?[currentChapterIndex]
+                    // 页号为前一章的最大页数
+                    currentChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
                     DispatchQueue.main.async {
                         if state == true {
                             CZHUD.dismiss()
@@ -644,10 +646,10 @@ extension CZReadController: CZBasePageControllerDelegate {
             let previousPageChapterIndex = (bookReadModel?.bookLastReadChapterIndex)! - 1
             // 获取章节模型
             let chapterModel = bookReadModel?.bookReadChapter?[previousPageChapterIndex]
-            // 临时定义一个下一页分页索引。待分页成功在改变当前阅读模型的分页索引
-            let previousPageChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
             // 判断是否存在分页数据
             if chapterModel?.chapterPaging?.count ?? 0 > 0 { // 存在分页数据
+                // 临时定义一个下一页分页索引。待分页成功在改变当前阅读模型的分页索引
+                let previousPageChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
                 if bookReadStyleName == "仿真" {  // 仿真
                     self.simulationPageViewController.view.isUserInteractionEnabled = false
                     self.simulationPageViewController?.setViewControllers([self.getSpecifyController(chapterIndex: previousPageChapterIndex, chapterPagingIndex: previousPageChapterPagingIndex)], direction: .reverse, animated: true, completion: { state in
@@ -669,6 +671,10 @@ extension CZReadController: CZBasePageControllerDelegate {
             } else { // 不存在则解析数据
                 CZHUD.show("解析中")
                 BookReadParsing.chapterContentParsing(currentChapterIndex: previousPageChapterIndex, bookReadModel: bookReadModel!) {[weak self] state in
+                    // 重新获取上一章节模型
+                    let chapterModel = self?.bookReadModel?.bookReadChapter?[previousPageChapterIndex]
+                    // 临时定义一个下一页分页索引。待分页成功在改变当前阅读模型的分页索引
+                    let previousPageChapterPagingIndex = (chapterModel?.chapterPaging!.count)! - 1
                     DispatchQueue.main.async {
                         if state == true {
                             CZHUD.dismiss()
