@@ -282,11 +282,6 @@ class MainTabBarController: BaseTabBarController {
         qt.parsingInterface = "https://api.potatost.xyz/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: parsingInterfaceFolderPath + "/" + (qt.parsingName ?? "") + ".plist")
         
-        let terroristDuck = ParsingInterfaceModel()
-        terroristDuck.parsingName = "恐怖鸭"
-        terroristDuck.parsingInterface = "https://vv.kongbuya.com/?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: terroristDuck, filePath: parsingInterfaceFolderPath + "/" + (terroristDuck.parsingName ?? "") + ".plist")
-        
         let dreamCloudOne = ParsingInterfaceModel()
         dreamCloudOne.parsingName = "集梦云1"
         dreamCloudOne.parsingInterface = "https://jx.ys520.club/om/?url="
@@ -297,7 +292,7 @@ class MainTabBarController: BaseTabBarController {
         dreamCloudTwo.parsingInterface = "https://ys.ys520.club/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: dreamCloudTwo, filePath: parsingInterfaceFolderPath + "/" + (dreamCloudTwo.parsingName ?? "") + ".plist")
         
-        
+        // 免费一次解析搭建：http://user.seakee.cn
         
     }
     

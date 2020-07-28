@@ -33,7 +33,7 @@ class VideoDetailsView: BaseView {
         // 是使用h5的视频播放器在线播放, 还是使用原生播放器全屏播放
         wkWebViewConfiguration.allowsInlineMediaPlayback = true
         wkWebViewConfiguration.allowsAirPlayForMediaPlayback = true
-        wkWebViewConfiguration.mediaTypesRequiringUserActionForPlayback = .all
+        wkWebViewConfiguration.requiresUserActionForMediaPlayback = false
         //设置是否允许画中画技术 在特定设备上有效
         wkWebViewConfiguration.allowsPictureInPictureMediaPlayback = true
         let view = WKWebView(frame: playerImageView.bounds, configuration: wkWebViewConfiguration)
