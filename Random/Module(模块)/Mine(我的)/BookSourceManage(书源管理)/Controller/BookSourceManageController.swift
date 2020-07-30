@@ -81,7 +81,7 @@ extension BookSourceManageController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: VideoResourceTableViewCell.identifier, for: indexPath) as! VideoResourceTableViewCell
-       // cell.delegate = self
+        cell.delegate = self
         let model = readShadowBookRuleResourceModels[indexPath.row]
         cell.titleLabel.text = model.bookSourceName
         return cell
@@ -98,41 +98,41 @@ extension BookSourceManageController: UITableViewDataSource, UITableViewDelegate
 }
 
 // MARK: - SwipeTableViewCellDelegate
-//extension BookSourceManageController: SwipeTableViewCellDelegate {
-//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-//        if orientation == .left {
-//            return nil
-//        } else {
-//            // 创建“删除”事件按钮
-//            let deleteAction = SwipeAction(style: .destructive, title: "删除") { action, indexPath in
-//                UIAlertController.cz_showAlertController("提示", "确定删除此书源？", .alert, self, "确定", { (action) in
-//                    let model = self.bookReadParsingRuleModels[indexPath.row]
-//                    do {
-//                        // 删除书源
-//                        try FileManager().removeItem(atPath: bookSourceRuleFolderPath + "/\(model.bookSourceName ?? "").plist")
-//                        DispatchQueue.main.async {
-//                            tableView.reloadData()
-//                            CZHUD.showSuccess("已移除")
-//                        }
-//                    } catch  {
-//                        DispatchQueue.main.async {
-//                            CZHUD.showError("移除失败")
-//                        }
-//
-//                    }
-//                }, "取消", nil)
-//            }
-//            //返回右侧事件按钮
-//            return [deleteAction]
-//        }
-//    }
-//
-//    //自定义滑动过渡行为（可选）
-//    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
-//        var options = SwipeTableOptions()
-//        options.transitionStyle = .reveal
-//        return options
-//    }
-//}
+extension BookSourceManageController: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        if orientation == .left {
+            return nil
+        } else {
+            // 创建“删除”事件按钮
+            let deleteAction = SwipeAction(style: .destructive, title: "删除") { action, indexPath in
+                UIAlertController.cz_showAlertController("提示", "确定删除此书源？", .alert, self, "确定", { (action) in
+                    let model = self.readShadowBookRuleResourceModels[indexPath.row]
+                    do {
+                        // 删除书源
+                        try FileManager().removeItem(atPath: bookSourceRuleFolderPath + "/\(model.bookSourceName ?? "").plist")
+                        DispatchQueue.main.async {
+                            tableView.reloadData()
+                            CZHUD.showSuccess("删除成功")
+                        }
+                    } catch  {
+                        DispatchQueue.main.async {
+                            CZHUD.showError("删除失败")
+                        }
+
+                    }
+                }, "取消", nil)
+            }
+            //返回右侧事件按钮
+            return [deleteAction]
+        }
+    }
+
+    //自定义滑动过渡行为（可选）
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        var options = SwipeTableOptions()
+        options.transitionStyle = .reveal
+        return options
+    }
+}
 
 

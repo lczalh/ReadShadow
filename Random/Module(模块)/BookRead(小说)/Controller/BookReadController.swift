@@ -116,16 +116,16 @@ extension BookReadController: UICollectionViewDataSource, UICollectionViewDelega
                 }
             }
         }
-        let removeAction = UIAlertAction(title: "移除", style: .default) { (action) in
+        let removeAction = UIAlertAction(title: "删除", style: .default) { (action) in
             do {
                 try FileManager().removeItem(atPath: bookcaseFolderPath + "/\(bookcaseModel.bookReadParsingRule?.bookSourceName ?? "")-\(bookcaseModel.bookName ?? "").plist")
                 DispatchQueue.main.async {
-                    CZHUD.showSuccess("移除成功")
+                    CZHUD.showSuccess("删除成功")
                     self.bookcaseModels = self.getBookcaseModels()
                 }
             } catch  {
                 DispatchQueue.main.async {
-                    CZHUD.showError("移除失败")
+                    CZHUD.showError("删除失败")
                 }
                 
             }
