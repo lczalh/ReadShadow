@@ -36,7 +36,7 @@ class MainTabBarController: BaseTabBarController {
         if videoSourceModels.count > 0 {
             setTabBarItem(viewController: BookReadController(), tabBarTitle: "小说", image: UIImage(named: "Icon_Fiction"), selectImage: UIImage(named: "Icon_Fiction"), tag: 1)
             setTabBarItem(viewController: VideoHomeController(), tabBarTitle: "视频", image: UIImage(named: "Icon_Video"), selectImage: UIImage(named: "Icon_Video"), tag: 2)
-            setTabBarItem(viewController: TelevisionController(), tabBarTitle: "电视", image: UIImage(named: "Icon_Home_Video_Television"), selectImage: UIImage(named: "Icon_Home_Video_Television"), tag: 3)
+           // setTabBarItem(viewController: TelevisionController(), tabBarTitle: "电视", image: UIImage(named: "Icon_Home_Video_Television"), selectImage: UIImage(named: "Icon_Home_Video_Television"), tag: 3)
             setTabBarItem(viewController: MineController(), tabBarTitle: "我的", image: UIImage(named: "Icon_Mine"), selectImage: UIImage(named: "Icon_Mine"), tag: 4)
         } else {
             setTabBarItem(viewController: BookReadController(), tabBarTitle: "小说", image: UIImage(named: "Icon_Fiction"), selectImage: UIImage(named: "Icon_Fiction"), tag: 1)

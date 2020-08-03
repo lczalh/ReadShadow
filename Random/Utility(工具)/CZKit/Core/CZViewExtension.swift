@@ -74,4 +74,64 @@ public extension UIView {
             layer.render(in: rendererContext.cgContext)
         }
     }
+    
+    /// 设置一些或所有视图的角度半径。
+    ///
+    /// - Parameters:
+    ///   - corners: array of corners to change (example: [.bottomLeft, .topRight]).
+    ///   - radius: radius for selected corners.
+    func cz_roundCorners(_ corners: UIRectCorner, radius: CGFloat) {
+        let maskPath = UIBezierPath(
+            roundedRect: bounds,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius))
+        let shape = CAShapeLayer()
+        shape.path = maskPath.cgPath
+        layer.mask = shape
+    }
+
+    /// 添加阴影到视图
+    ///
+    /// - Parameters:
+    ///   - color: shadow color (default is #137992).
+    ///   - radius: shadow radius (default is 3).
+    ///   - offset: shadow offset (default is .zero).
+    ///   - opacity: shadow opacity (default is 0.5).
+    func cz_addShadow(ofColor color: UIColor = UIColor(red: 0.07, green: 0.47, blue: 0.57, alpha: 1.0), radius: CGFloat = 3, offset: CGSize = .zero, opacity: Float = 0.5) {
+        layer.shadowColor = color.cgColor
+        layer.shadowOffset = offset
+        layer.shadowRadius = radius
+        layer.shadowOpacity = opacity
+        layer.masksToBounds = false
+    }
+    
+    /// 向视图插入阴影和任意角落圆角
+    /// - Parameters:
+    ///   - shadowLayerName: 层名称
+    ///   - shadowColor: 阴影颜色
+    ///   - offSet: 阴影偏移
+    ///   - opacity: 透明度
+    ///   - shadowRadius: 角度
+    ///   - cornerRadius: 角度
+    ///   - corners: 角落
+    ///   - fillColor: 填充颜色
+    func cz_insertShadowAndRoundedCorners(shadowLayerName: String? = nil, shadowColor: UIColor, offSet: CGSize, opacity: Float, shadowRadius:
+        CGFloat, cornerRadius: CGFloat, corners: UIRectCorner, fillColor: UIColor = .white) {
+        if layer.sublayers?.filter({ $0.name == shadowLayerName }).first == nil {
+            let shadowLayer = CAShapeLayer()
+            let size = CGSize(width: cornerRadius, height: cornerRadius)
+            let cgPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: size).cgPath //1
+            shadowLayer.path = cgPath //2
+            shadowLayer.fillColor = fillColor.cgColor //3
+            shadowLayer.shadowColor = shadowColor.cgColor //4
+            shadowLayer.shadowPath = cgPath
+            shadowLayer.shadowOffset = offSet //5
+            shadowLayer.shadowOpacity = opacity
+            shadowLayer.shadowRadius = shadowRadius
+            shadowLayer.name = shadowLayerName
+            shadowLayer.masksToBounds = false
+            layer.masksToBounds = false
+            layer.insertSublayer(shadowLayer, at: 0)
+        }
+    }
 }
