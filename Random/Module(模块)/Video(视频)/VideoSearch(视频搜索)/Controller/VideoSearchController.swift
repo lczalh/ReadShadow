@@ -67,61 +67,47 @@ class VideoSearchController: BaseController {
             }
         }).disposed(by: rx.disposeBag)
         
-        videoSearchView.searchTextField.rx
-            .controlEvent([.editingDidEnd,.editingDidEndOnExit]) //状态可以组合
-            .subscribe(onNext: {[weak self] in
+        videoSearchView.searchTextField.rx.value.orEmpty.throttle(DispatchTimeInterval.seconds(1), scheduler: MainScheduler.instance).asObservable()
+          //  .controlEvent([.editingDidEnd,.editingDidEndOnExit]) //状态可以组合
+            .subscribe(onNext: {[weak self] _ in
             guard self?.videoSearchView.searchTextField.markedTextRange == nil else { return }
             guard self?.videoSearchView.searchTextField.text?.isEmpty == false && self?.videoSearchView.searchTextField.text != nil else { return }
             /// 搜索值相同则不重复请求
             guard self?.searchName != self?.videoSearchView.searchTextField.text else { return }
             self?.searchName = self?.videoSearchView.searchTextField.text
             self?.videoModels.removeAll()
-            self?.sectionTitles.removeAll()
             self?.searchVideoData()
         }).disposed(by: rx.disposeBag)
     }
     
 
     @objc func searchVideoData() {
-        let semaphore = DispatchSemaphore(value: 0)
-        DispatchQueue.global().async {
-            for videoSourceModel in self.readShadowVideoResourceModels {
-                autoreleasepool{
-                    DispatchQueue.main.async { CZHUD.show("\(videoSourceModel.name!)搜索中") }
-                    CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: videoSourceModel.baseUrl!, path: videoSourceModel.path!, ac: "detail", categoryId: nil, pg: nil, wd: self.searchName), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
-                        switch result {
-                            case .success(let model):
-                                if let videoModels = model.data, videoModels.count > 0 {
-                                    var videos: [ReadShadowVideoModel] = []
-                                    for videoModel in videoModels {
-                                        guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
-                                        // 默认播放首集
-                                        videoModel.currentPlayIndex = 0
-                                        videoModel.readShadowVideoResourceModel = videoSourceModel
-                                        videos.append(videoModel)
-                                    }
-                                    // 过滤空数组
-                                    if videos.count > 0 {
-                                        self?.videoModels.append(videos)
-                                        self?.sectionTitles.append(videoSourceModel.name!)
-                                    }
+        for videoSourceModel in self.readShadowVideoResourceModels {
+            autoreleasepool{
+                CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: videoSourceModel.baseUrl!, path: videoSourceModel.path!, ac: "detail", categoryId: nil, pg: nil, wd: self.searchName), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
+                    switch result {
+                        case .success(let model):
+                            if let videoModels = model.data, videoModels.count > 0 {
+                                var videos: [ReadShadowVideoModel] = []
+                                for videoModel in videoModels {
+                                    guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
+                                    // 默认播放首集
+                                    videoModel.currentPlayIndex = 0
+                                    videoModel.readShadowVideoResourceModel = videoSourceModel
+                                    videos.append(videoModel)
                                 }
-                                DispatchQueue.main.async {
-                                    CZHUD.dismiss()
-                                    self?.videoSearchView.tableView.reloadData()
-                                    semaphore.signal()
+                                // 过滤空数组
+                                if videos.count > 0 {
+                                    self?.videoModels.append(videos)
                                 }
-                                break
-                            case .failure(let error):
-                                DispatchQueue.main.async {
-                                    CZHUD.dismiss()
-                                    semaphore.signal()
-                                }
-                                cz_print(error.localizedDescription)
-                                break
-                        }
+                            }
+                            DispatchQueue.main.async {
+                                self?.videoSearchView.tableView.reloadData()
+                            }
+                            break
+                        case .failure(_):
+                            break
                     }
-                    semaphore.wait()
                 }
             }
         }
@@ -133,7 +119,7 @@ class VideoSearchController: BaseController {
 extension VideoSearchController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sectionTitles.count
+        return videoModels.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -150,7 +136,7 @@ extension VideoSearchController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookReadHeaderView.identifier) as! BookReadHeaderView
-        headerView.bookSourceNameLabel.text = sectionTitles[section]
+        headerView.bookSourceNameLabel.text = videoModels[section].first?.readShadowVideoResourceModel?.name
         return headerView
     }
     
@@ -172,8 +158,10 @@ extension VideoSearchController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let model = videoModels[indexPath.section][indexPath.row]
-        let videoDetailsController = VideoDetailsController()
-        videoDetailsController.model = model
-        DispatchQueue.main.async { self.navigationController?.pushViewController(videoDetailsController, animated: true) }
+        DispatchQueue.main.async {
+            let videoDetailsController = VideoDetailsController()
+            videoDetailsController.model = model
+            self.navigationController?.pushViewController(videoDetailsController, animated: true)
+        }
     }
 }

@@ -178,6 +178,7 @@ class VideoDetailsController: BaseController {
                 switchVideoSourceController.allPlayerSourceNames = self?.model.allPlayerSourceNames ?? []
                 switchVideoSourceController.didSelectRowBlock = {[weak self] index in
                     self?.currentPlayerSourceIndex = index
+                    self?.playerVideo()
                 }
                 self?.present(switchVideoSourceController, animated: false, completion: nil)
             }
@@ -191,6 +192,7 @@ class VideoDetailsController: BaseController {
                 switchVideoSourceController.allPlayerSourceNames = self?.parsingInterfaceModels.map{ $0.parsingName ?? "" } ?? []
                 switchVideoSourceController.didSelectRowBlock = {[weak self] index in
                     self?.currentPlayerParsingIndex = index
+                    self?.playerVideo()
                 }
                 self?.present(switchVideoSourceController, animated: false, completion: nil)
             }
@@ -274,49 +276,43 @@ class VideoDetailsController: BaseController {
     
     /// 播放视频
     func playerVideo() {
-        let url = currentSeriesUrls[model.currentPlayIndex!]
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let directBroadcastAction = UIAlertAction(title: "直接播放", style: .default) { (action) in
-            self.currentPlayType = .directlyPlay
-            DispatchQueue.main.async {
-                self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.currentParsingInterface)!))
-                self.videoDetailsView.wkWebView.isHidden = true
-                self.videoDetailsView.superPlayerView.isHidden = false
-                self.videoDetailsView.superPlayerView.startTime = self.model.currentPlayTime
-                if self.currentSeriesNames.count > 1 {
-                    self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.name ?? "")\(self.currentSeriesNames[self.model.currentPlayIndex ?? 0])"
-                } else {
-                    self.videoDetailsView.superPlayerView.controlView.title = self.model.name
-                }
-                self.superPlayerModel.videoURL = url
-                self.videoDetailsView.superPlayerView.play(with: self.superPlayerModel)
-            }
-        }
-        let parsingPlayAction = UIAlertAction(title: "解析播放", style: .default) { (action) in
-            if (try? String(contentsOf: URL(string: self.currentParsingInterface)!)) != nil {
-                self.currentPlayType = .parsingPlay
+        DispatchQueue.global().async {
+            let url = self.currentSeriesUrls[self.model.currentPlayIndex!]
+            if url.contains(".m3u8") || url.contains(".mp4") {
                 DispatchQueue.main.async {
-                    self.videoDetailsView.superPlayerView.resetPlayer()
-                    self.videoDetailsView.superPlayerView.isHidden = true
-                    self.videoDetailsView.wkWebView.isHidden = false
-                    self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.currentParsingInterface)\(url)")!))
+                    self.videoDetailsView.switchParsingButton.isHidden = true
+                    self.videoDetailsView.switchParsingLabel.isHidden = true
+                    self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.currentParsingInterface)!))
+                    self.videoDetailsView.wkWebView.isHidden = true
+                    self.videoDetailsView.superPlayerView.isHidden = false
+                    self.videoDetailsView.superPlayerView.startTime = self.model.currentPlayTime
+                    if self.currentSeriesNames.count > 1 {
+                        self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.name ?? "")\(self.currentSeriesNames[self.model.currentPlayIndex ?? 0])"
+                    } else {
+                        self.videoDetailsView.superPlayerView.controlView.title = self.model.name
+                    }
+                    self.superPlayerModel.videoURL = url
+                    self.videoDetailsView.superPlayerView.play(with: self.superPlayerModel)
                 }
             } else {
-                CZHUD.showError("无效的解析接口")
+                if (try? String(contentsOf: URL(string: self.currentParsingInterface)!)) != nil {
+                    self.currentPlayType = .parsingPlay
+                    DispatchQueue.main.async {
+                        self.videoDetailsView.switchParsingButton.isHidden = false
+                        self.videoDetailsView.switchParsingLabel.isHidden = false
+                        self.videoDetailsView.superPlayerView.resetPlayer()
+                        self.videoDetailsView.superPlayerView.isHidden = true
+                        self.videoDetailsView.wkWebView.isHidden = false
+                        self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.currentParsingInterface)\(url)")!))
+                    }
+                } else {
+                    CZHUD.showError("无效的解析接口")
+                }
             }
+            // 更新历史记录
+            self.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
+            _ = CZObjectStore.standard.cz_archiver(object: self.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self.model.readShadowVideoResourceModel?.name ?? "")-\(self.model.name ?? "").plist")
         }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (action) in }
-        if url.contains(".m3u8") || url.contains(".mp4") {
-            alertController.addAction(directBroadcastAction)
-        }
-        alertController.addAction(parsingPlayAction)
-        alertController.addAction(cancelAction)
-        DispatchQueue.main.async {
-            self.present(alertController, animated: true, completion: nil)
-        }
-        // 更新历史记录
-        model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
-        _ = CZObjectStore.standard.cz_archiver(object: model!, filePath: "\(videoBrowsingRecordFolderPath)/\(model.readShadowVideoResourceModel?.name ?? "")-\(model.name ?? "").plist")
     }
     
     override var prefersStatusBarHidden: Bool {

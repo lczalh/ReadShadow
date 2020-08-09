@@ -99,6 +99,9 @@ class VideoDetailsView: BaseView {
     /// 切换源按钮
     var switchSourceButton: UIButton!
     
+    /// 解析源
+    var switchParsingLabel: UILabel!
+    
     /// 切换解析
     var switchParsingButton: UIButton!
     
@@ -243,7 +246,7 @@ class VideoDetailsView: BaseView {
            // .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
         
-        let _ = UILabel()
+        switchParsingLabel = UILabel()
             .cz
             .addSuperView(tableHeaderView)
             .makeConstraints({ (make) in

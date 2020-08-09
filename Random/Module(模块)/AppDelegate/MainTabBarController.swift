@@ -146,10 +146,10 @@ class MainTabBarController: BaseTabBarController {
         greenFiction.bookDetailRecommendReadRule = "//div[@class='link']/span/a"
         
         // 创建书源文件夹
-        let state = CZObjectStore.standard.cz_createFolder(folderPath: bookSourceRuleFolderPath)
-        guard state else {
-            return
-        }
+        let _ = CZObjectStore.standard.cz_createFolder(folderPath: bookSourceRuleFolderPath)
+//        guard state else {
+//            return
+//        }
 
 
         let _ = CZObjectStore.standard.cz_archiver(object: newPenBoringPavilion, filePath: bookSourceRuleFolderPath + "/" + (newPenBoringPavilion.bookSourceName ?? "") + ".plist")
@@ -165,8 +165,8 @@ class MainTabBarController: BaseTabBarController {
     func configshadowResources() {
         
         // 创建影源文件夹
-        let state = CZObjectStore.standard.cz_createFolder(folderPath: videoResourceFolderPath)
-        guard state else { return }
+        let _ = CZObjectStore.standard.cz_createFolder(folderPath: videoResourceFolderPath)
+     //   guard state else { return }
         
         let coolCloud = ReadShadowVideoResourceModel()
         coolCloud.name = "酷云"
@@ -249,48 +249,48 @@ class MainTabBarController: BaseTabBarController {
     /// 配置影源解析
     func configshadowParsings() {
         // 创建解析文件夹
-        let state = CZObjectStore.standard.cz_createFolder(folderPath: parsingInterfaceFolderPath)
-        guard state else { return }
+        let _ = CZObjectStore.standard.cz_createFolder(folderPath: parsingInterfaceFolderPath)
+        //guard state else { return }
         
         let ckmov = ParsingInterfaceModel()
         ckmov.parsingName = "ckmov"
         ckmov.parsingInterface = "https://www.ckmov.com/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: ckmov, filePath: parsingInterfaceFolderPath + "/" + (ckmov.parsingName ?? "") + ".plist")
         
-        let readShadow = ParsingInterfaceModel()
-        readShadow.parsingName = "阅影"
-        readShadow.parsingInterface = "https://jx.letaoshijie.com/?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: readShadow, filePath: parsingInterfaceFolderPath + "/" + (readShadow.parsingName ?? "") + ".plist")
-        
+        let jqaaa = ParsingInterfaceModel()
+        jqaaa.parsingName = "金桥"
+        jqaaa.parsingInterface = "https://jqaaa.com/jx.php?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: jqaaa, filePath: parsingInterfaceFolderPath + "/" + (jqaaa.parsingName ?? "") + ".plist")
+
         let six18g = ParsingInterfaceModel()
         six18g.parsingName = "618g"
         six18g.parsingInterface = "https://jx.618g.com/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: six18g, filePath: parsingInterfaceFolderPath + "/" + (six18g.parsingName ?? "") + ".plist")
         
-        let zy8090 = ParsingInterfaceModel()
-        zy8090.parsingName = "8090"
-        zy8090.parsingInterface = "https://www.8090g.cn/jiexi/?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: zy8090, filePath: parsingInterfaceFolderPath + "/" + (zy8090.parsingName ?? "") + ".plist")
+        let feifei = ParsingInterfaceModel()
+        feifei.parsingName = "飞飞"
+        feifei.parsingInterface = "https://jx.lfeifei.cn/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: feifei, filePath: parsingInterfaceFolderPath + "/" + (feifei.parsingName ?? "") + ".plist")
         
-        let darkNight = ParsingInterfaceModel()
-        darkNight.parsingName = "暗夜"
-        darkNight.parsingInterface = "http://jx.aywlkj.xyz/jiexi/?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: darkNight, filePath: parsingInterfaceFolderPath + "/" + (darkNight.parsingName ?? "") + ".plist")
-        
-        let qt = ParsingInterfaceModel()
-        qt.parsingName = "QT"
-        qt.parsingInterface = "https://api.potatost.xyz/?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: parsingInterfaceFolderPath + "/" + (qt.parsingName ?? "") + ".plist")
-        
-        let dreamCloudOne = ParsingInterfaceModel()
-        dreamCloudOne.parsingName = "集梦云1"
-        dreamCloudOne.parsingInterface = "https://jx.ys520.club/om/?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: dreamCloudOne, filePath: parsingInterfaceFolderPath + "/" + (dreamCloudOne.parsingName ?? "") + ".plist")
+        let moon = ParsingInterfaceModel()
+        moon.parsingName = "月亮"
+        moon.parsingInterface = "https://api.yueliangjx.com/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: moon, filePath: parsingInterfaceFolderPath + "/" + (moon.parsingName ?? "") + ".plist")
         
         let dreamCloudTwo = ParsingInterfaceModel()
         dreamCloudTwo.parsingName = "集梦云2"
         dreamCloudTwo.parsingInterface = "https://ys.ys520.club/?url="
         let _ = CZObjectStore.standard.cz_archiver(object: dreamCloudTwo, filePath: parsingInterfaceFolderPath + "/" + (dreamCloudTwo.parsingName ?? "") + ".plist")
+        
+        let bjx = ParsingInterfaceModel()
+        bjx.parsingName = "bjx"
+        bjx.parsingInterface = "https://api.8bjx.cn/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: bjx, filePath: parsingInterfaceFolderPath + "/" + (bjx.parsingName ?? "") + ".plist")
+        
+        let beaacc = ParsingInterfaceModel()
+        beaacc.parsingName = "beaacc"
+        beaacc.parsingInterface = "https://beaacc.com/api.php?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: beaacc, filePath: parsingInterfaceFolderPath + "/" + (beaacc.parsingName ?? "") + ".plist")
         
         // 免费一次解析搭建：http://user.seakee.cn
         

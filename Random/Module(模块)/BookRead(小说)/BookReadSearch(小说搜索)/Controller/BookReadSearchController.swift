@@ -34,15 +34,15 @@ class BookReadSearchController: BaseController {
         }
     }
     
-    private let bookSearchQueue = DispatchQueue.init(label: "bookSearch")
-    
-    private let bookSearchGroup = DispatchGroup()
+//    private let bookSearchQueue = DispatchQueue.init(label: "bookSearch")
+//
+//    private let bookSearchGroup = DispatchGroup()
     
     /// 搜索内容
     private var searchName: String?
     
     /// 小说搜索结果模型数组
-    private var bookReadSearchResultModels: [[BookReadModel]] = []
+    private var bookReadSearchResultModels: Array<[BookReadModel]> = []
     
     
     override func setupNavigationItems() {
@@ -57,14 +57,12 @@ class BookReadSearchController: BaseController {
         }
         bookReadSearchView.searchTextField.becomeFirstResponder()
         
-        bookReadSearchView.searchTextField.rx
-            .controlEvent([.editingDidEnd,.editingDidEndOnExit]) //状态可以组合
-            .asObservable().subscribe(onNext: {[weak self] in
+        bookReadSearchView.searchTextField.rx.value.orEmpty.throttle(DispatchTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+            .asObservable().subscribe(onNext: {[weak self] _ in
                 guard self?.bookReadSearchView.searchTextField.markedTextRange == nil else { return }
                 guard self?.bookReadSearchView.searchTextField.text?.isEmpty == false && self?.bookReadSearchView.searchTextField.text != nil else { return }
                 guard self?.searchName != self?.bookReadSearchView.searchTextField.text else { return }
                 self?.searchName = self?.bookReadSearchView.searchTextField.text
-                self?.bookReadSearchResultModels.removeAll()
                 self?.searchBooksData()
             }).disposed(by: rx.disposeBag)
         
@@ -81,7 +79,6 @@ class BookReadSearchController: BaseController {
         DispatchQueue.global().async {
             for bookParsingRuleModel in self.readShadowBookRuleResourceModels {
                 autoreleasepool {
-                    DispatchQueue.main.async { CZHUD.show("\(bookParsingRuleModel.bookSourceName!)搜索中") }
                     var encoding: String.Encoding
                     var url = "\(bookParsingRuleModel.bookSearchUrl ?? "")\(self.searchName ?? "")"
                     if bookParsingRuleModel.bookSearchEncoding == "0" {
@@ -184,7 +181,6 @@ class BookReadSearchController: BaseController {
                         cz_print("小说搜索失败")
                     }
                     DispatchQueue.main.async {
-                        CZHUD.dismiss()
                         self.bookReadSearchView.searchResultTableView.reloadData()
                     }
                 }
