@@ -30,6 +30,7 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
         coder.encode(allPlayerSourceSeriesUrls, forKey: "allPlayerSourceSeriesUrls")
         coder.encode(playerSource, forKey: "playerSource")
         coder.encode(readShadowVideoResourceModel, forKey: "readShadowVideoResourceModel")
+        coder.encode(allPlayerSourceNames, forKey: "allPlayerSourceNames")
     }
     
     required init?(coder: NSCoder) {
@@ -52,6 +53,7 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
         allPlayerSourceSeriesUrls = coder.decodeObject(forKey: "allPlayerSourceSeriesUrls") as? Array<Array<String>>
         playerSource = coder.decodeObject(forKey: "playerSource") as? String
         readShadowVideoResourceModel = coder.decodeObject(forKey: "readShadowVideoResourceModel") as? ReadShadowVideoResourceModel
+        allPlayerSourceNames = coder.decodeObject(forKey: "allPlayerSourceNames") as? Array<String>
     }
     
     /// 资源模型
@@ -131,6 +133,12 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     
     /// 所有播放源名称
     var allPlayerSourceNames: Array<String>?
+    
+//    /// 播放源索引
+//    var currentPlayerSourceIndex: Int?
+//
+//    /// 解析索引
+//    var currentPlayerParsingIndex: Int?
     
     func mapping(map: Map)
     {

@@ -202,6 +202,7 @@ class VideoDetailsController: BaseController {
         _ = videoDetailsView.superPlayerView.rx.observeWeakly(CGFloat.self, "playCurrentTime")
             .takeUntil(rx.deallocated)
             .subscribe(onNext: {[weak self] (value) in
+                guard value != nil else { return }
                 // 记录当前播放时间 和 浏览时间
                 self?.model.currentPlayTime = value ?? 0.0
                 self?.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
