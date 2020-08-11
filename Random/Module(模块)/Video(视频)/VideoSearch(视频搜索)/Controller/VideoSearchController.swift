@@ -89,7 +89,8 @@ class VideoSearchController: BaseController {
                         case .success(let model):
                             if let videoModels = model.data, videoModels.count > 0 {
                                 var videos: [ReadShadowVideoModel] = []
-                                for videoModel in videoModels {
+                                
+                                for videoModel in videoModels.filter({ $0.url != nil && $0.url?.isEmpty == false }) {
                                     guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
                                     // 默认播放首集
                                     videoModel.currentPlayIndex = 0

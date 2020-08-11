@@ -93,7 +93,7 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     var type : String?
     
     /// 播放地址
-    private var url : String? {
+    var url : String? {
         didSet {
             guard url != nil, url?.isEmpty == false else { return }
             let playerSourceAry = parsingResourceSiteM3U8Dddress(url: url!)

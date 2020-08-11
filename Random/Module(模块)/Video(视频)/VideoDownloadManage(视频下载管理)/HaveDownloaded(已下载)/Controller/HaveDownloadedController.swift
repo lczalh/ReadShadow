@@ -45,7 +45,6 @@ class HaveDownloadedController: BaseController {
                 make.edges.equalToSuperview()
             }
         }
-        cz_print(downloadFilePath, files)
     }
     
 
@@ -86,17 +85,25 @@ extension HaveDownloadedController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         if orientation == .left {
             // 创建“删除所有”事件按钮
-            let deleteAction = SwipeAction(style: .destructive, title: "删除所有任务") { action, indexPath in
-                UIAlertController.cz_showAlertController("提示", "确定删除所有已下载的任务？", .alert, self, "确定", { (action) in
-                    do {
-                        // 删除存储下载文件的文件夹
-                        try self.fileManager.removeItem(atPath: self.downloadFilePath)
-                        // 重新创建一个文件夹
-                        try self.fileManager.createDirectory(atPath: self.downloadFilePath, withIntermediateDirectories: true,
-                        attributes: nil)
-                        DispatchQueue.main.async { tableView.reloadData() }
-                    } catch {
-                        cz_print("视频删除失败!")
+            let deleteAction = SwipeAction(style: .destructive, title: "删除所有视频") { action, indexPath in
+                UIAlertController.cz_showAlertController("提示", "确定删除所有视频？", .alert, self, "确定", { (action) in
+                    CZHUD.show("删除中")
+                    DispatchQueue.global().async {
+                        do {
+                            // 删除存储下载文件的文件夹
+                            try self.fileManager.removeItem(atPath: self.downloadFilePath)
+                            // 重新创建一个文件夹
+                            try self.fileManager.createDirectory(atPath: self.downloadFilePath, withIntermediateDirectories: true,
+                            attributes: nil)
+                            DispatchQueue.main.async {
+                                CZHUD.showSuccess("删除成功")
+                                tableView.reloadData()
+                            }
+                        } catch {
+                            DispatchQueue.main.async {
+                                CZHUD.showError("删除失败")
+                            }
+                        }
                     }
                 }, "取消", nil)
             }
@@ -109,11 +116,19 @@ extension HaveDownloadedController: SwipeTableViewCellDelegate {
             // 创建“删除”事件按钮
             let deleteAction = SwipeAction(style: .destructive, title: "删除") { action, indexPath in
                 UIAlertController.cz_showAlertController("提示", "确定删除此视频？", .alert, self, "确定", { (action) in
-                    do {
-                        try self.fileManager.removeItem(atPath: path)
-                        DispatchQueue.main.async { tableView.reloadData() }
-                    } catch {
-                        cz_print("视频删除失败!")
+                    CZHUD.show("删除中")
+                    DispatchQueue.global().async {
+                        do {
+                            try self.fileManager.removeItem(atPath: path)
+                            DispatchQueue.main.async {
+                                CZHUD.showSuccess("删除成功")
+                                tableView.reloadData()
+                            }
+                        } catch {
+                            DispatchQueue.main.async {
+                                CZHUD.showError("删除失败")
+                            }
+                        }
                     }
                 }, "取消", nil)
             }

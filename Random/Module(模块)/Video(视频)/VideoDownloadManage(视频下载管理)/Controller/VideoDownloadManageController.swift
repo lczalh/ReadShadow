@@ -24,7 +24,7 @@ class VideoDownloadManageController: BaseController {
     }()
     
     /// 标题
-    var titles: Array<String> = ["下载中","已下载"]
+    var titles: Array<String> = ["缓存中","已缓存"]
     
     /// 下载管理
     var sessionManager: SessionManager = (UIApplication.shared.delegate as! AppDelegate).sessionManager

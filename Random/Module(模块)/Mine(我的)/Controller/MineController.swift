@@ -29,7 +29,8 @@ class MineController: BaseController {
             "免责声明",
             "隐私政策",
             "设备标识",
-            "免广告特权"
+            "免费赞助",
+            "QQ群：1135481892"
         ]
     }()
     
@@ -42,6 +43,7 @@ class MineController: BaseController {
             "Icon_Record",
             "Icon_HighPraise",
             "Icon_Disclaimer",
+            "Icon_PrivacyPolicy",
             "Icon_PrivacyPolicy",
             "Icon_PrivacyPolicy",
             "Icon_PrivacyPolicy"
@@ -291,7 +293,7 @@ extension MineController: UITableViewDataSource, UITableViewDelegate {
                         privacyPolicyController.hidesBottomBarWhenPushed = true
                         self?.navigationController?.pushViewController(privacyPolicyController, animated: true)
                     }
-                } else if sectionTitle == "免广告特权" {
+                } else if sectionTitle == "免费赞助" {
                     DispatchQueue.main.async {
                         if self!.gadRewardedAd?.isReady == true {
                             self!.gadRewardedAd?.present(fromRootViewController: self!, delegate:self!)
@@ -323,19 +325,18 @@ extension MineController: UITableViewDataSource, UITableViewDelegate {
 extension MineController: GADRewardedAdDelegate {
     /// 告诉委托用户获得了奖励。
     func rewardedAd(_ rewardedAd: GADRewardedAd, userDidEarn reward: GADAdReward) {
-        // 计算到期时间
-        let expirationTime = Date() + 1.days
-        // 判断偏好设置中是否存在到期时间
-        let existingExpirationTime = CZObjectStore.standard.cz_readObjectInUserDefault(key: "expirationTime")
-        
-        if existingExpirationTime == nil || (existingExpirationTime as! Date) < Date() { // 小于当前时间，本地时间过期\ 本地时间不存在，则重写写入
-            CZObjectStore.standard.cz_objectWriteUserDefault(object: expirationTime, key: "expirationTime")
-            CZHUD.showSuccess("已获得免广告特权，到期时间：\(expirationTime.string(withFormat: "yyyy-MM-dd HH:mm:ss"))")
-        } else { // 本地时间有效
-            CZHUD.showSuccess("已获得免广告特权，不可重复获取！到期时间：\(expirationTime.string(withFormat: "yyyy-MM-dd HH:mm:ss"))")
-//            expirationTime = (existingExpirationTime as! Date) + 1.days
+        CZHUD.show("一路有你，感谢您的支持！")
+//        // 计算到期时间
+//        let expirationTime = Date() + 1.days
+//        // 判断偏好设置中是否存在到期时间
+//        let existingExpirationTime = CZObjectStore.standard.cz_readObjectInUserDefault(key: "expirationTime")
+//
+//        if existingExpirationTime == nil || (existingExpirationTime as! Date) < Date() { // 小于当前时间，本地时间过期\ 本地时间不存在，则重写写入
 //            CZObjectStore.standard.cz_objectWriteUserDefault(object: expirationTime, key: "expirationTime")
-        }
+//            CZHUD.showSuccess("已获得免广告特权，到期时间：\(expirationTime.string(withFormat: "yyyy-MM-dd HH:mm:ss"))")
+//        } else { // 本地时间有效
+//            CZHUD.showSuccess("已获得免广告特权，不可重复获取！到期时间：\(expirationTime.string(withFormat: "yyyy-MM-dd HH:mm:ss"))")
+//        }
     }
     /// 告知委托已显示已奖励的广告。
     func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {

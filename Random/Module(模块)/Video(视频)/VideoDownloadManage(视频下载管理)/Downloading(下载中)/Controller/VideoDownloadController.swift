@@ -139,10 +139,14 @@ extension VideoDownloadController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         if orientation == .left {
             // 创建“删除所有”事件按钮
-            let deleteAction = SwipeAction(style: .destructive, title: "删除所有任务") { action, indexPath in
-                UIAlertController.cz_showAlertController("提示", "确定删除所有进行中的任务？", .alert, self, "确定", { (action) in
+            let deleteAction = SwipeAction(style: .destructive, title: "删除所有视频") { action, indexPath in
+                UIAlertController.cz_showAlertController("提示", "确定删除所有视频？", .alert, self, "确定", { (action) in
+                    CZHUD.show("删除中")
                     appDelegate.sessionManager.totalCancel(onMainQueue: false) { (manage) in
-                        DispatchQueue.main.async { tableView.reloadData() }
+                        DispatchQueue.main.async {
+                            CZHUD.showSuccess("删除成功")
+                            tableView.reloadData()
+                        }
                     }
                 }, "取消", nil)
             }
@@ -154,8 +158,12 @@ extension VideoDownloadController: SwipeTableViewCellDelegate {
             let deleteAction = SwipeAction(style: .destructive, title: "删除") { action, indexPath in
                 UIAlertController.cz_showAlertController("提示", "确定删除此任务？", .alert, self, "确定", { (action) in
                     let urlString = self.urlStrings.safeObject(at: indexPath.row)
+                    CZHUD.show("删除中")
                     appDelegate.sessionManager.cancel(urlString!, onMainQueue: false) { (task) in
-                        DispatchQueue.main.async { tableView.reloadData() }
+                        DispatchQueue.main.async {
+                            CZHUD.showSuccess("删除成功")
+                            tableView.reloadData()
+                        }
                     }
                 }, "取消", nil)
             }
