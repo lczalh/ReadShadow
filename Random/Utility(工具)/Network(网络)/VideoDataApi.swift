@@ -25,8 +25,8 @@ import Foundation
 /// 定义分类
 public enum VideoDataApi {
     
-    // MARK: - 获取视频数据 wd: 搜索内容, p: 页码, cid: 类别
-    case getVideoData(baseUrl: String, path: String, wd: String?, p: Int?, cid: String?)
+//    // MARK: - 获取视频数据 wd: 搜索内容, p: 页码, cid: 类别
+//    case getVideoData(baseUrl: String, path: String, wd: String?, p: Int?, cid: String?)
     
     // MARK: - 获取视频下载数据 wd: 搜索内容, p: 页码, cid: 类别
     case getVideoDownData(baseUrl: String, downloadPath: String, wd: String?, p: Int?, cid: String?)
@@ -34,8 +34,8 @@ public enum VideoDataApi {
     // MARK: - 直链视频解析
     case straightChainVideoAnalysis(baseUrl: String, path: String, url: String)
     
-    // MARK: - ac=list/detail ids=数据ID，多个ID逗号分割。 t=类别ID pg=页码 wd=搜索关键字 h=几小时内的数据
-    case getAppleCmsVideoListData(baseUrl: String, path: String, ac: String, ids: Int?, t: Int?, pg: Int?, wd: String?, h: Int?)
+//    // MARK: - ac=list/detail ids=数据ID，多个ID逗号分割。 t=类别ID pg=页码 wd=搜索关键字 h=几小时内的数据
+//    case getAppleCmsVideoListData(baseUrl: String, path: String, ac: String, ids: Int?, t: Int?, pg: Int?, wd: String?, h: Int?)
     
     
     
@@ -59,14 +59,14 @@ extension VideoDataApi : TargetType {
     //服务器地址
     public var baseURL: URL {
         switch self {
-        case .getVideoData(let baseUrl, _, _, _, _):
-            return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
+//        case .getVideoData(let baseUrl, _, _, _, _):
+//            return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         case .getVideoDownData(let baseUrl, _, _, _, _):
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         case .straightChainVideoAnalysis(let baseUrl, _, _):
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
-        case .getAppleCmsVideoListData(let baseUrl, _, _, _, _, _, _, _):
-            return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
+//        case .getAppleCmsVideoListData(let baseUrl, _, _, _, _, _, _, _):
+//            return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         case .getReadShadowVideoData(let baseUrl, _, _, _, _, _):
             return URL(string: baseUrl) ?? URL(string: "https://www.baidu.com")!
         }
@@ -76,14 +76,14 @@ extension VideoDataApi : TargetType {
     public var path: String {
         
         switch self {
-        case .getVideoData(_, let path, _, _, _):
-            return path
+//        case .getVideoData(_, let path, _, _, _):
+//            return path
         case .getVideoDownData(_, let downloadPath, _, _, _):
             return downloadPath
         case .straightChainVideoAnalysis(_, let path, _):
             return path
-        case .getAppleCmsVideoListData(_, let path, _, _, _, _, _, _):
-            return path
+//        case .getAppleCmsVideoListData(_, let path, _, _, _, _, _, _):
+//            return path
         case .getReadShadowVideoData(_, let path, _, _, _, _):
             return path
         }
@@ -105,11 +105,11 @@ extension VideoDataApi : TargetType {
         // 请求通用参数
         var parameterDict: [String : Any] = Dictionary()
         switch self {
-        case .getVideoData(_, _, let wd, let p, let cid):
-            parameterDict["wd"] = wd
-            parameterDict["p"] = p
-            parameterDict["cid"] = cid
-            break
+//        case .getVideoData(_, _, let wd, let p, let cid):
+//            parameterDict["wd"] = wd
+//            parameterDict["p"] = p
+//            parameterDict["cid"] = cid
+//            break
         case .getVideoDownData(_, _, let wd, let p, let cid):
             parameterDict["wd"] = wd
             parameterDict["p"] = p
@@ -118,14 +118,14 @@ extension VideoDataApi : TargetType {
         case .straightChainVideoAnalysis(_, _, let url):
             parameterDict["url"] = url
             break
-        case .getAppleCmsVideoListData(_, _, let ac, let ids, let t, let pg, let wd, let h):
-            parameterDict["ac"] = ac
-            parameterDict["ids"] = ids
-            parameterDict["t"] = t
-            parameterDict["pg"] = pg
-            parameterDict["wd"] = wd
-            parameterDict["h"] = h
-            break
+//        case .getAppleCmsVideoListData(_, _, let ac, let ids, let t, let pg, let wd, let h):
+//            parameterDict["ac"] = ac
+//            parameterDict["ids"] = ids
+//            parameterDict["t"] = t
+//            parameterDict["pg"] = pg
+//            parameterDict["wd"] = wd
+//            parameterDict["h"] = h
+//            break
         case .getReadShadowVideoData(_, let path, let ac, let categoryId, let pg, let wd):
             if path == "/api.php/provide/vod" {
                 parameterDict["ac"] = ac

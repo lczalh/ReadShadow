@@ -49,7 +49,7 @@ class VideoDetailsView: BaseView {
     /// 腾讯视频播放器
     lazy var superPlayerView: SuperPlayerView = {
         let view = SuperPlayerView(frame: playerImageView.bounds)
-        view.coverImageView.contentMode = .scaleAspectFill
+        view.coverImageView.contentMode = .scaleAspectFit
         view.fatherView = playerImageView
         let superPlayerViewConfig = SuperPlayerViewConfig()
         superPlayerViewConfig.maxCacheItem = 100

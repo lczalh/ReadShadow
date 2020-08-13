@@ -113,8 +113,7 @@
 		FC998414248FA09A00ADE067 /* BookReadDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC998413248FA09A00ADE067 /* BookReadDetailsView.swift */; };
 		FC998416248FA28E00ADE067 /* BookReadBasicInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC998415248FA28E00ADE067 /* BookReadBasicInfoTableViewCell.swift */; };
 		FC998418248FA44700ADE067 /* BookReadIntroductionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC998417248FA44700ADE067 /* BookReadIntroductionTableViewCell.swift */; };
-		FC9AEFDC24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9AEFDB24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m */; };
-		FC9AEFDF24E4FC1600493143 /* HybridNSURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9AEFDD24E4FC1500493143 /* HybridNSURLProtocol.m */; };
+		FC9AEFE624E53C7A00493143 /* ParsingPlayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9AEFE524E53C7A00493143 /* ParsingPlayModel.swift */; };
 		FC9E3F032359ACBC008E76E4 /* HighSpeedDataApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E3F022359ACBC008E76E4 /* HighSpeedDataApi.swift */; };
 		FC9E71C024985F560090EE76 /* CZReadThemeCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E71BF24985F560090EE76 /* CZReadThemeCollectionCell.swift */; };
 		FC9E71C224986D270090EE76 /* CZReadWordSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E71C124986D270090EE76 /* CZReadWordSizeView.swift */; };
@@ -379,10 +378,7 @@
 		FC998413248FA09A00ADE067 /* BookReadDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadDetailsView.swift; sourceTree = "<group>"; };
 		FC998415248FA28E00ADE067 /* BookReadBasicInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadBasicInfoTableViewCell.swift; sourceTree = "<group>"; };
 		FC998417248FA44700ADE067 /* BookReadIntroductionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadIntroductionTableViewCell.swift; sourceTree = "<group>"; };
-		FC9AEFDA24E4FC0E00493143 /* NSURLProtocol+WKWebVIew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLProtocol+WKWebVIew.h"; sourceTree = "<group>"; };
-		FC9AEFDB24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLProtocol+WKWebVIew.m"; sourceTree = "<group>"; };
-		FC9AEFDD24E4FC1500493143 /* HybridNSURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HybridNSURLProtocol.m; sourceTree = "<group>"; };
-		FC9AEFDE24E4FC1600493143 /* HybridNSURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HybridNSURLProtocol.h; sourceTree = "<group>"; };
+		FC9AEFE524E53C7A00493143 /* ParsingPlayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingPlayModel.swift; sourceTree = "<group>"; };
 		FC9E3F022359ACBC008E76E4 /* HighSpeedDataApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighSpeedDataApi.swift; sourceTree = "<group>"; };
 		FC9E71BF24985F560090EE76 /* CZReadThemeCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadThemeCollectionCell.swift; sourceTree = "<group>"; };
 		FC9E71C124986D270090EE76 /* CZReadWordSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadWordSizeView.swift; sourceTree = "<group>"; };
@@ -661,7 +657,6 @@
 		D06E732523350DBA00886FDB /* Utility(工具) */ = {
 			isa = PBXGroup;
 			children = (
-				FC9AEFD924E4FBF400493143 /* Interceptor(拦截器) */,
 				FCCFC857248E298400BC4DD3 /* BookReadParsing(阅读解析) */,
 				FCC875BA23A0E85500ECA178 /* CZKit */,
 				FC838828239DE37400DC2D6E /* Progress */,
@@ -797,9 +792,9 @@
 		FC100E4C23756628004ADEB3 /* VideoDetails(视频详情) */ = {
 			isa = PBXGroup;
 			children = (
+				FC9AEFE424E53C7100493143 /* Model */,
 				FC85664424C93B70008E0D95 /* SwitchVideoSource(切换视频源) */,
 				FCA4EBAC24C5884800D29579 /* VideoIntroduction(视频简介) */,
-				FC7D22AE23A1DC5E00314876 /* Model */,
 				FC100E4E237566B9004ADEB3 /* View */,
 				FC100E4D237566AE004ADEB3 /* Controller */,
 			);
@@ -1207,13 +1202,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		FC7D22AE23A1DC5E00314876 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		FC80B0F724B5CFEF00E19F13 /* GlobalMacro(全局宏) */ = {
 			isa = PBXGroup;
 			children = (
@@ -1414,15 +1402,12 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		FC9AEFD924E4FBF400493143 /* Interceptor(拦截器) */ = {
+		FC9AEFE424E53C7100493143 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				FC9AEFDA24E4FC0E00493143 /* NSURLProtocol+WKWebVIew.h */,
-				FC9AEFDB24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m */,
-				FC9AEFDE24E4FC1600493143 /* HybridNSURLProtocol.h */,
-				FC9AEFDD24E4FC1500493143 /* HybridNSURLProtocol.m */,
+				FC9AEFE524E53C7A00493143 /* ParsingPlayModel.swift */,
 			);
-			path = "Interceptor(拦截器)";
+			path = Model;
 			sourceTree = "<group>";
 		};
 		FC9E3F012359AC56008E76E4 /* Network(网络) */ = {
@@ -2128,7 +2113,6 @@
 				FCC8761023A0E85600ECA178 /* UIScrollView+CZKit.swift in Sources */,
 				FC0A020624A9BAA2007AA1B0 /* BookSourceDetailController.swift in Sources */,
 				FC6BE5A3243C4B6300F15A46 /* CZValidationCodeButton.swift in Sources */,
-				FC9AEFDF24E4FC1600493143 /* HybridNSURLProtocol.m in Sources */,
 				FC288A4E237A454C00B8C707 /* VideoDownloadManageController.swift in Sources */,
 				FC7EC4D2246543B90057C6D2 /* CZReadTapGestureView.swift in Sources */,
 				FC859B712497697D00ECABFC /* CZReadTabBarView.swift in Sources */,
@@ -2136,6 +2120,7 @@
 				FC998416248FA28E00ADE067 /* BookReadBasicInfoTableViewCell.swift in Sources */,
 				FCDF994124BED3560038970B /* SearchDownloadableVideoView.swift in Sources */,
 				FC8180C9249078B400140B5E /* BookReadNewestTableViewCell.swift in Sources */,
+				FC9AEFE624E53C7A00493143 /* ParsingPlayModel.swift in Sources */,
 				FCF21C3424A2F100003BFD3D /* VideoSourceManageController.swift in Sources */,
 				FCB57FF4237E9F2500A46CD7 /* VideoDownloadView.swift in Sources */,
 				FCC875FE23A0E85600ECA178 /* CZViewExtension.swift in Sources */,
@@ -2201,7 +2186,6 @@
 				FCC8761F23A0E85600ECA178 /* UICollectionViewFlowLayout+CZKit.swift in Sources */,
 				FC17D9F124C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift in Sources */,
 				FCC8762323A0E85600ECA178 /* ChainKit+SnapKit.swift in Sources */,
-				FC9AEFDC24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m in Sources */,
 				FC716CE0236A83B200692833 /* UIDevice+VKKeychainIDFV.m in Sources */,
 				FC452FD72374FBAB00CCADD8 /* VideoDataApi.swift in Sources */,
 				FC799B4824ADC64100793FA9 /* BrowsingHistoryView.swift in Sources */,

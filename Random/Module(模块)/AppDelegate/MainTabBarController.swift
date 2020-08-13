@@ -225,24 +225,68 @@ class MainTabBarController: BaseTabBarController {
         mushroomCloud.baseUrl = "http://zy.mgys8.com"
         mushroomCloud.path = "/api.php/provide/vod"
         let _ = CZObjectStore.standard.cz_archiver(object: mushroomCloud, filePath: videoResourceFolderPath + "/" + (mushroomCloud.name ?? "") + ".plist")
-        
+
         let darkNight = ReadShadowVideoResourceModel()
         darkNight.name = "暗夜"
         darkNight.baseUrl = "https://vip.aywlkj.xyz"
         darkNight.path = "/api.php/provide/vod"
         let _ = CZObjectStore.standard.cz_archiver(object: darkNight, filePath: videoResourceFolderPath + "/" + (darkNight.name ?? "") + ".plist")
-        
+
         let qt = ReadShadowVideoResourceModel()
         qt.name = "QT"
         qt.baseUrl = "http://zy.potatost.xyz"
         qt.path = "/api.php/provide/vod"
         let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: videoResourceFolderPath + "/" + (qt.name ?? "") + ".plist")
-        
+
         let terroristDuck = ReadShadowVideoResourceModel()
         terroristDuck.name = "恐怖鸭"
         terroristDuck.baseUrl = "https://ya.kongbuya.com"
         terroristDuck.path = "/api.php/provide/vod"
         let _ = CZObjectStore.standard.cz_archiver(object: terroristDuck, filePath: videoResourceFolderPath + "/" + (terroristDuck.name ?? "") + ".plist")
+        
+        let g8090 = ReadShadowVideoResourceModel()
+        g8090.name = "8090"
+        g8090.baseUrl = "http://zy.yilans.net"
+        g8090.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: g8090, filePath: videoResourceFolderPath + "/" + (g8090.name ?? "") + ".plist")
+        
+        let nuoxun = ReadShadowVideoResourceModel()
+        nuoxun.name = "诺讯"
+        nuoxun.baseUrl = "https://ziyuan.nuoxun.net"
+        nuoxun.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: nuoxun, filePath: videoResourceFolderPath + "/" + (nuoxun.name ?? "") + ".plist")
+        
+        let xiaoxiao = ReadShadowVideoResourceModel()
+        xiaoxiao.name = "小小"
+        xiaoxiao.baseUrl = "https://api.xxdizhi.cc"
+        xiaoxiao.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: xiaoxiao, filePath: videoResourceFolderPath + "/" + (xiaoxiao.name ?? "") + ".plist")
+        
+        let soule = ReadShadowVideoResourceModel()
+        soule.name = "搜乐"
+        soule.baseUrl = "https://www.caijizy.vip"
+        soule.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: soule, filePath: videoResourceFolderPath + "/" + (soule.name ?? "") + ".plist")
+        
+        let z1886 = ReadShadowVideoResourceModel()
+        z1886.name = "1886"
+        z1886.baseUrl = "http://cj.1886zy.co"
+        z1886.path = "/inc/feifei3"
+        let _ = CZObjectStore.standard.cz_archiver(object: z1886, filePath: videoResourceFolderPath + "/" + (z1886.name ?? "") + ".plist")
+        
+        let moka = ReadShadowVideoResourceModel()
+        moka.name = "摩卡"
+        moka.baseUrl = "https://cj.heiyap.com"
+        moka.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: moka, filePath: videoResourceFolderPath + "/" + (moka.name ?? "") + ".plist")
+        
+        /* X
+         http://cangtianzy10.com/api.php/provide/vod
+         http://balezy3.com/api.php/provide/vod
+         https://jialiapi.com/api.php/provide/vod
+         https://www.jikzy.com/inc/feifei3/
+         */
+        
         
     }
     
@@ -252,15 +296,15 @@ class MainTabBarController: BaseTabBarController {
         let _ = CZObjectStore.standard.cz_createFolder(folderPath: parsingInterfaceFolderPath)
         //guard state else { return }
         
-        let ckmov = ParsingInterfaceModel()
-        ckmov.parsingName = "ckmov"
-        ckmov.parsingInterface = "https://www.ckmov.com/?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: ckmov, filePath: parsingInterfaceFolderPath + "/" + (ckmov.parsingName ?? "") + ".plist")
+//        let ckmov = ParsingInterfaceModel()
+//        ckmov.parsingName = "ckmov"
+//        ckmov.parsingInterface = "https://www.ckmov.com/?url="
+//        let _ = CZObjectStore.standard.cz_archiver(object: ckmov, filePath: parsingInterfaceFolderPath + "/" + (ckmov.parsingName ?? "") + ".plist")
         
-        let jqaaa = ParsingInterfaceModel()
-        jqaaa.parsingName = "金桥"
-        jqaaa.parsingInterface = "https://jqaaa.com/jx.php?url="
-        let _ = CZObjectStore.standard.cz_archiver(object: jqaaa, filePath: parsingInterfaceFolderPath + "/" + (jqaaa.parsingName ?? "") + ".plist")
+        let yilans = ParsingInterfaceModel()
+        yilans.parsingName = "8090"
+        yilans.parsingInterface = "https://www.8090g.cn/jiexi/?url="
+        let _ = CZObjectStore.standard.cz_archiver(object: yilans, filePath: parsingInterfaceFolderPath + "/" + (yilans.parsingName ?? "") + ".plist")
 
         let six18g = ParsingInterfaceModel()
         six18g.parsingName = "618g"
