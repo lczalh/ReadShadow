@@ -18,7 +18,7 @@ target 'Random' do
     #pod 'RxDataSources', '~> 4.0.1'
     #pod 'RxSwiftExt', '~> 5.1.1'
     # 键盘自动处理
-    pod 'IQKeyboardManagerSwift', '~> 6.5.5'
+    pod 'IQKeyboardManagerSwift', '~> 6.5.6'
     #
     pod 'SVProgressHUD', '~> 2.2.5'
     #pod 'NVActivityIndicatorView'
@@ -46,11 +46,11 @@ target 'Random' do
     # Keychain
     #pod 'KeychainAccess'
     # 引导标记
-    pod 'Instructions', '~> 2.0.0'
+    #pod 'Instructions', '~> 2.0.0'
     # 调试工具
     #pod 'FLEX', '~> 3.1.2', :configurations => ['Debug']
     # UI
-    pod 'QMUIKit', '4.1.3'
+    pod 'QMUIKit', '4.2.0'
     # 在Swift项目中获得强大的类型化，自动完成的资源，例如图像，字体和序列
     #pod 'R.swift', '~> 5.2.2'
     # 二维码生成 / 扫描
@@ -99,7 +99,7 @@ target 'Random' do
     # 微软的暗黑模式适配框架
     #pod "FluentDarkModeKit"
     # 空白页
-    pod 'DZNEmptyDataSet'
+    #pod 'DZNEmptyDataSet'
     # 浮动面板
     #pod 'FloatingPanel'
     # VasSonic是由腾讯VAS团队开发的轻量级高性能混合框架，旨在加快可在Android和iOS平台上运行的网站的首屏显示

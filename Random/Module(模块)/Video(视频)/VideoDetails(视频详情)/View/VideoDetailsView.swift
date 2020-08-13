@@ -38,7 +38,7 @@ class VideoDetailsView: BaseView {
         wkWebViewConfiguration.allowsPictureInPictureMediaPlayback = true
         let view = WKWebView(frame: playerImageView.bounds, configuration: wkWebViewConfiguration)
         // 请求桌面网站
-        view.customUserAgent = "ASDF"
+        view.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"
         view.isHidden = true
         view.scrollView.bounces = false
         view.scrollView.showsVerticalScrollIndicator = false

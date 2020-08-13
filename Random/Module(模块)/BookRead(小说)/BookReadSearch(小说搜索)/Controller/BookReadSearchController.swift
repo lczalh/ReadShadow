@@ -14,8 +14,8 @@ class BookReadSearchController: BaseController {
         let view = BookReadSearchView()
         view.searchResultTableView.delegate = self
         view.searchResultTableView.dataSource = self
-        view.searchResultTableView.emptyDataSetSource = self
-        view.searchResultTableView.emptyDataSetDelegate = self
+      //  view.searchResultTableView.emptyDataSetSource = self
+       // view.searchResultTableView.emptyDataSetDelegate = self
         return view
     }()
     
@@ -238,10 +238,3 @@ extension BookReadSearchController: UITableViewDataSource, UITableViewDelegate {
 }
 
 
-extension BookReadSearchController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
-    
-//    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-//        return UIImage(named: "Icon_Placeholder")
-//    }
-    
-}

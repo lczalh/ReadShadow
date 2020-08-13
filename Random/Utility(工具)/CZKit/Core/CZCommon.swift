@@ -278,5 +278,14 @@ public class CZCommon: NSObject {
     /// 刘海屏设备
     public static let cz_bangScreenDevice: Bool = cz_iphoneX || cz_iphoneXR
     
-    
+    /// 清理WKWebView缓存
+    public static func cz_clearWKWebViewCache() {
+        let dataStore = WKWebsiteDataStore.default()
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), completionHandler: { (records) in
+            for record in records{
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        })
+    }
+
 }

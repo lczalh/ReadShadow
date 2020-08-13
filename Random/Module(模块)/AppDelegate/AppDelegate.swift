@@ -35,8 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableView.appearance().estimatedRowHeight = 0
         UITableView.appearance().estimatedSectionFooterHeight = 0
         UITableView.appearance().estimatedSectionHeaderHeight = 0
-//        UICollectionViewFlowLayout.appearance()
-        
+      //  URLProtocol.wk_registerScheme("http")
+       // URLProtocol.wk_registerScheme("https")
+     //   URLProtocol.registerClass(HybridNSURLProtocol.self)
         // 允许获取电量信息
         UIDevice.current.isBatteryMonitoringEnabled = true
         

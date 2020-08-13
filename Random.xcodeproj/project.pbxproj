@@ -113,6 +113,8 @@
 		FC998414248FA09A00ADE067 /* BookReadDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC998413248FA09A00ADE067 /* BookReadDetailsView.swift */; };
 		FC998416248FA28E00ADE067 /* BookReadBasicInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC998415248FA28E00ADE067 /* BookReadBasicInfoTableViewCell.swift */; };
 		FC998418248FA44700ADE067 /* BookReadIntroductionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC998417248FA44700ADE067 /* BookReadIntroductionTableViewCell.swift */; };
+		FC9AEFDC24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9AEFDB24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m */; };
+		FC9AEFDF24E4FC1600493143 /* HybridNSURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9AEFDD24E4FC1500493143 /* HybridNSURLProtocol.m */; };
 		FC9E3F032359ACBC008E76E4 /* HighSpeedDataApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E3F022359ACBC008E76E4 /* HighSpeedDataApi.swift */; };
 		FC9E71C024985F560090EE76 /* CZReadThemeCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E71BF24985F560090EE76 /* CZReadThemeCollectionCell.swift */; };
 		FC9E71C224986D270090EE76 /* CZReadWordSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E71C124986D270090EE76 /* CZReadWordSizeView.swift */; };
@@ -377,6 +379,10 @@
 		FC998413248FA09A00ADE067 /* BookReadDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadDetailsView.swift; sourceTree = "<group>"; };
 		FC998415248FA28E00ADE067 /* BookReadBasicInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadBasicInfoTableViewCell.swift; sourceTree = "<group>"; };
 		FC998417248FA44700ADE067 /* BookReadIntroductionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadIntroductionTableViewCell.swift; sourceTree = "<group>"; };
+		FC9AEFDA24E4FC0E00493143 /* NSURLProtocol+WKWebVIew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLProtocol+WKWebVIew.h"; sourceTree = "<group>"; };
+		FC9AEFDB24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLProtocol+WKWebVIew.m"; sourceTree = "<group>"; };
+		FC9AEFDD24E4FC1500493143 /* HybridNSURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HybridNSURLProtocol.m; sourceTree = "<group>"; };
+		FC9AEFDE24E4FC1600493143 /* HybridNSURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HybridNSURLProtocol.h; sourceTree = "<group>"; };
 		FC9E3F022359ACBC008E76E4 /* HighSpeedDataApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighSpeedDataApi.swift; sourceTree = "<group>"; };
 		FC9E71BF24985F560090EE76 /* CZReadThemeCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadThemeCollectionCell.swift; sourceTree = "<group>"; };
 		FC9E71C124986D270090EE76 /* CZReadWordSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadWordSizeView.swift; sourceTree = "<group>"; };
@@ -655,6 +661,7 @@
 		D06E732523350DBA00886FDB /* Utility(工具) */ = {
 			isa = PBXGroup;
 			children = (
+				FC9AEFD924E4FBF400493143 /* Interceptor(拦截器) */,
 				FCCFC857248E298400BC4DD3 /* BookReadParsing(阅读解析) */,
 				FCC875BA23A0E85500ECA178 /* CZKit */,
 				FC838828239DE37400DC2D6E /* Progress */,
@@ -1407,6 +1414,17 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		FC9AEFD924E4FBF400493143 /* Interceptor(拦截器) */ = {
+			isa = PBXGroup;
+			children = (
+				FC9AEFDA24E4FC0E00493143 /* NSURLProtocol+WKWebVIew.h */,
+				FC9AEFDB24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m */,
+				FC9AEFDE24E4FC1600493143 /* HybridNSURLProtocol.h */,
+				FC9AEFDD24E4FC1500493143 /* HybridNSURLProtocol.m */,
+			);
+			path = "Interceptor(拦截器)";
+			sourceTree = "<group>";
+		};
 		FC9E3F012359AC56008E76E4 /* Network(网络) */ = {
 			isa = PBXGroup;
 			children = (
@@ -1868,8 +1886,8 @@
 				D06E72EF23350D2D00886FDB /* Frameworks */,
 				D06E72F023350D2D00886FDB /* Resources */,
 				FCFA8885240E644800FFBEC0 /* Embed App Extensions */,
-				053C6DA7CD51C411C8DA9259 /* [CP] Embed Pods Frameworks */,
-				79CE5A252B920849F1A0CE61 /* [CP] Copy Pods Resources */,
+				470B8A9E4A98B91FC225FC15 /* [CP] Embed Pods Frameworks */,
+				D6DC0B53A2B35590B57F96CF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2021,7 +2039,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		053C6DA7CD51C411C8DA9259 /* [CP] Embed Pods Frameworks */ = {
+		470B8A9E4A98B91FC225FC15 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2036,23 +2054,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		79CE5A252B920849F1A0CE61 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B76F0387E78BCFF790E9E53C /* [CP] Check Pods Manifest.lock */ = {
@@ -2075,6 +2076,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D6DC0B53A2B35590B57F96CF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2110,6 +2128,7 @@
 				FCC8761023A0E85600ECA178 /* UIScrollView+CZKit.swift in Sources */,
 				FC0A020624A9BAA2007AA1B0 /* BookSourceDetailController.swift in Sources */,
 				FC6BE5A3243C4B6300F15A46 /* CZValidationCodeButton.swift in Sources */,
+				FC9AEFDF24E4FC1600493143 /* HybridNSURLProtocol.m in Sources */,
 				FC288A4E237A454C00B8C707 /* VideoDownloadManageController.swift in Sources */,
 				FC7EC4D2246543B90057C6D2 /* CZReadTapGestureView.swift in Sources */,
 				FC859B712497697D00ECABFC /* CZReadTabBarView.swift in Sources */,
@@ -2182,6 +2201,7 @@
 				FCC8761F23A0E85600ECA178 /* UICollectionViewFlowLayout+CZKit.swift in Sources */,
 				FC17D9F124C6DEE50079F524 /* ReadShadowVideoCategoryModel.swift in Sources */,
 				FCC8762323A0E85600ECA178 /* ChainKit+SnapKit.swift in Sources */,
+				FC9AEFDC24E4FC0F00493143 /* NSURLProtocol+WKWebVIew.m in Sources */,
 				FC716CE0236A83B200692833 /* UIDevice+VKKeychainIDFV.m in Sources */,
 				FC452FD72374FBAB00CCADD8 /* VideoDataApi.swift in Sources */,
 				FC799B4824ADC64100793FA9 /* BrowsingHistoryView.swift in Sources */,
