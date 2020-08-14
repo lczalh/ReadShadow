@@ -31,6 +31,9 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
         coder.encode(playerSource, forKey: "playerSource")
         coder.encode(readShadowVideoResourceModel, forKey: "readShadowVideoResourceModel")
         coder.encode(allPlayerSourceNames, forKey: "allPlayerSourceNames")
+        coder.encode(allPlayerSourceSeriesCurrentTimes, forKey: "allPlayerSourceSeriesCurrentTimes")
+        coder.encode(currentPlayerSourceIndex, forKey: "currentPlayerSourceIndex")
+        coder.encode(currentPlayerParsingIndex, forKey: "currentPlayerParsingIndex")
     }
     
     required init?(coder: NSCoder) {
@@ -54,6 +57,9 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
         playerSource = coder.decodeObject(forKey: "playerSource") as? String
         readShadowVideoResourceModel = coder.decodeObject(forKey: "readShadowVideoResourceModel") as? ReadShadowVideoResourceModel
         allPlayerSourceNames = coder.decodeObject(forKey: "allPlayerSourceNames") as? Array<String>
+        allPlayerSourceSeriesCurrentTimes = coder.decodeObject(forKey: "allPlayerSourceSeriesCurrentTimes") as? Array<Array<CGFloat>>
+        currentPlayerSourceIndex = coder.decodeObject(forKey: "currentPlayerSourceIndex") as? Int
+        currentPlayerParsingIndex = coder.decodeObject(forKey: "currentPlayerParsingIndex") as? Int
     }
     
     /// 资源模型
@@ -99,6 +105,17 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
             let playerSourceAry = parsingResourceSiteM3U8Dddress(url: url!)
             allPlayerSourceSeriesNames = playerSourceAry.0
             allPlayerSourceSeriesUrls = playerSourceAry.1
+            if allPlayerSourceSeriesCurrentTimes?.count ?? 0 <= 0 {
+                var allPlayerSourceSeriesCurrentTimes: Array<Array<CGFloat>> = []
+                for allPlayerSourceSeriesUrl in allPlayerSourceSeriesUrls ?? [] {
+                    var seriesCurrentTimes: Array<CGFloat> = []
+                    for _ in allPlayerSourceSeriesUrl {
+                        seriesCurrentTimes.append(CGFloat(0.0))
+                    }
+                    allPlayerSourceSeriesCurrentTimes.append(seriesCurrentTimes)
+                }
+                self.allPlayerSourceSeriesCurrentTimes = allPlayerSourceSeriesCurrentTimes
+            }
         }
     }
     
@@ -134,11 +151,15 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     /// 所有播放源名称
     var allPlayerSourceNames: Array<String>?
     
-//    /// 播放源索引
-//    var currentPlayerSourceIndex: Int?
-//
-//    /// 解析索引
-//    var currentPlayerParsingIndex: Int?
+    /// 所以播放源剧集当前播放时间
+    var allPlayerSourceSeriesCurrentTimes: Array<Array<CGFloat>>?
+    
+    /// 当前播放源索引
+    var currentPlayerSourceIndex: Int?
+    
+    /// 当前解析索引
+    var currentPlayerParsingIndex: Int?
+    
     
     func mapping(map: Map)
     {

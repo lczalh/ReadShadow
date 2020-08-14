@@ -49,10 +49,11 @@ class VideoDetailsView: BaseView {
     /// 腾讯视频播放器
     lazy var superPlayerView: SuperPlayerView = {
         let view = SuperPlayerView(frame: playerImageView.bounds)
-        view.coverImageView.contentMode = .scaleAspectFit
+        view.coverImageView.contentMode = .scaleAspectFill
+        view.autoPlay = true
         view.fatherView = playerImageView
         let superPlayerViewConfig = SuperPlayerViewConfig()
-        superPlayerViewConfig.maxCacheItem = 100
+        superPlayerViewConfig.maxCacheItem = 10000
         view.playerConfig = superPlayerViewConfig
         view.isHidden = true
         return view

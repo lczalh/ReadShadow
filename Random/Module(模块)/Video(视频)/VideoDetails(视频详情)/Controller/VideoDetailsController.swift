@@ -24,45 +24,48 @@ class VideoDetailsController: BaseController {
     /// 本页数据模型
     var model: ReadShadowVideoModel! {
         didSet {
-            currentPlayerSourceIndex = 0
-            currentPlayerParsingIndex = 0
+           // currentPlayerSourceIndex = model.currentPlayerSourceIndex ?? 0
+           // currentPlayerParsingIndex = model.currentPlayerParsingIndex ?? 0
         }
     }
     
     /// 当前播放源索引
-    private var currentPlayerSourceIndex: Int = 0 {
-        didSet {
-            currentSeriesNames = model.allPlayerSourceSeriesNames?[currentPlayerSourceIndex] ?? []
-            currentSeriesUrls = model.allPlayerSourceSeriesUrls?[currentPlayerSourceIndex] ?? []
-            currentPlayerSourceName = model.allPlayerSourceNames?[currentPlayerSourceIndex] ?? ""
-            DispatchQueue.main.async {
-                self.videoDetailsView.switchSourceButton.setTitle(self.currentPlayerSourceName, for: .normal)
-                self.videoDetailsView.tableView.reloadData()
-            }
-        }
-    }
+//    private var currentPlayerSourceIndex: Int = 0 {
+//        didSet {
+//
+//
+//
+//            // model.allPlayerSourceNames?[model.currentPlayerSourceIndex ?? 0] ?? ""
+////            currentPlayerSourceName = model.allPlayerSourceNames?[currentPlayerSourceIndex] ?? ""
+////            DispatchQueue.main.async {
+////                self.videoDetailsView.switchSourceButton.setTitle(self.model.allPlayerSourceNames?[model.currentPlayerSourceIndex ?? 0], for: .normal)
+////                self.videoDetailsView.tableView.reloadData()
+////            }
+//        }
+//    }
     
     /// 当前播放源所有剧集名称
-    private var currentSeriesNames: Array<String> = []
+//    private var currentSeriesNames: Array<String> = []
     
     /// 当前播放源所有剧集地址
-    private var currentSeriesUrls: Array<String> = []
+//    private var currentSeriesUrls: Array<String> = []
     
-    /// 当前播放源
-    private var currentPlayerSourceName: String = ""
+//    /// 当前播放源
+//    private var currentPlayerSourceName: String = ""
     
     /// 当前播放解析索引
-    private var currentPlayerParsingIndex: Int = 0 {
-        didSet {
-            let parsingInterfaceModel = parsingInterfaceModels[currentPlayerParsingIndex]
-            currentParsingInterface = parsingInterfaceModel.parsingInterface ?? ""
-            // 设置解析名称
-            DispatchQueue.main.async { self.videoDetailsView.switchParsingButton.setTitle(parsingInterfaceModel.parsingName, for: .normal) }
-        }
-    }
+//    private var currentPlayerParsingIndex: Int = 0 {
+//        didSet {
+//            model.currentPlayerParsingIndex = currentPlayerParsingIndex
+//            let parsingInterfaceModel = parsingInterfaceModels[currentPlayerParsingIndex]
+//            currentParsingInterface = parsingInterfaceModel.parsingInterface ?? ""
+//            // 设置解析名称
+//            DispatchQueue.main.async { self.videoDetailsView.switchParsingButton.setTitle(parsingInterfaceModel.parsingName, for: .normal) }
+//        }
+//    }
     
     /// 当前解析接口
-    private var currentParsingInterface: String = ""
+//    private var currentParsingInterface: String = ""
     
     /// 所有影源模型
     private var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> {
@@ -118,15 +121,6 @@ class VideoDetailsController: BaseController {
         }
     }
     
-    // 播放类型枚举
-    private enum VideoPlayType {
-        case parsingPlay // 解析播放
-        case directlyPlay // 直接播放
-    }
-    
-    /// 记录当前播放类型
-    private var currentPlayType: VideoPlayType?
-    
     override func setupNavigationItems() {
         super.setupNavigationItems()
         titleView?.title = model.name
@@ -177,7 +171,11 @@ class VideoDetailsController: BaseController {
                 switchVideoSourceController.titleName = "切换播放源"
                 switchVideoSourceController.allPlayerSourceNames = self?.model.allPlayerSourceNames ?? []
                 switchVideoSourceController.didSelectRowBlock = {[weak self] index in
-                    self?.currentPlayerSourceIndex = index
+                    self?.model.currentPlayerSourceIndex = index
+                    DispatchQueue.main.async {
+                        self?.videoDetailsView.switchSourceButton.setTitle(self?.model.allPlayerSourceNames?[self?.model.currentPlayerSourceIndex ?? 0], for: .normal)
+                        self?.videoDetailsView.tableView.reloadData()
+                    }
                     self?.playerVideo()
                 }
                 self?.present(switchVideoSourceController, animated: false, completion: nil)
@@ -191,7 +189,9 @@ class VideoDetailsController: BaseController {
                 switchVideoSourceController.titleName = "切换解析接口"
                 switchVideoSourceController.allPlayerSourceNames = self?.parsingInterfaceModels.map{ $0.parsingName ?? "" } ?? []
                 switchVideoSourceController.didSelectRowBlock = {[weak self] index in
-                    self?.currentPlayerParsingIndex = index
+                    self?.model.currentPlayerParsingIndex = index
+                    // 设置解析名称
+                    DispatchQueue.main.async { self?.videoDetailsView.switchParsingButton.setTitle(self?.parsingInterfaceModels[self?.model.currentPlayerParsingIndex ?? 0].parsingName, for: .normal) }
                     self?.playerVideo()
                 }
                 self?.present(switchVideoSourceController, animated: false, completion: nil)
@@ -204,7 +204,7 @@ class VideoDetailsController: BaseController {
             .subscribe(onNext: {[weak self] (value) in
                 guard value != nil else { return }
                 // 记录当前播放时间 和 浏览时间
-                self?.model.currentPlayTime = value ?? 0.0
+                self?.model.allPlayerSourceSeriesCurrentTimes?[self?.model.currentPlayerSourceIndex ?? 0][self?.model.currentPlayIndex ?? 0] = value ?? 0.0
                 self?.model.browseTime = Date().string(withFormat: "yyyy-MM-dd HH:mm:ss")
                 _ = CZObjectStore.standard.cz_archiver(object: self!.model!, filePath: "\(videoBrowsingRecordFolderPath)/\(self?.model.readShadowVideoResourceModel?.name ?? "")-\(self?.model.name ?? "").plist")
         })
@@ -212,11 +212,20 @@ class VideoDetailsController: BaseController {
         // 设置封面
         videoDetailsView.playerImageView.kf.indicatorType = .activity
         videoDetailsView.playerImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
+        videoDetailsView.superPlayerView.coverImageView.kf.indicatorType = .activity
+        videoDetailsView.superPlayerView.coverImageView.kf.setImage(with: URL(string: model.pic), placeholder: UIImage(named: "Icon_Placeholder"))
         // 设置视频名称
         videoDetailsView.videoNameLabel.text = model.name
         videoDetailsView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))·\(model.continu ?? "未知")"
+        
         // 默认加载一次解析接口
-        videoDetailsView.wkWebView.load(URLRequest(url: URL(string: currentParsingInterface)!))
+        videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface)!))
+        
+        // 设置默认的播放源名称
+        videoDetailsView.switchSourceButton.setTitle(model.allPlayerSourceNames?[model.currentPlayerSourceIndex ?? 0], for: .normal)
+        // 设置默认的解析接口名称
+        videoDetailsView.switchParsingButton.setTitle(parsingInterfaceModels[model.currentPlayerParsingIndex ?? 0].parsingName, for: .normal)
+        
         getMoreWonderfulModels()
         
         playerVideo()
@@ -277,16 +286,17 @@ class VideoDetailsController: BaseController {
     
     /// 播放视频
     func playerVideo() {
+        videoDetailsView.superPlayerView.resetPlayer()
         DispatchQueue.global().async {
-            let url = self.currentSeriesUrls[self.model.currentPlayIndex!]
+            let url = self.model.allPlayerSourceSeriesUrls?[self.model.currentPlayerSourceIndex ?? 0][self.model.currentPlayIndex ?? 0] ?? ""
             if url.contains(".m3u8") || url.contains(".mp4") {
                 self.directPlay(url: url)
             } else {
-                // http://js.voooe.cn/1787799317json/?wap=0&url=https://www.iqiyi.com/v_2ffkwsy3h6k.html
+                DispatchQueue.main.async { CZHUD.show("解析中") }
                 CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://js.voooe.cn/", path: "1787799317json", url: url), model: ParsingPlayModel.self) {[weak self] (result) in
                     switch result {
-                        
                     case .success(let model):
+                        DispatchQueue.main.async { CZHUD.dismiss() }
                         if model.url != nil, model.url?.isEmpty == false {
                             self?.directPlay(url: model.url ?? "")
                         } else {
@@ -294,6 +304,7 @@ class VideoDetailsController: BaseController {
                         }
                         break
                     case .failure(_):
+                        DispatchQueue.main.async { CZHUD.dismiss() }
                         self?.webParsingPlay(url: url)
                         break
                     }
@@ -311,12 +322,13 @@ class VideoDetailsController: BaseController {
         DispatchQueue.main.async {
             self.videoDetailsView.switchParsingButton.isHidden = true
             self.videoDetailsView.switchParsingLabel.isHidden = true
-            self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.currentParsingInterface)!))
+            self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface)!))
             self.videoDetailsView.wkWebView.isHidden = true
             self.videoDetailsView.superPlayerView.isHidden = false
-            self.videoDetailsView.superPlayerView.startTime = self.model.currentPlayTime
-            if self.currentSeriesNames.count > 1 {
-                self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.name ?? "")\(self.currentSeriesNames[self.model.currentPlayIndex ?? 0])"
+            self.videoDetailsView.superPlayerView.startTime = self.model.allPlayerSourceSeriesCurrentTimes?[self.model.currentPlayerSourceIndex ?? 0][self.model.currentPlayIndex ?? 0] ?? 0.0
+            // 设置播放名称
+            if self.model.allPlayerSourceSeriesNames?[self.model.currentPlayerSourceIndex ?? 0].count ?? 0 > 1 {
+                self.videoDetailsView.superPlayerView.controlView.title = "\(self.model.name ?? "")\(self.model.allPlayerSourceSeriesNames?[self.model.currentPlayerSourceIndex ?? 0][self.model.currentPlayIndex ?? 0] ?? "")"
             } else {
                 self.videoDetailsView.superPlayerView.controlView.title = self.model.name
             }
@@ -327,15 +339,18 @@ class VideoDetailsController: BaseController {
     
     /// 网页解析播放
     func webParsingPlay(url: String) {
-        if (try? String(contentsOf: URL(string: self.currentParsingInterface)!)) != nil {
-            self.currentPlayType = .parsingPlay
+        guard parsingInterfaceModels.count > 0 else {
+            CZHUD.showError("您还未添加解析接口")
+            return
+        }
+        if (try? String(contentsOf: URL(string: parsingInterfaceModels[model.currentPlayerParsingIndex ?? 0].parsingInterface)!)) != nil {
             DispatchQueue.main.async {
                 self.videoDetailsView.switchParsingButton.isHidden = false
                 self.videoDetailsView.switchParsingLabel.isHidden = false
                 self.videoDetailsView.superPlayerView.resetPlayer()
                 self.videoDetailsView.superPlayerView.isHidden = true
                 self.videoDetailsView.wkWebView.isHidden = false
-                self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.currentParsingInterface)\(url)")!))
+                self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface ?? "")\(url)")!))
             }
         } else {
             CZHUD.showError("无效的解析接口")
@@ -362,7 +377,7 @@ extension VideoDetailsController: UITableViewDataSource, UITableViewDelegate  {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: VideoEpisodeTableViewCell.identifier, for: indexPath) as! VideoEpisodeTableViewCell
-            cell.segmentedDataSource.titles = currentSeriesNames
+            cell.segmentedDataSource.titles = model.allPlayerSourceSeriesNames?[model.currentPlayerSourceIndex ?? 0] ?? []
             cell.segmentedView.defaultSelectedIndex = model.currentPlayIndex ?? 0
             cell.segmentedView.reloadDataWithoutListContainer()
             cell.segmentedView.delegate = self
@@ -401,16 +416,9 @@ extension VideoDetailsController: SuperPlayerDelegate {
     
     /// 播放结束通知
     func superPlayerDidEnd(_ player: SuperPlayerView!) {
-        guard model.currentPlayIndex != currentSeriesUrls.count - 1 else { return }
+        guard model.currentPlayIndex != (self.model.allPlayerSourceSeriesUrls?[self.model.currentPlayerSourceIndex ?? 0].count ?? 0) - 1 else { return }
         model.currentPlayIndex! += 1
-        let url = currentSeriesUrls[model.currentPlayIndex!]
-        // 重置wkWebView 并隐藏
-        videoDetailsView.wkWebView.load(URLRequest(url: URL(string: currentParsingInterface)!))
-        videoDetailsView.wkWebView.isHidden = true
-        videoDetailsView.superPlayerView.isHidden = false
-        superPlayerModel.videoURL = url
-        videoDetailsView.superPlayerView.controlView.title = "\(model.name ?? "")\(currentSeriesNames[model.currentPlayIndex ?? 0])"
-        videoDetailsView.superPlayerView.play(with: superPlayerModel)
+        playerVideo()
         DispatchQueue.main.async {
             self.videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
         }
