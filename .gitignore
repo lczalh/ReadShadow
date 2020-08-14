@@ -15361,3 +15361,9 @@ Pods/Target Support Files/SwiftDate/SwiftDate-prefix 3.pch
 Pods/Target Support Files/SwiftDate/SwiftDate-umbrella 3.h
 Pods/Target Support Files/SwiftDate/SwiftDate.debug 3.xcconfig
 Pods/Target Support Files/SwiftDate/SwiftDate.release 3.xcconfig
+Pods/QMUIKit/QMUIKit/UIKitExtensions/UITableViewHeaderFooterView+QMUI 2.h
+Pods/QMUIKit/QMUIKit/UIKitExtensions/UITableViewHeaderFooterView+QMUI 2.m
+Pods/QMUIKit/QMUIKit/UIKitExtensions/UIView+QMUIBorder 2.h
+Pods/QMUIKit/QMUIKit/UIKitExtensions/UIView+QMUIBorder 2.m
+Pods/QMUIKit/QMUIKit/UIKitExtensions/UIVisualEffectView+QMUI 2.h
+Pods/QMUIKit/QMUIKit/UIKitExtensions/UIVisualEffectView+QMUI 2.m

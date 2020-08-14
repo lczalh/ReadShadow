@@ -22,50 +22,7 @@ class VideoDetailsController: BaseController {
     }()
     
     /// 本页数据模型
-    var model: ReadShadowVideoModel! {
-        didSet {
-           // currentPlayerSourceIndex = model.currentPlayerSourceIndex ?? 0
-           // currentPlayerParsingIndex = model.currentPlayerParsingIndex ?? 0
-        }
-    }
-    
-    /// 当前播放源索引
-//    private var currentPlayerSourceIndex: Int = 0 {
-//        didSet {
-//
-//
-//
-//            // model.allPlayerSourceNames?[model.currentPlayerSourceIndex ?? 0] ?? ""
-////            currentPlayerSourceName = model.allPlayerSourceNames?[currentPlayerSourceIndex] ?? ""
-////            DispatchQueue.main.async {
-////                self.videoDetailsView.switchSourceButton.setTitle(self.model.allPlayerSourceNames?[model.currentPlayerSourceIndex ?? 0], for: .normal)
-////                self.videoDetailsView.tableView.reloadData()
-////            }
-//        }
-//    }
-    
-    /// 当前播放源所有剧集名称
-//    private var currentSeriesNames: Array<String> = []
-    
-    /// 当前播放源所有剧集地址
-//    private var currentSeriesUrls: Array<String> = []
-    
-//    /// 当前播放源
-//    private var currentPlayerSourceName: String = ""
-    
-    /// 当前播放解析索引
-//    private var currentPlayerParsingIndex: Int = 0 {
-//        didSet {
-//            model.currentPlayerParsingIndex = currentPlayerParsingIndex
-//            let parsingInterfaceModel = parsingInterfaceModels[currentPlayerParsingIndex]
-//            currentParsingInterface = parsingInterfaceModel.parsingInterface ?? ""
-//            // 设置解析名称
-//            DispatchQueue.main.async { self.videoDetailsView.switchParsingButton.setTitle(parsingInterfaceModel.parsingName, for: .normal) }
-//        }
-//    }
-    
-    /// 当前解析接口
-//    private var currentParsingInterface: String = ""
+    var model: ReadShadowVideoModel!
     
     /// 所有影源模型
     private var readShadowVideoResourceModels: Array<ReadShadowVideoResourceModel> {
@@ -199,7 +156,7 @@ class VideoDetailsController: BaseController {
         }).disposed(by: rx.disposeBag)
         
         //监听腾讯视频播放器当前播放时间
-        _ = videoDetailsView.superPlayerView.rx.observeWeakly(CGFloat.self, "playCurrentTime")
+        _ = videoDetailsView.superPlayerView.rx.observeWeakly(CGFloat.self, "playCurrentTime").skip(1)
             .takeUntil(rx.deallocated)
             .subscribe(onNext: {[weak self] (value) in
                 guard value != nil else { return }
@@ -292,11 +249,9 @@ class VideoDetailsController: BaseController {
             if url.contains(".m3u8") || url.contains(".mp4") {
                 self.directPlay(url: url)
             } else {
-                DispatchQueue.main.async { CZHUD.show("解析中") }
-                CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://js.voooe.cn/", path: "1787799317json", url: url), model: ParsingPlayModel.self) {[weak self] (result) in
+                CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://js.voooe.cn/", path: "1787799317json", url: url), model: ParsingPlayModel.self, max: 1) {[weak self] (result) in
                     switch result {
                     case .success(let model):
-                        DispatchQueue.main.async { CZHUD.dismiss() }
                         if model.url != nil, model.url?.isEmpty == false {
                             self?.directPlay(url: model.url ?? "")
                         } else {
@@ -304,7 +259,6 @@ class VideoDetailsController: BaseController {
                         }
                         break
                     case .failure(_):
-                        DispatchQueue.main.async { CZHUD.dismiss() }
                         self?.webParsingPlay(url: url)
                         break
                     }

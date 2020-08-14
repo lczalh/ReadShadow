@@ -244,7 +244,6 @@ class VideoDetailsView: BaseView {
             .titleColor(cz_standardTextColor, for: .normal)
             .font(.cz_boldSystemFont(10))
             .setContentHuggingPriority(.required, for: .horizontal)
-           // .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
         
         switchParsingLabel = UILabel()

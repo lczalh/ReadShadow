@@ -13,7 +13,7 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     func encode(with coder: NSCoder) {
         coder.encode(browseTime, forKey: "browseTime")
         coder.encode(currentPlayIndex, forKey: "currentPlayIndex")
-        coder.encode(currentPlayTime, forKey: "currentPlayTime")
+     //   coder.encode(currentPlayTime, forKey: "currentPlayTime")
         coder.encode(name, forKey: "name")
         coder.encode(actor, forKey: "actor")
         coder.encode(area, forKey: "area")
@@ -39,7 +39,7 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     required init?(coder: NSCoder) {
         browseTime = coder.decodeObject(forKey: "browseTime") as? String
         currentPlayIndex = coder.decodeObject(forKey: "currentPlayIndex") as? Int
-        currentPlayTime = coder.decodeObject(forKey: "currentPlayTime") as? CGFloat ?? 0.0
+       // currentPlayTime = coder.decodeObject(forKey: "currentPlayTime") as? CGFloat ?? 0.0
         name = coder.decodeObject(forKey: "name") as? String
         actor = coder.decodeObject(forKey: "actor") as? String
         area = coder.decodeObject(forKey: "area") as? String
@@ -74,8 +74,8 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
     /// 当前播放索引
     var currentPlayIndex: Int?
     
-    /// 当前播放时间
-    var currentPlayTime: CGFloat = 0.0
+//    /// 当前播放时间
+//    var currentPlayTime: CGFloat = 0.0
     
     /// 主演
     var actor : String?
@@ -105,17 +105,8 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
             let playerSourceAry = parsingResourceSiteM3U8Dddress(url: url!)
             allPlayerSourceSeriesNames = playerSourceAry.0
             allPlayerSourceSeriesUrls = playerSourceAry.1
-            if allPlayerSourceSeriesCurrentTimes?.count ?? 0 <= 0 {
-                var allPlayerSourceSeriesCurrentTimes: Array<Array<CGFloat>> = []
-                for allPlayerSourceSeriesUrl in allPlayerSourceSeriesUrls ?? [] {
-                    var seriesCurrentTimes: Array<CGFloat> = []
-                    for _ in allPlayerSourceSeriesUrl {
-                        seriesCurrentTimes.append(CGFloat(0.0))
-                    }
-                    allPlayerSourceSeriesCurrentTimes.append(seriesCurrentTimes)
-                }
-                self.allPlayerSourceSeriesCurrentTimes = allPlayerSourceSeriesCurrentTimes
-            }
+            allPlayerSourceSeriesCurrentTimes = allPlayerSourceSeriesUrls.map{ $0.map{ $0.map{_ in CGFloat(0.0) } } }
+            cz_print(allPlayerSourceSeriesCurrentTimes?.count)
         }
     }
     

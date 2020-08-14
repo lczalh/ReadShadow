@@ -68,6 +68,7 @@ struct CZNetwork {
                 if max == 1 {
                     completion(.failure(CZError("似乎已断开与互联网的连接")))
                 } else { // 重试
+                   // cz_request(target: target, model: model, delay: delay, max: max - 1, completion: completion)
                     DispatchQueue(label: "com.request.queue", attributes: .concurrent).asyncAfter(deadline: DispatchTime.now() + delay) {
                         cz_request(target: target, model: model, delay: delay, max: max - 1, completion: completion)
                     }

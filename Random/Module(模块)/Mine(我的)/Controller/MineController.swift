@@ -193,13 +193,46 @@ extension MineController: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: RecordTableViewCell.identifier, for: indexPath) as! RecordTableViewCell
                 cell.recordTableViewModels = videoRecordTableViewModels
                 cell.didSelectItemBlock = {[weak self] indexPath in
+                    let viewingRecordModel = self?.videoRecordModels[indexPath.row]
                     DispatchQueue.main.async {
-                        let viewingRecordModel = self?.videoRecordModels[indexPath.row]
+                        //CZHUD.dismiss()
                         let videoDetailsController = VideoDetailsController()
                         videoDetailsController.hidesBottomBarWhenPushed = true
                         videoDetailsController.model = viewingRecordModel
                         self?.navigationController?.pushViewController(videoDetailsController, animated: true)
                     }
+//                    DispatchQueue.main.async { CZHUD.show("检查更新中") }
+//                    CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: viewingRecordModel?.readShadowVideoResourceModel?.baseUrl ?? "", path: viewingRecordModel?.readShadowVideoResourceModel?.path ?? "", ac: "detail", categoryId: nil, pg: nil, wd: viewingRecordModel?.name), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
+//                        switch result {
+//                            case .success(let model):
+//                                DispatchQueue.main.async {
+//                                    CZHUD.dismiss()
+//                                    let videoDetailsController = VideoDetailsController()
+//                                    videoDetailsController.hidesBottomBarWhenPushed = true
+//                                    if let videoModels = model.data, videoModels.count > 0 {
+//                                        videoDetailsController.model = model.data?.first
+//                                        videoDetailsController.model.readShadowVideoResourceModel = viewingRecordModel?.readShadowVideoResourceModel
+//                                        videoDetailsController.model.currentPlayerSourceIndex = viewingRecordModel?.currentPlayerSourceIndex
+//                                        videoDetailsController.model.currentPlayerParsingIndex = viewingRecordModel?.currentPlayerParsingIndex
+//                                        videoDetailsController.model.currentPlayIndex = viewingRecordModel?.currentPlayIndex
+//                                    } else {
+//                                        videoDetailsController.model = viewingRecordModel
+//                                    }
+//                                    self?.navigationController?.pushViewController(videoDetailsController, animated: true)
+//                                }
+//                                break
+//                            case .failure(_):
+//                                DispatchQueue.main.async {
+//                                    CZHUD.dismiss()
+//                                    let videoDetailsController = VideoDetailsController()
+//                                    videoDetailsController.hidesBottomBarWhenPushed = true
+//                                    videoDetailsController.model = viewingRecordModel
+//                                    self?.navigationController?.pushViewController(videoDetailsController, animated: true)
+//                                }
+//                                break
+//                        }
+//                    }
+                    
                 }
                 return cell
             case "阅读记录":
