@@ -372,6 +372,13 @@ extension VideoDetailsController: SuperPlayerDelegate {
     func superPlayerDidEnd(_ player: SuperPlayerView!) {
         guard model.currentPlayIndex != (self.model.allPlayerSourceSeriesUrls?[self.model.currentPlayerSourceIndex ?? 0].count ?? 0) - 1 else { return }
         model.currentPlayIndex! += 1
+        let url = self.model.allPlayerSourceSeriesUrls?[self.model.currentPlayerSourceIndex ?? 0][self.model.currentPlayIndex ?? 0] ?? ""
+        if url.contains(".m3u8") == false, url.contains(".mp4") == false {
+            if player.isFullScreen == true {
+                player.isFullScreen = false
+            }
+        }
+            
         playerVideo()
         DispatchQueue.main.async {
             self.videoDetailsView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
@@ -387,6 +394,10 @@ extension VideoDetailsController: SuperPlayerDelegate {
         }
     }
 }
+
+//extension VideoDetailsController: SuperPlayerControlViewDelegate {
+//
+//}
 
 extension VideoDetailsController: GADInterstitialDelegate {
     /// 广告加载成功
