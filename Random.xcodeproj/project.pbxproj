@@ -1871,8 +1871,8 @@
 				D06E72EF23350D2D00886FDB /* Frameworks */,
 				D06E72F023350D2D00886FDB /* Resources */,
 				FCFA8885240E644800FFBEC0 /* Embed App Extensions */,
-				9E09F3BF6F8FEF328CD11927 /* [CP] Embed Pods Frameworks */,
-				00ED3087AD4BFCB8D4BA2D5B /* [CP] Copy Pods Resources */,
+				3B1B59E059B1A96778B99A3F /* [CP] Embed Pods Frameworks */,
+				B00F3CB28B59E52EC3BA2B87 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2024,24 +2024,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		00ED3087AD4BFCB8D4BA2D5B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9E09F3BF6F8FEF328CD11927 /* [CP] Embed Pods Frameworks */ = {
+		3B1B59E059B1A96778B99A3F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2056,6 +2039,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B00F3CB28B59E52EC3BA2B87 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B76F0387E78BCFF790E9E53C /* [CP] Check Pods Manifest.lock */ = {
