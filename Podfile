@@ -56,7 +56,7 @@ target 'Random' do
     # 二维码生成 / 扫描
     #pod 'EFQRCode', '~> 5.1.6'
     # 腾讯云超级播放器
-    pod 'SuperPlayer', '~> 3.2.9'
+    pod 'SuperPlayer'
     # 任务下载
     pod 'Tiercel', '~> 3.2.0'
     # 极光推送
