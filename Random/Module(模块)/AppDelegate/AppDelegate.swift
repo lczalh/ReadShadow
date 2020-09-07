@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     /// 是否允许屏幕旋转
-    var isAllowOrentitaionRotation: Bool = false
+//    var isAllowOrentitaionRotation: Bool = false
     
     /// 后台任务标识
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
@@ -41,6 +41,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // 初始化谷歌广告sdk
         GADMobileAds.sharedInstance().start { (status) in }
+        
+        // P2P加速
+        CBP2pEngine.sharedInstance().start(token: "xsspVPvMg", p2pConfig: nil)
         
         // 极光配置
         self.jPushConfig(launchOptions: launchOptions)
@@ -107,9 +110,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return .all
-    }
+//    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+//        return .portrait
+//    }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         // 视频解析

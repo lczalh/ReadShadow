@@ -16,4 +16,7 @@
 #import "UIDevice+VKKeychainIDFV.h"
 
 
+// P2P 加速
+#import <CDNByeKit/CBP2pEngine.h>
+
 

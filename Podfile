@@ -108,6 +108,8 @@ target 'Random' do
     #pod 'RealmSwift', '5.0.1'
     #pod 'WCDB'
     # 电视资源：https://github.com/iptv-org/iptv
+    # p2p加速
+    pod 'CDNByeSDK', '~> 1.8.0'
 
 end
 post_install do |installer|

@@ -30,7 +30,7 @@ class MoreBrilliantTableViewCell: BaseTableViewCell {
             let line = CGFloat(models.count).truncatingRemainder(dividingBy: 3.0) == 0 ? CGFloat(models.count / 3) : CGFloat((models.count + 1) / 3)
             let height = itemHeight * line + line * 10
             collectionView.cz.remakeConstraints { (make) in
-                make.top.equalTo(moreWonderfulLabel.snp.bottom).offset(5)
+                make.top.equalTo(moreWonderfulLabel.snp.bottom).offset(10)
                 make.right.left.bottom.equalToSuperview()
                 make.height.equalTo(height)
             }
@@ -93,7 +93,7 @@ class MoreBrilliantTableViewCell: BaseTableViewCell {
         collectionView.cz.addSuperView(contentView).makeConstraints({ (make) in
             make.top.equalTo(moreWonderfulLabel.snp.bottom).offset(10)
             make.right.left.bottom.equalToSuperview()
-        })
+            })
     }
     
     required init?(coder: NSCoder) {

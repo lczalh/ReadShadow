@@ -270,7 +270,7 @@
 		D04E5496237448E400F88EB3 /* VideoHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoHomeView.swift; sourceTree = "<group>"; };
 		D05F5ABE2335FED400FC0B52 /* CZClearCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CZClearCache.swift; sourceTree = "<group>"; };
 		D05F5AC12336092E00FC0B52 /* CZHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CZHUD.swift; sourceTree = "<group>"; };
-		D06E72F223350D2D00886FDB /* Random.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Random.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D06E72F223350D2D00886FDB /* 乐淘视界.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "乐淘视界.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06E72F523350D2D00886FDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D06E72F723350D2D00886FDB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D06E72FA23350D2D00886FDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -603,7 +603,7 @@
 		D06E72F323350D2D00886FDB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D06E72F223350D2D00886FDB /* Random.app */,
+				D06E72F223350D2D00886FDB /* 乐淘视界.app */,
 				D06E730623350D2E00886FDB /* RandomTests.xctest */,
 				D06E731123350D2E00886FDB /* RandomUITests.xctest */,
 				FCDF994A24BEF2820038970B /* Share.appex */,
@@ -1871,8 +1871,8 @@
 				D06E72EF23350D2D00886FDB /* Frameworks */,
 				D06E72F023350D2D00886FDB /* Resources */,
 				FCFA8885240E644800FFBEC0 /* Embed App Extensions */,
-				3B1B59E059B1A96778B99A3F /* [CP] Embed Pods Frameworks */,
-				B00F3CB28B59E52EC3BA2B87 /* [CP] Copy Pods Resources */,
+				CBA0AFA4DE8A60591A13E951 /* [CP] Embed Pods Frameworks */,
+				D85E744C39BD1CF80135D5D2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1881,7 +1881,7 @@
 			);
 			name = Random;
 			productName = Random;
-			productReference = D06E72F223350D2D00886FDB /* Random.app */;
+			productReference = D06E72F223350D2D00886FDB /* 乐淘视界.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D06E730523350D2E00886FDB /* RandomTests */ = {
@@ -2024,40 +2024,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3B1B59E059B1A96778B99A3F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B00F3CB28B59E52EC3BA2B87 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B76F0387E78BCFF790E9E53C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2078,6 +2044,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CBA0AFA4DE8A60591A13E951 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D85E744C39BD1CF80135D5D2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2501,7 +2501,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.letao.ceshi;
-				PRODUCT_NAME = Random;
+				PRODUCT_NAME = "乐淘视界";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Random/Utility(工具)/Bridging(桥接文件)/Random-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2537,7 +2537,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.letao.ceshi;
-				PRODUCT_NAME = Random;
+				PRODUCT_NAME = "乐淘视界";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Random/Utility(工具)/Bridging(桥接文件)/Random-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

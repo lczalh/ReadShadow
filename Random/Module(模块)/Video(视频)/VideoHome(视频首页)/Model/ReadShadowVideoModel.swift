@@ -106,7 +106,6 @@ class ReadShadowVideoModel: NSObject, NSCoding, Mappable {
             allPlayerSourceSeriesNames = playerSourceAry.0
             allPlayerSourceSeriesUrls = playerSourceAry.1
             allPlayerSourceSeriesCurrentTimes = allPlayerSourceSeriesUrls.map{ $0.map{ $0.map{_ in CGFloat(0.0) } } }
-            cz_print(allPlayerSourceSeriesCurrentTimes?.count)
         }
     }
     

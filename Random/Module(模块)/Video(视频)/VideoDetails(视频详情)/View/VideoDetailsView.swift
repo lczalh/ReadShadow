@@ -8,7 +8,7 @@
 
 import UIKit
 import AVKit
-import WebKit
+//import WebKit
 
 class VideoDetailsView: BaseView {
     
@@ -27,24 +27,26 @@ class VideoDetailsView: BaseView {
     }()
     
     
-    /// 网页播放器
-    lazy var wkWebView: WKWebView = {
-        let wkWebViewConfiguration = WKWebViewConfiguration()
-        // 是使用h5的视频播放器在线播放, 还是使用原生播放器全屏播放
-        wkWebViewConfiguration.allowsInlineMediaPlayback = true
-        wkWebViewConfiguration.allowsAirPlayForMediaPlayback = true
-        wkWebViewConfiguration.requiresUserActionForMediaPlayback = false
-        //设置是否允许画中画技术 在特定设备上有效
-        wkWebViewConfiguration.allowsPictureInPictureMediaPlayback = true
-        let view = WKWebView(frame: playerImageView.bounds, configuration: wkWebViewConfiguration)
-        // 请求桌面网站
-        view.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"
-        view.isHidden = true
-        view.scrollView.bounces = false
-        view.scrollView.showsVerticalScrollIndicator = false
-        view.scrollView.isScrollEnabled = false
-        return view
-    }()
+//    /// 网页播放器
+//    lazy var wkWebView: WKWebView = {
+//        let wkWebViewConfiguration = WKWebViewConfiguration()
+//        wkWebViewConfiguration.ignoresViewportScaleLimits = true
+//        wkWebViewConfiguration.suppressesIncrementalRendering = true
+//        // 是使用h5的视频播放器在线播放, 还是使用原生播放器全屏播放
+//        wkWebViewConfiguration.allowsInlineMediaPlayback = false
+//        wkWebViewConfiguration.allowsAirPlayForMediaPlayback = false
+//        wkWebViewConfiguration.requiresUserActionForMediaPlayback = false
+//        //设置是否允许画中画技术 在特定设备上有效
+//        wkWebViewConfiguration.allowsPictureInPictureMediaPlayback = true
+//        let view = WKWebView(frame: playerImageView.bounds, configuration: wkWebViewConfiguration)
+//        // 请求桌面网站
+//        view.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"
+//        view.isHidden = true
+//        view.scrollView.bounces = false
+//        view.scrollView.showsVerticalScrollIndicator = false
+//        view.scrollView.isScrollEnabled = false
+//        return view
+//    }()
     
     /// 腾讯视频播放器
     lazy var superPlayerView: SuperPlayerView = {
@@ -78,6 +80,7 @@ class VideoDetailsView: BaseView {
             .backgroundColor(cz_backgroundColor)
             .tableHeaderView(createTableHeaderView())
             .separatorStyle(.none)
+            .showsVerticalScrollIndicator(false)
             .build
         return view
     }()
@@ -110,7 +113,7 @@ class VideoDetailsView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(playerImageView)
-        wkWebView.cz.addSuperView(playerImageView)
+//        wkWebView.cz.addSuperView(playerImageView)
         marqueeLabel.cz.addSuperView(self).makeConstraints { (make) in
             make.top.equalTo(playerImageView.snp.bottom)
             make.left.right.equalToSuperview()

@@ -81,11 +81,12 @@ class VideoDetailsController: BaseController {
     override func setupNavigationItems() {
         super.setupNavigationItems()
         titleView?.title = model.name
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         if isAdvertisingPrivilege == false {
             requestAdvertising(adUnitId: "ca-app-pub-7194032995143004/7501390732")
         }
@@ -176,7 +177,7 @@ class VideoDetailsController: BaseController {
         videoDetailsView.videoInfoLabel.text = "\(model.language ?? "未知")·\(model.year ?? "未知")·\(model.area ?? "未知")·\(model.category ?? (model.type ?? "未知"))·\(model.continu ?? "未知")"
         
         // 默认加载一次解析接口
-        videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface)!))
+      //  videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface)!))
         
         // 设置默认的播放源名称
         videoDetailsView.switchSourceButton.setTitle(model.allPlayerSourceNames?[model.currentPlayerSourceIndex ?? 0], for: .normal)
@@ -249,20 +250,21 @@ class VideoDetailsController: BaseController {
             if url.contains(".m3u8") || url.contains(".mp4") {
                 self.directPlay(url: url)
             } else {
-                CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://js.voooe.cn/", path: "1787799317json", url: url), model: ParsingPlayModel.self, max: 1) {[weak self] (result) in
-                    switch result {
-                    case .success(let model):
-                        if model.url != nil, model.url?.isEmpty == false {
-                            self?.directPlay(url: model.url ?? "")
-                        } else {
-                            self?.webParsingPlay(url: url)
-                        }
-                        break
-                    case .failure(_):
-                        self?.webParsingPlay(url: url)
-                        break
-                    }
-                }
+                CZHUD.showError("此格式无法播放")
+//                CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://js.voooe.cn/", path: "1787799317json", url: url), model: ParsingPlayModel.self, max: 1) {[weak self] (result) in
+//                    switch result {
+//                    case .success(let model):
+//                        if model.url != nil, model.url?.isEmpty == false {
+//                            self?.directPlay(url: model.url ?? "")
+//                        } else {
+//                            self?.webParsingPlay(url: url)
+//                        }
+//                        break
+//                    case .failure(_):
+//                        self?.webParsingPlay(url: url)
+//                        break
+//                    }
+//                }
                 
             }
             // 更新历史记录
@@ -276,8 +278,8 @@ class VideoDetailsController: BaseController {
         DispatchQueue.main.async {
             self.videoDetailsView.switchParsingButton.isHidden = true
             self.videoDetailsView.switchParsingLabel.isHidden = true
-            self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface)!))
-            self.videoDetailsView.wkWebView.isHidden = true
+           // self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface)!))
+         //   self.videoDetailsView.wkWebView.isHidden = true
             self.videoDetailsView.superPlayerView.isHidden = false
             self.videoDetailsView.superPlayerView.startTime = self.model.allPlayerSourceSeriesCurrentTimes?[self.model.currentPlayerSourceIndex ?? 0][self.model.currentPlayIndex ?? 0] ?? 0.0
             // 设置播放名称
@@ -286,7 +288,9 @@ class VideoDetailsController: BaseController {
             } else {
                 self.videoDetailsView.superPlayerView.controlView.title = self.model.name
             }
-            self.superPlayerModel.videoURL = url
+            let orginalUrl = URL.init(string: url)
+            let parsedUrl = CBP2pEngine.sharedInstance().parse(streamURL: orginalUrl!)
+            self.superPlayerModel.videoURL = parsedUrl.absoluteString
             self.videoDetailsView.superPlayerView.play(with: self.superPlayerModel)
         }
     }
@@ -303,8 +307,8 @@ class VideoDetailsController: BaseController {
                 self.videoDetailsView.switchParsingLabel.isHidden = false
                 self.videoDetailsView.superPlayerView.resetPlayer()
                 self.videoDetailsView.superPlayerView.isHidden = true
-                self.videoDetailsView.wkWebView.isHidden = false
-                self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface ?? "")\(url)")!))
+              //  self.videoDetailsView.wkWebView.isHidden = false
+              //  self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface ?? "")\(url)")!))
             }
         } else {
             CZHUD.showError("无效的解析接口")
@@ -318,6 +322,16 @@ class VideoDetailsController: BaseController {
     deinit {
         self.videoDetailsView.superPlayerView.resetPlayer()
     }
+    
+//    // MARK: - 设置所有控制器的默认竖屏
+//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+//        return .all
+//    }
+//
+//    override var shouldAutorotate: Bool {
+//        return true
+//    }
+    
 
 }
 
