@@ -34,9 +34,8 @@ class MainTabBarController: BaseTabBarController {
 //        // 获取当前版本状态
 //        let readShadowBasicConfigModel = getApplicationConfigModel()?.basicConfig?.filter{ $0.version == majorVersion }.first
         if videoSourceModels.count > 0 {
-            setTabBarItem(viewController: BookReadController(), tabBarTitle: "小说", image: UIImage(named: "Icon_Fiction"), selectImage: UIImage(named: "Icon_Fiction"), tag: 1)
+            //setTabBarItem(viewController: BookReadController(), tabBarTitle: "小说", image: UIImage(named: "Icon_Fiction"), selectImage: UIImage(named: "Icon_Fiction"), tag: 1)
             setTabBarItem(viewController: VideoHomeController(), tabBarTitle: "视频", image: UIImage(named: "Icon_Video"), selectImage: UIImage(named: "Icon_Video"), tag: 2)
-           // setTabBarItem(viewController: TelevisionController(), tabBarTitle: "电视", image: UIImage(named: "Icon_Home_Video_Television"), selectImage: UIImage(named: "Icon_Home_Video_Television"), tag: 3)
             setTabBarItem(viewController: MineController(), tabBarTitle: "我的", image: UIImage(named: "Icon_Mine"), selectImage: UIImage(named: "Icon_Mine"), tag: 4)
         } else {
             setTabBarItem(viewController: BookReadController(), tabBarTitle: "小说", image: UIImage(named: "Icon_Fiction"), selectImage: UIImage(named: "Icon_Fiction"), tag: 1)
@@ -168,19 +167,32 @@ class MainTabBarController: BaseTabBarController {
         let _ = CZObjectStore.standard.cz_createFolder(folderPath: videoResourceFolderPath)
      //   guard state else { return }
         
-        let coolCloud = ReadShadowVideoResourceModel()
-        coolCloud.name = "酷云"
-        coolCloud.baseUrl = "http://caiji.kuyun98.com"
-        coolCloud.path = "/inc/s_feifeikkm3u8"
-        coolCloud.downloadPath = "/inc/feifei3down"
-        let _ = CZObjectStore.standard.cz_archiver(object: coolCloud, filePath: videoResourceFolderPath + "/" + (coolCloud.name ?? "") + ".plist")
-
-        let ok = ReadShadowVideoResourceModel()
-        ok.name = "OK"
-        ok.baseUrl = "https://cj.okzy.tv"
-        ok.path = "/inc/feifei3ckm3u8s"
-        ok.downloadPath = "/inc/feifei3down"
-        let _ = CZObjectStore.standard.cz_archiver(object: ok, filePath: videoResourceFolderPath + "/" + (ok.name ?? "") + ".plist")
+//        let coolCloud = ReadShadowVideoResourceModel()
+//        coolCloud.name = "酷云"
+//        coolCloud.baseUrl = "http://caiji.kuyun98.com"
+//        coolCloud.path = "/inc/s_feifeikkm3u8"
+//        coolCloud.downloadPath = "/inc/feifei3down"
+//        let _ = CZObjectStore.standard.cz_archiver(object: coolCloud, filePath: videoResourceFolderPath + "/" + (coolCloud.name ?? "") + ".plist")
+//
+//        let ok = ReadShadowVideoResourceModel()
+//        ok.name = "OK"
+//        ok.baseUrl = "https://cj.okzy.tv"
+//        ok.path = "/inc/feifei3ckm3u8s"
+//        ok.downloadPath = "/inc/feifei3down"
+//        let _ = CZObjectStore.standard.cz_archiver(object: ok, filePath: videoResourceFolderPath + "/" + (ok.name ?? "") + ".plist")
+        
+        let qt = ReadShadowVideoResourceModel()
+        qt.name = "QT"
+        qt.baseUrl = "http://zy.potatost.xyz"
+        qt.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: videoResourceFolderPath + "/" + (qt.name ?? "") + ".plist")
+        
+        
+        let moka = ReadShadowVideoResourceModel()
+        moka.name = "摩卡"
+        moka.baseUrl = "https://cj.heiyap.com"
+        moka.path = "/api.php/provide/vod"
+        let _ = CZObjectStore.standard.cz_archiver(object: moka, filePath: videoResourceFolderPath + "/" + (moka.name ?? "") + ".plist")
 
         let max = ReadShadowVideoResourceModel()
         max.name = "最大"
@@ -189,31 +201,13 @@ class MainTabBarController: BaseTabBarController {
         max.downloadPath = "/inc/feifeidown"
         let _ = CZObjectStore.standard.cz_archiver(object: max, filePath: videoResourceFolderPath + "/" + (max.name ?? "") + ".plist")
 
-        let twistCloud = ReadShadowVideoResourceModel()
-        twistCloud.name = "麻花云"
-        twistCloud.baseUrl = "https://www.mhapi123.com"
-        twistCloud.path = "/inc/feifei3"
-        let _ = CZObjectStore.standard.cz_archiver(object: twistCloud, filePath: videoResourceFolderPath + "/" + (twistCloud.name ?? "") + ".plist")
+//        let twistCloud = ReadShadowVideoResourceModel()
+//        twistCloud.name = "麻花云"
+//        twistCloud.baseUrl = "https://www.mhapi123.com"
+//        twistCloud.path = "/inc/feifei3"
+//        let _ = CZObjectStore.standard.cz_archiver(object: twistCloud, filePath: videoResourceFolderPath + "/" + (twistCloud.name ?? "") + ".plist")
 
 
-//        let qt = ReadShadowVideoResourceModel()
-//        qt.name = "QT"
-//        qt.baseUrl = "http://zy.potatost.xyz"
-//        qt.path = "/api.php/provide/vod"
-//        let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: videoResourceFolderPath + "/" + (qt.name ?? "") + ".plist")
-        
-        let soule = ReadShadowVideoResourceModel()
-        soule.name = "搜乐"
-        soule.baseUrl = "https://www.caijizy.vip"
-        soule.path = "/api.php/provide/vod"
-        let _ = CZObjectStore.standard.cz_archiver(object: soule, filePath: videoResourceFolderPath + "/" + (soule.name ?? "") + ".plist")
-        
-        
-        let moka = ReadShadowVideoResourceModel()
-        moka.name = "摩卡"
-        moka.baseUrl = "https://cj.heiyap.com"
-        moka.path = "/api.php/provide/vod"
-        let _ = CZObjectStore.standard.cz_archiver(object: moka, filePath: videoResourceFolderPath + "/" + (moka.name ?? "") + ".plist")
         
         /* X
          http://cangtianzy10.com/api.php/provide/vod

@@ -30,9 +30,13 @@ class VideoSearchController: BaseController {
     /// 搜索内容
     var searchName: String?
     
-    private let videoSearchQueue = DispatchQueue.init(label: "videoSearch")
+    //获取系统存在的全局队列
+    let queue = DispatchQueue.global(qos: .default)
     
-    private let videoSearchGroup = DispatchGroup()
+    //定义一个group
+    let group = DispatchGroup()
+    
+    
     
     private var sectionTitles: Array<String> = []
     
@@ -67,13 +71,13 @@ class VideoSearchController: BaseController {
             }
         }).disposed(by: rx.disposeBag)
         
-        videoSearchView.searchTextField.rx.value.orEmpty.throttle(DispatchTimeInterval.seconds(1), scheduler: MainScheduler.instance).asObservable()
-          //  .controlEvent([.editingDidEnd,.editingDidEndOnExit]) //状态可以组合
-            .subscribe(onNext: {[weak self] _ in
+        videoSearchView.searchTextField.rx//.value.orEmpty.throttle(DispatchTimeInterval.seconds(2), scheduler: MainScheduler.instance).asObservable()
+            .controlEvent([.editingDidEnd,.editingDidEndOnExit]) //状态可以组合
+            .subscribe(onNext: {[weak self] in
             guard self?.videoSearchView.searchTextField.markedTextRange == nil else { return }
             guard self?.videoSearchView.searchTextField.text?.isEmpty == false && self?.videoSearchView.searchTextField.text != nil else { return }
             /// 搜索值相同则不重复请求
-            guard self?.searchName != self?.videoSearchView.searchTextField.text else { return }
+            //guard self?.searchName != self?.videoSearchView.searchTextField.text else { return }
             self?.searchName = self?.videoSearchView.searchTextField.text
             self?.videoModels.removeAll()
             self?.searchVideoData()
@@ -82,14 +86,15 @@ class VideoSearchController: BaseController {
     
 
     @objc func searchVideoData() {
-        for videoSourceModel in self.readShadowVideoResourceModels {
-            autoreleasepool{
+        let semaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.global().async {
+            for videoSourceModel in self.readShadowVideoResourceModels {
+                DispatchQueue.main.async { CZHUD.show("\(videoSourceModel.name ?? "")搜索中") }
                 CZNetwork.cz_request(target: VideoDataApi.getReadShadowVideoData(baseUrl: videoSourceModel.baseUrl!, path: videoSourceModel.path!, ac: "detail", categoryId: nil, pg: nil, wd: self.searchName), model: ReadShadowVideoRootModel.self) {[weak self] (result) in
                     switch result {
                         case .success(let model):
                             if let videoModels = model.data, videoModels.count > 0 {
                                 var videos: [ReadShadowVideoModel] = []
-                                
                                 for videoModel in videoModels.filter({ $0.url != nil && $0.url?.isEmpty == false }) {
                                     guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
                                     // 默认播放首集
@@ -103,16 +108,22 @@ class VideoSearchController: BaseController {
                                 }
                             }
                             DispatchQueue.main.async {
+                                CZHUD.dismiss()
                                 self?.videoSearchView.tableView.reloadData()
+                                semaphore.signal()
                             }
                             break
                         case .failure(_):
+                            DispatchQueue.main.async {
+                                CZHUD.dismiss()
+                                semaphore.signal()
+                            }
                             break
                     }
                 }
+                semaphore.wait()
             }
         }
-        
     }
 
 }

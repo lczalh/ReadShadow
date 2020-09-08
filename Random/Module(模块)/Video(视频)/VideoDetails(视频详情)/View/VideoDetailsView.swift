@@ -179,7 +179,7 @@ class VideoDetailsView: BaseView {
             })
             .font(.cz_systemFont(10))
             .textColor(cz_unStandardTextColor)
-            .text("切换播放源:")
+            .text("播放源:")
             .setContentHuggingPriority(.required, for: .horizontal)
             .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
@@ -188,7 +188,7 @@ class VideoDetailsView: BaseView {
             .cz
             .addSuperView(tableHeaderView)
             .makeConstraints({ (make) in
-                make.left.equalTo(playerSourceLabel.snp.right).offset(5)
+                make.left.equalTo(playerSourceLabel.snp.right)
                 make.centerY.equalTo(playerSourceLabel)
             })
             .titleColor(cz_standardTextColor, for: .normal)
@@ -259,11 +259,9 @@ class VideoDetailsView: BaseView {
             })
             .font(.cz_systemFont(10))
             .textColor(cz_unStandardTextColor)
-            .text("切换解析接口:")
+            .text("解析接口:")
             .setContentCompressionResistancePriority(.required, for: .horizontal)
             .textAlignment(.right)
-        // .setContentHuggingPriority(.required, for: .horizontal)
-         //.setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
         
         let _ = UIView()

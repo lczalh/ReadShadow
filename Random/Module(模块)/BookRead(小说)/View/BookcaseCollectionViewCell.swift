@@ -55,39 +55,6 @@ class BookcaseCollectionViewCell: BaseCollectionViewCell {
             .numberOfLines(2)
             .build
         
-//        updateBookButton = UIButton()
-//            .cz
-//            .addSuperView(contentView)
-//            .makeConstraints({ (make) in
-//                make.bottom.equalTo(bookImageView).offset(-5)
-//                make.left.equalTo(bookImageView).offset(5)
-//                make.height.equalTo(CZCommon.cz_dynamicFitHeight(20))
-//                make.width.equalTo(CZCommon.cz_dynamicFitWidth(30))
-//            })
-//            .title("更新", for: .normal)
-//            .titleColor(UIColor.white, for: .normal)
-//            .font(.cz_systemFont(10))
-//            .backgroundColor(cz_selectedColor)
-//            .cornerRadius(5)
-//            .clipsToBounds(true)
-//            .build
-//        
-//        removeBookButton = UIButton()
-//            .cz
-//            .addSuperView(contentView)
-//            .makeConstraints({ (make) in
-//                make.bottom.equalTo(bookImageView).offset(-5)
-//                make.right.equalTo(bookImageView).offset(-5)
-//                make.height.equalTo(CZCommon.cz_dynamicFitHeight(20))
-//                make.width.equalTo(CZCommon.cz_dynamicFitWidth(40))
-//            })
-//            .title("移除", for: .normal)
-//            .titleColor(UIColor.white, for: .normal)
-//            .font(.cz_systemFont(10))
-//            .backgroundColor(cz_selectedColor)
-//            .cornerRadius(5)
-//            .clipsToBounds(true)
-//            .build
     }
     
     required init?(coder: NSCoder) {

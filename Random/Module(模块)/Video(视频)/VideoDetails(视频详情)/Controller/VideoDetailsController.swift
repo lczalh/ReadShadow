@@ -250,21 +250,23 @@ class VideoDetailsController: BaseController {
             if url.contains(".m3u8") || url.contains(".mp4") {
                 self.directPlay(url: url)
             } else {
-                CZHUD.showError("此格式无法播放")
-//                CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "http://js.voooe.cn/", path: "1787799317json", url: url), model: ParsingPlayModel.self, max: 1) {[weak self] (result) in
-//                    switch result {
-//                    case .success(let model):
-//                        if model.url != nil, model.url?.isEmpty == false {
-//                            self?.directPlay(url: model.url ?? "")
-//                        } else {
-//                            self?.webParsingPlay(url: url)
-//                        }
-//                        break
-//                    case .failure(_):
-//                        self?.webParsingPlay(url: url)
-//                        break
-//                    }
-//                }
+                
+                CZNetwork.cz_request(target: VideoDataApi.straightChainVideoAnalysis(baseUrl: "https://user.htv009.com", path: "/json", url: url), model: ParsingPlayModel.self, max: 1) {[weak self] (result) in
+                    switch result {
+                    case .success(let model):
+                        if model.url != nil, model.url?.isEmpty == false {
+                            self?.directPlay(url: model.url ?? "")
+                        } else {
+                            DispatchQueue.main.async {
+                                UIApplication.shared.open(URL(string: "https://jx.quanmingjiexi.com/?url=\(url)")!, options: [:], completionHandler: nil)
+                            }
+                        }
+                        break
+                    case .failure(let error):
+                        CZHUD.showError(error.localizedDescription)
+                        break
+                    }
+                }
                 
             }
             // 更新历史记录
@@ -295,25 +297,25 @@ class VideoDetailsController: BaseController {
         }
     }
     
-    /// 网页解析播放
-    func webParsingPlay(url: String) {
-        guard parsingInterfaceModels.count > 0 else {
-            CZHUD.showError("您还未添加解析接口")
-            return
-        }
-        if (try? String(contentsOf: URL(string: parsingInterfaceModels[model.currentPlayerParsingIndex ?? 0].parsingInterface)!)) != nil {
-            DispatchQueue.main.async {
-                self.videoDetailsView.switchParsingButton.isHidden = false
-                self.videoDetailsView.switchParsingLabel.isHidden = false
-                self.videoDetailsView.superPlayerView.resetPlayer()
-                self.videoDetailsView.superPlayerView.isHidden = true
-              //  self.videoDetailsView.wkWebView.isHidden = false
-              //  self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface ?? "")\(url)")!))
-            }
-        } else {
-            CZHUD.showError("无效的解析接口")
-        }
-    }
+//    /// 网页解析播放
+//    func webParsingPlay(url: String) {
+//        guard parsingInterfaceModels.count > 0 else {
+//            CZHUD.showError("您还未添加解析接口")
+//            return
+//        }
+//        if (try? String(contentsOf: URL(string: parsingInterfaceModels[model.currentPlayerParsingIndex ?? 0].parsingInterface)!)) != nil {
+//            DispatchQueue.main.async {
+//                self.videoDetailsView.switchParsingButton.isHidden = false
+//                self.videoDetailsView.switchParsingLabel.isHidden = false
+//                self.videoDetailsView.superPlayerView.resetPlayer()
+//                self.videoDetailsView.superPlayerView.isHidden = true
+//              //  self.videoDetailsView.wkWebView.isHidden = false
+//              //  self.videoDetailsView.wkWebView.load(URLRequest(url: URL(string: "\(self.parsingInterfaceModels[self.model.currentPlayerParsingIndex ?? 0].parsingInterface ?? "")\(url)")!))
+//            }
+//        } else {
+//            CZHUD.showError("无效的解析接口")
+//        }
+//    }
     
     override var prefersStatusBarHidden: Bool {
         return statusBarHidden
@@ -360,7 +362,7 @@ extension VideoDetailsController: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
-            return CZCommon.cz_dynamicFitHeight(40)
+            return UITableView.automaticDimension
         } else {
             return UITableView.automaticDimension
         }

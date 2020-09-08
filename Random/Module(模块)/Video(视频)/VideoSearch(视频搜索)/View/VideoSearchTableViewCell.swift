@@ -26,10 +26,10 @@ class VideoSearchTableViewCell: BaseTableViewCell {
                 make.centerY.equalToSuperview()
                 make.left.equalToSuperview().offset(15)
             })
-            .textColor(cz_standardTextColor)
-            .font(.cz_systemFont(14))
             .setContentHuggingPriority(.required, for: .horizontal)
             .setContentCompressionResistancePriority(.required, for: .horizontal)
+            .textColor(cz_standardTextColor)
+            .font(.cz_systemFont(14))
             .build
         
         rightLabel = UILabel()
@@ -43,6 +43,8 @@ class VideoSearchTableViewCell: BaseTableViewCell {
             .textAlignment(.right)
             .textColor(cz_unStandardTextColor)
             .font(.cz_systemFont(12))
+            .setContentHuggingPriority(.required, for: .horizontal)
+            .setContentCompressionResistancePriority(.required, for: .horizontal)
             .build
         
         let _ = UIView()

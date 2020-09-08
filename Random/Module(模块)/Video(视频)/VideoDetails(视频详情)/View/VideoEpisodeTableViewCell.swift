@@ -12,6 +12,9 @@ class VideoEpisodeTableViewCell: BaseTableViewCell {
     
     static var identifier = "VideoEpisodeTableViewCell"
     
+    /// 剧集
+    var seriesLabel: UILabel!
+    
     /// 初始化JXSegmentedView
     lazy var segmentedView: JXSegmentedView = {
         let view = JXSegmentedView()
@@ -44,8 +47,24 @@ class VideoEpisodeTableViewCell: BaseTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        seriesLabel = UILabel()
+            .cz
+            .addSuperView(contentView)
+            .makeConstraints({ (make) in
+                make.top.equalToSuperview().offset(10)
+                make.left.equalToSuperview().offset(10)
+                
+            })
+            .font(.cz_boldSystemFont(14))
+            .text("剧集与更新")
+            .build
+        
         segmentedView.cz.addSuperView(contentView).makeConstraints({ (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo(seriesLabel.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(CZCommon.cz_dynamicFitHeight(40))
+            make.bottom.equalToSuperview()
         })
         
         let _ = UIView()
