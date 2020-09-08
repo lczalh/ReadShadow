@@ -64,7 +64,7 @@ target 'Random' do
     pod 'JPush', '~> 3.2.8'
     #FFmpeg脚本 https://github.com/kewlbear/FFmpeg-iOS-build-script
     # 转场动画库
-    #pod 'Hero'
+    #pod 'Hero', '~> 1.5.0'
     # 消息弹窗
     #pod 'SwiftMessages'
     # cell滑动删除
@@ -110,6 +110,8 @@ target 'Random' do
     # 电视资源：https://github.com/iptv-org/iptv
     # p2p加速
     pod 'CDNByeSDK', '~> 1.8.0'
+    #
+    pod "ViewAnimator"
 
 end
 post_install do |installer|

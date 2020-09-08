@@ -15539,3 +15539,20 @@ Pods/WebRTCDatachannel/WebRTC.framework/Headers/RTCTracing.h
 Pods/WebRTCDatachannel/WebRTC.framework/Headers/UIDevice+RTCDevice.h
 Pods/WebRTCDatachannel/WebRTC.framework/Headers/WebRTC.h
 Pods/WebRTCDatachannel/WebRTC.framework/Modules/module.modulemap
+Pods/Pods.xcodeproj/xcuserdata/yumingming.xcuserdatad/xcschemes/ViewAnimator.xcscheme
+Pods/Target Support Files/ViewAnimator/ViewAnimator-dummy.m
+Pods/Target Support Files/ViewAnimator/ViewAnimator-Info.plist
+Pods/Target Support Files/ViewAnimator/ViewAnimator-prefix.pch
+Pods/Target Support Files/ViewAnimator/ViewAnimator-umbrella.h
+Pods/Target Support Files/ViewAnimator/ViewAnimator.debug.xcconfig
+Pods/Target Support Files/ViewAnimator/ViewAnimator.modulemap
+Pods/Target Support Files/ViewAnimator/ViewAnimator.release.xcconfig
+Pods/ViewAnimator/LICENSE
+Pods/ViewAnimator/README.md
+Pods/ViewAnimator/ViewAnimator/Classes/ViewAnimator.swift
+Pods/ViewAnimator/ViewAnimator/Classes/ViewAnimatorConfig.swift
+Pods/ViewAnimator/ViewAnimator/Classes/Extensions/UICollectionView + ViewAnimator.swift
+Pods/ViewAnimator/ViewAnimator/Classes/Extensions/UITableView + ViewAnimator.swift
+Pods/ViewAnimator/ViewAnimator/Classes/Models/AnimationType.swift
+Pods/ViewAnimator/ViewAnimator/Classes/Models/Direction.swift
+Pods/ViewAnimator/ViewAnimator/Classes/Protocols/Animation.swift

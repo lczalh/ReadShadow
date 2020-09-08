@@ -92,6 +92,10 @@ class VideoListController: BaseController {
                     self?.videoListView.collectionView.reloadData()
                     if self?.videoListView.collectionView.mj_header?.isRefreshing == true {
                         self?.videoListView.collectionView.mj_header?.endRefreshing()
+                        self?.videoListView.collectionView?.performBatchUpdates({
+                            UIView.animate(views: (self?.videoListView.collectionView!.orderedVisibleCells)!,
+                                       animations: [AnimationType.random()], options: [.curveEaseInOut], completion: {})
+                        }, completion: nil)
                     }
                     if self?.videoListView.collectionView.mj_footer?.isRefreshing == true {
                         self?.videoListView.collectionView.mj_footer?.endRefreshing()

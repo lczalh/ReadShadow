@@ -25,3 +25,4 @@ import Foundation
 @_exported import Kanna
 @_exported import SuperPlayer
 @_exported import SwiftDate
+@_exported import ViewAnimator
