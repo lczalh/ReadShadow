@@ -112,6 +112,7 @@ target 'Random' do
     pod 'CDNByeSDK', '~> 1.8.0'
     #
     pod "ViewAnimator"
+    # https://github.com/Tencent/vap 直播动画库
 
 end
 post_install do |installer|

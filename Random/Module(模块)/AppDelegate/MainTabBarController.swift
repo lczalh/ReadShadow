@@ -34,7 +34,7 @@ class MainTabBarController: BaseTabBarController {
 //        // 获取当前版本状态
 //        let readShadowBasicConfigModel = getApplicationConfigModel()?.basicConfig?.filter{ $0.version == majorVersion }.first
         if videoSourceModels.count > 0 {
-            //setTabBarItem(viewController: BookReadController(), tabBarTitle: "小说", image: UIImage(named: "Icon_Fiction"), selectImage: UIImage(named: "Icon_Fiction"), tag: 1)
+            setTabBarItem(viewController: BookReadController(), tabBarTitle: "小说", image: UIImage(named: "Icon_Fiction"), selectImage: UIImage(named: "Icon_Fiction"), tag: 1)
             setTabBarItem(viewController: VideoHomeController(), tabBarTitle: "视频", image: UIImage(named: "Icon_Video"), selectImage: UIImage(named: "Icon_Video"), tag: 2)
             setTabBarItem(viewController: MineController(), tabBarTitle: "我的", image: UIImage(named: "Icon_Mine"), selectImage: UIImage(named: "Icon_Mine"), tag: 4)
         } else {

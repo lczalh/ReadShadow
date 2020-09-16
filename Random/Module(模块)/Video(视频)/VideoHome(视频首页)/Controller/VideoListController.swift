@@ -54,7 +54,6 @@ class VideoListController: BaseController {
     
     @objc func downRefresh() {
         currentPage = 1
-        models.removeAll()
         getVideoData()
     }
 
@@ -69,6 +68,9 @@ class VideoListController: BaseController {
             switch result {
             case .success(let model):
                 if let videoModels = model.data, videoModels.count > 0 {
+                    if self?.currentPage == 1 {
+                        self?.models.removeAll()
+                    }
                     var videos: [ReadShadowVideoModel] = []
                     for videoModel in videoModels.filter({ $0.url != nil && $0.url?.isEmpty == false }) {
                         guard filterVideoCategorys.filter({ videoModel.category == $0 }).first == nil else { continue }
