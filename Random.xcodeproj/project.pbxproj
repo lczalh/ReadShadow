@@ -121,6 +121,7 @@
 		FC9E71C624989D870090EE76 /* CZReadFontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E71C524989D870090EE76 /* CZReadFontView.swift */; };
 		FC9E71C82498B3100090EE76 /* BookReadChapterPagingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9E71C72498B3100090EE76 /* BookReadChapterPagingModel.swift */; };
 		FC9F122824922C7A0066A84E /* BookcaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9F122724922C7A0066A84E /* BookcaseCollectionViewCell.swift */; };
+		FCA0C8052511BD3400A0C2FD /* CZTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA0C8042511BD3400A0C2FD /* CZTimer.m */; };
 		FCA1D46024B6EA8800E0AE8E /* BookReadSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA1D45F24B6EA8800E0AE8E /* BookReadSearchController.swift */; };
 		FCA1D46224B6EAA200E0AE8E /* BookReadSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA1D46124B6EAA200E0AE8E /* BookReadSearchView.swift */; };
 		FCA1D46824B6F0BF00E0AE8E /* TelevisionSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA1D46724B6F0BF00E0AE8E /* TelevisionSearchController.swift */; };
@@ -386,6 +387,8 @@
 		FC9E71C524989D870090EE76 /* CZReadFontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CZReadFontView.swift; sourceTree = "<group>"; };
 		FC9E71C72498B3100090EE76 /* BookReadChapterPagingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadChapterPagingModel.swift; sourceTree = "<group>"; };
 		FC9F122724922C7A0066A84E /* BookcaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookcaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		FCA0C8032511BD3400A0C2FD /* CZTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CZTimer.h; sourceTree = "<group>"; };
+		FCA0C8042511BD3400A0C2FD /* CZTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CZTimer.m; sourceTree = "<group>"; };
 		FCA1D45F24B6EA8800E0AE8E /* BookReadSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadSearchController.swift; sourceTree = "<group>"; };
 		FCA1D46124B6EAA200E0AE8E /* BookReadSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadSearchView.swift; sourceTree = "<group>"; };
 		FCA1D46724B6F0BF00E0AE8E /* TelevisionSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelevisionSearchController.swift; sourceTree = "<group>"; };
@@ -1420,6 +1423,15 @@
 			path = "Network(网络)";
 			sourceTree = "<group>";
 		};
+		FCA0C8012511BCB800A0C2FD /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				FCA0C8032511BD3400A0C2FD /* CZTimer.h */,
+				FCA0C8042511BD3400A0C2FD /* CZTimer.m */,
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
 		FCA1D45B24B6EA2F00E0AE8E /* BookReadSearch(小说搜索) */ = {
 			isa = PBXGroup;
 			children = (
@@ -1592,6 +1604,7 @@
 		FCC875BA23A0E85500ECA178 /* CZKit */ = {
 			isa = PBXGroup;
 			children = (
+				FCA0C8012511BCB800A0C2FD /* Timer */,
 				FCC875BB23A0E85500ECA178 /* UI */,
 				FCC875BE23A0E85600ECA178 /* Core */,
 				FCC875CA23A0E85600ECA178 /* ChainKit */,
@@ -1871,8 +1884,8 @@
 				D06E72EF23350D2D00886FDB /* Frameworks */,
 				D06E72F023350D2D00886FDB /* Resources */,
 				FCFA8885240E644800FFBEC0 /* Embed App Extensions */,
-				44BDA4AAE42F046761025903 /* [CP] Embed Pods Frameworks */,
-				77EA53D423F6A1B78906BD1F /* [CP] Copy Pods Resources */,
+				C5DC6923EDBC6719CAE2621E /* [CP] Embed Pods Frameworks */,
+				94358E610FA333A240C2A2ED /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2024,24 +2037,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		44BDA4AAE42F046761025903 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		77EA53D423F6A1B78906BD1F /* [CP] Copy Pods Resources */ = {
+		94358E610FA333A240C2A2ED /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2078,6 +2074,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5DC6923EDBC6719CAE2621E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Random/Pods-Random-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2209,6 +2222,7 @@
 				D06E72F623350D2D00886FDB /* AppDelegate.swift in Sources */,
 				FCF3C7E1249353710072AC50 /* BookSourceManageView.swift in Sources */,
 				FC2701702487A575007A16A6 /* VideoSearchTableViewCell.swift in Sources */,
+				FCA0C8052511BD3400A0C2FD /* CZTimer.m in Sources */,
 				FCC8761523A0E85600ECA178 /* UISwitch+CZKit.swift in Sources */,
 				FCFF172A24B56935006A88E2 /* TelevisionListController.swift in Sources */,
 				FCB8B4E82493561B0043EFF7 /* AddBookSourceController.swift in Sources */,

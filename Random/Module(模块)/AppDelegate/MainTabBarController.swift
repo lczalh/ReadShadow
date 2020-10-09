@@ -43,6 +43,14 @@ class MainTabBarController: BaseTabBarController {
         }
         tabBar.tintColor = cz_selectedColor
         tabBar.unselectedItemTintColor = cz_unselectedColor
+        
+//        CZTimer.execTask({
+//            cz_print(111)
+//        }, start: 0, interval: 1, repeating: true, async: true)
+//        
+//        CZTimer.execTask({
+//            cz_print(222)
+//        }, start: 0, interval: 1, repeating: true, async: true)
     }
     
     /// 配置书资源
@@ -181,18 +189,18 @@ class MainTabBarController: BaseTabBarController {
 //        ok.downloadPath = "/inc/feifei3down"
 //        let _ = CZObjectStore.standard.cz_archiver(object: ok, filePath: videoResourceFolderPath + "/" + (ok.name ?? "") + ".plist")
         
-        let qt = ReadShadowVideoResourceModel()
-        qt.name = "QT"
-        qt.baseUrl = "http://zy.potatost.xyz"
-        qt.path = "/api.php/provide/vod"
-        let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: videoResourceFolderPath + "/" + (qt.name ?? "") + ".plist")
-        
-        
-        let moka = ReadShadowVideoResourceModel()
-        moka.name = "摩卡"
-        moka.baseUrl = "https://cj.heiyap.com"
-        moka.path = "/api.php/provide/vod"
-        let _ = CZObjectStore.standard.cz_archiver(object: moka, filePath: videoResourceFolderPath + "/" + (moka.name ?? "") + ".plist")
+//        let qt = ReadShadowVideoResourceModel()
+//        qt.name = "QT"
+//        qt.baseUrl = "http://zy.potatost.xyz"
+//        qt.path = "/api.php/provide/vod"
+//        let _ = CZObjectStore.standard.cz_archiver(object: qt, filePath: videoResourceFolderPath + "/" + (qt.name ?? "") + ".plist")
+//        
+//        
+//        let moka = ReadShadowVideoResourceModel()
+//        moka.name = "摩卡"
+//        moka.baseUrl = "https://cj.heiyap.com"
+//        moka.path = "/api.php/provide/vod"
+//        let _ = CZObjectStore.standard.cz_archiver(object: moka, filePath: videoResourceFolderPath + "/" + (moka.name ?? "") + ".plist")
 
         let max = ReadShadowVideoResourceModel()
         max.name = "最大"
