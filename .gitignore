@@ -15564,3 +15564,21 @@ Pods/ViewAnimator/Sources/Extensions/UICollectionView + ViewAnimator.swift
 Pods/ViewAnimator/Sources/Extensions/UITableView + ViewAnimator.swift
 Pods/ViewAnimator/Sources/Models/AnimationType.swift
 Pods/ViewAnimator/Sources/Protocols/Animation.swift
+Pods/Alamofire/Source/AuthenticationInterceptor.swift
+Pods/Alamofire/Source/Combine.swift
+Pods/Alamofire/Source/Protected.swift
+Pods/Alamofire/Source/StringEncoding+Alamofire.swift
+Pods/JXSegmentedView/Sources/Common/JXSegmentedRTLLayout.swift
+Pods/JXSegmentedView/Sources/Indicator/JXSegmentedIndicatorGradientLineView.swift
+Pods/JXSegmentedView/Sources/Indicator/JXSegmentedIndicatorParams.swift
+Pods/Kingfisher/Sources/Extensions/NSTextAttachment+Kingfisher.swift
+Pods/Kingfisher/Sources/General/ImageSource/AVAssetImageDataProvider.swift
+Pods/Kingfisher/Sources/Networking/RetryStrategy.swift
+Pods/MJRefresh/MJRefresh/Base/MJRefreshTrailer.h
+Pods/MJRefresh/MJRefresh/Base/MJRefreshTrailer.m
+Pods/MJRefresh/MJRefresh/Custom/Trailer/MJRefreshNormalTrailer.h
+Pods/MJRefresh/MJRefresh/Custom/Trailer/MJRefreshNormalTrailer.m
+Pods/MJRefresh/MJRefresh/Custom/Trailer/MJRefreshStateTrailer.h
+Pods/MJRefresh/MJRefresh/Custom/Trailer/MJRefreshStateTrailer.m
+Pods/MJRefresh/MJRefresh/MJRefresh.bundle/trail_arrow@2x.png
+Pods/SwiftDate/Sources/SwiftDate/Formatters/RelativeFormatter/langs/sr.json

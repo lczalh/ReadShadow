@@ -3,13 +3,13 @@ platform :ios, ‘11.0’
 use_frameworks!
 
 target 'Random' do
-    pod 'Alamofire', '~> 5.0.5'
+    pod 'Alamofire', '~> 5.2.2'
     # 上下刷新
-    pod 'MJRefresh', '~> 3.2.3'
+    pod 'MJRefresh'#, '~> 3.5.1'
     # 自动布局
     pod 'SnapKit', '~> 5.0.1'
     #
-    pod 'Kingfisher', '~> 5.8.3'
+    pod 'Kingfisher', '~> 5.15.6'
     pod 'Moya/RxSwift', '~> 14.0.0'
     #Rx
     pod 'RxSwift', '~> 5.1.1'
@@ -29,7 +29,7 @@ target 'Random' do
     # 皮肤管理器主题
     #pod 'SwiftTheme', '~> 0.4.7'
     # 分段
-    pod 'JXSegmentedView', '~> 1.0.6'
+    pod 'JXSegmentedView', '~> 1.2.7'
     # 搜索
     #pod 'PYSearch', '~> 0.9.1'
     # 二维码扫描
@@ -37,12 +37,12 @@ target 'Random' do
     # 骨架y图
     #pod 'SkeletonView', '~> 1.8.2'
     # JSON解析
-    pod 'ObjectMapper', '~> 3.5.3'
+    pod 'ObjectMapper', '~> 4.2.0'
     # XML/HTML解析
     #pod 'Ono', '~> 2.1.2'
-    pod 'Kanna', '~> 5.2.2'
+    pod 'Kanna', '~> 5.2.3'
     # 加密库
-    pod 'CryptoSwift', '~> 1.3.1'
+    pod 'CryptoSwift', '~> 1.3.2'
     # Keychain
     #pod 'KeychainAccess'
     # 引导标记
@@ -50,13 +50,13 @@ target 'Random' do
     # 调试工具
     #pod 'FLEX', '~> 3.1.2', :configurations => ['Debug']
     # UI
-    pod 'QMUIKit', '4.2.0'
+    pod 'QMUIKit', '~> 4.2.1'
     # 在Swift项目中获得强大的类型化，自动完成的资源，例如图像，字体和序列
     #pod 'R.swift', '~> 5.2.2'
     # 二维码生成 / 扫描
     #pod 'EFQRCode', '~> 5.1.6'
     # 腾讯云超级播放器
-    pod 'SuperPlayer'
+    pod 'SuperPlayer', '~> 3.3.1'
     # 任务下载
     pod 'Tiercel', '~> 3.2.0'
     # 极光推送
@@ -93,7 +93,7 @@ target 'Random' do
     # 图片裁剪
     #pod 'CropViewController'
     # 特别完整、强大的日期时间操作管理类库
-    pod 'SwiftDate', '~> 6.1.0'
+    pod 'SwiftDate', '~> 6.2.0'
     # 强大的媒体缓存框架
     #pod 'KTVHTTPCache', '~> 2.0.1'
     # 微软的暗黑模式适配框架
@@ -109,7 +109,7 @@ target 'Random' do
     #pod 'WCDB'
     # 电视资源：https://github.com/iptv-org/iptv
     # p2p加速
-    pod 'CDNByeSDK', '~> 1.8.0'
+    pod 'CDNByeSDK', '~> 1.10.0'
     #
     pod "ViewAnimator"
     # https://github.com/Tencent/vap 直播动画库
