@@ -54,7 +54,6 @@
 		FC2B54F023794EE200637B56 /* MoreBrilliantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2B54EF23794EE200637B56 /* MoreBrilliantTableViewCell.swift */; };
 		FC2CE09423838E0B003CAEFD /* VideoDownloadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2CE09323838E0B003CAEFD /* VideoDownloadTableViewCell.swift */; };
 		FC2E28B324A081FF00373FAF /* BookReadRecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2E28B224A081FF00373FAF /* BookReadRecordModel.swift */; };
-		FC3DDB4D2358696500052AA1 /* BaseTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3DDB4C2358696500052AA1 /* BaseTableController.swift */; };
 		FC3DDB4F23586B2000052AA1 /* BaseTableHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3DDB4E23586B2000052AA1 /* BaseTableHeaderFooterView.swift */; };
 		FC427BB32412365300DEC398 /* channel.txt in Resources */ = {isa = PBXBuildFile; fileRef = FC427BB22412365300DEC398 /* channel.txt */; };
 		FC427BB9241237A800DEC398 /* TelevisionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC427BB8241237A800DEC398 /* TelevisionController.swift */; };
@@ -319,7 +318,6 @@
 		FC2B54EF23794EE200637B56 /* MoreBrilliantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreBrilliantTableViewCell.swift; sourceTree = "<group>"; };
 		FC2CE09323838E0B003CAEFD /* VideoDownloadTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloadTableViewCell.swift; sourceTree = "<group>"; };
 		FC2E28B224A081FF00373FAF /* BookReadRecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReadRecordModel.swift; sourceTree = "<group>"; };
-		FC3DDB4C2358696500052AA1 /* BaseTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableController.swift; sourceTree = "<group>"; };
 		FC3DDB4E23586B2000052AA1 /* BaseTableHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableHeaderFooterView.swift; sourceTree = "<group>"; };
 		FC427BB22412365300DEC398 /* channel.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = channel.txt; sourceTree = "<group>"; };
 		FC427BB8241237A800DEC398 /* TelevisionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelevisionController.swift; sourceTree = "<group>"; };
@@ -753,7 +751,6 @@
 				D0FCF7E9234323B100AF30A5 /* BaseController.swift */,
 				D0FCF7F9234336F200AF30A5 /* BaseNavigationController.swift */,
 				D0FCF7FB2343373400AF30A5 /* BaseTabBarController.swift */,
-				FC3DDB4C2358696500052AA1 /* BaseTableController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2174,7 +2171,6 @@
 				FCC8762023A0E85600ECA178 /* UINavigationItem+CZKit.swift in Sources */,
 				FCC875F223A0E85600ECA178 /* CZLabel.swift in Sources */,
 				FCA1D46224B6EAA200E0AE8E /* BookReadSearchView.swift in Sources */,
-				FC3DDB4D2358696500052AA1 /* BaseTableController.swift in Sources */,
 				FC17D9F324C6E2C50079F524 /* ReadShadowVideoRootModel.swift in Sources */,
 				FCDF994524BEDB920038970B /* SearchDownloadableVideoCollectionHeaderView.swift in Sources */,
 				FCA1D46824B6F0BF00E0AE8E /* TelevisionSearchController.swift in Sources */,
